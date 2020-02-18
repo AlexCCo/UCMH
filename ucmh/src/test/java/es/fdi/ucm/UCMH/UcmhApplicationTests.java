@@ -1,4 +1,4 @@
-package es.ucm.fdi.iw;
+package es.fdi.ucm.UCMH;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
