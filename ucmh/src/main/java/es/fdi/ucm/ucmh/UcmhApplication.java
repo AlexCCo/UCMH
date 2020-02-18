@@ -1,4 +1,4 @@
-package es.fdi.ucm.UCMH;
+package es.fdi.ucm.ucmh;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
