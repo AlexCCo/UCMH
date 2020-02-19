@@ -8,7 +8,7 @@ public class RootController {
 	
 	@GetMapping("/")
 	public String hola() {
-		return "hola";
+		return "ajustesPaciente";
 	}
 
 }
