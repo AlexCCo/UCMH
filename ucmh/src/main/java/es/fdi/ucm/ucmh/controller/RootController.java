@@ -2,7 +2,6 @@ package es.fdi.ucm.ucmh.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class RootController {
@@ -20,6 +19,11 @@ public class RootController {
 	@GetMapping("/misCitas.html")
 	public String misCitas() {
 		return "misCitas";
+	}
+	
+	@GetMapping("/estadisiticasPaciente.html")
+	public String estadisticasPaciente() {
+		return "estadisiticasPaciente";
 	}
 	
 }

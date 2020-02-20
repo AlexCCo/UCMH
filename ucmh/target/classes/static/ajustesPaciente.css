@@ -2,7 +2,7 @@
 	color:blue;
 	width: 3em; 
 	height: 2em;
-	position:center;
+	margin-right: 45em;
 }
 .no{
 	color:red;
@@ -13,4 +13,16 @@
 .img{
 	width: 4em; 
 	height: 8em;
+}
+
+p.cuadro{
+	border: 2px solid blue;
+	
+	padding: 20px;
+}
+tabla{
+	
+}
+#f{
+	display: flex;
 }
