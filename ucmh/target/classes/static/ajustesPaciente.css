@@ -2,7 +2,7 @@
 	color:blue;
 	width: 3em; 
 	height: 2em;
-	margin-right: 45em;
+	margin-right: 10em;
 }
 .no{
 	color:red;
@@ -11,18 +11,24 @@
 	
 }
 .img{
-	width: 4em; 
+	
+	width: 8em; 
 	height: 8em;
 }
 
 p.cuadro{
-	border: 2px solid blue;
-	
-	padding: 20px;
+	box-sizing: content-box;
+	border: 3px solid blue;
+	background:RGB(236, 208, 178);
+	padding: 10px;
 }
-tabla{
+.tabla{
 	
 }
 #f{
 	display: flex;
+	
+}
+#b{
+	background:RGB(241, 228, 215);
 }
