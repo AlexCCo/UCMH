@@ -1,0 +1,106 @@
+/*instrucciones generales*/
+* {
+	margin: auto;
+}
+/*cabecera de la página*/
+h1 {
+	text-align: center;
+	padding: 0.5em;
+}
+/*div principal del calendario*/
+#calendario {
+	text-align: center;
+	}
+/*tabla del calendario*/
+#diasc {
+	border: 1px solid black;
+	bordercolor: #000000;
+	border-collapse: separate;
+	border-spacing: 4px;
+}
+
+#diasc th, #diasc td {
+	border: 1px solid black;
+	font: normal 14pt arial;
+	width: 70px;
+	height: 30px;
+}
+
+#diasc th {
+	COLOR: #000000;
+	BACKGROUND-COLOR: #808000
+}
+
+#diasc td {
+	color: #808000;
+	background-color: #ffffff
+}
+/*línea de la fecha actual*/
+#fechaactual {
+	font: bold 12pt arial;
+	padding: 0.4em
+}
+
+#fechaactual i {
+	cursor: pointer;
+}
+
+#fechaactual i:hover {
+	color: #808000;
+	text-decoration: underline;
+}
+/*formulario de busqueda de fechas*/
+#buscafecha {
+	
+	color: #000000;
+	padding: 5px
+}
+
+#buscafecha select, #buscafecha input {
+	background-color:#808000 ;
+	color:#000000;
+	font: bold 10pt arial;
+}
+
+#buscafecha [type=text] {
+	text-align: center;
+}
+
+#buscafecha  [type=button] {
+	cursor: pointer;
+}
+/*cabecera del calendario*/
+#anterior {
+	float: left;
+	width: 100px;
+	font: bold 12pt arial;
+	padding: 0.5em 0.1em;
+	cursor: pointer;
+}
+
+#posterior {
+	float: right;
+	width: 100px;
+	font: bold 12pt arial;
+	padding: 0.5em 0.1em;
+	cursor: pointer;
+}
+
+#anterior:hover {
+	color: blue;
+	text-decoration: underline;
+}
+
+#posterior:hover {
+	color: blue;
+	text-decoration: underline;
+}
+
+#titulos {
+	font: normal 20pt "arial black";
+	padding: 0.2em;
+}
+
+#sentir {
+ border: 1px solid black;
+}
