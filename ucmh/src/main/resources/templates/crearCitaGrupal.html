@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Crear cita grupal</title>
+    <link rel="stylesheet" href="../static/general.css">
+    <body>
+        <div class="header">
+            <img class="logo" src= "../static/image/Logo.jpg">
+             <div class="header-right">
+              <a class="active" href="index.html">Home</a>
+              <a href="miHorarioPsicologo.html">Mi horario</a>
+              <a href="crearCitaGrupal.html">Crear cita grupal</a>
+              <a href="paciente">Paciente</a>
+              <a class="logout" href="#log-out">Log-out</a>
+            </div>
+
+      </div> 
+      <div class="header-right">
+        <br>
+        <strong>Bienvenida:</strong>
+        <a href="#miperfil"> Alba Fernández.</a>
+    </div> 
+    <div class="texto" >Seleccione una semana:
+
+      <div id="buscafecha">
+        <form action="#" name="buscar">
+          <p>
+            </select> 
+              Mes <select name="buscames">
+                <option value="0">Enero</option>
+                <option value="1">Febrero</option>
+                <option value="2">Marzo</option>
+                <option value="3">Abril</option>
+                <option value="4">Mayo</option>
+                <option value="5">Junio</option>
+                <option value="6">Julio</option>
+                <option value="7">Agosto</option>
+                <option value="8">Septiembre</option>
+                <option value="9">Octubre</option>
+                <option value="10">Noviembre</option>
+                <option value="11">Diciembre</option>
+  
+            </select> 
+            Año <input type="text" name="buscaanno" maxlength="4" size="4"
+              value="2020" /> <input type="button" value="BUSCAR"
+              onclick="mifecha()" />
+          </p>
+        </form>
+      </div>
+
+      <table id="citas">
+        <tr id="cabecera">
+            <th></th>
+            <th>Lunes</th>
+            <th>Martes</th>
+            <th>Miercoles</th>
+            <th>Jueves</th>
+            <th>Viernes</th>
+        </tr>
+        <tr > 
+            <th id="cabecera">09:00 </th>   
+                <td></td>
+                <td></td>
+                <td id="tuscitas"></td>
+                <td id="tuscitas"></td>     
+                <td></td>   
+        </tr> 
+        <tr > 
+            <th id="cabecera">10:00 </th>   
+                <td></td>
+                <td></td>
+                <td></td>
+                <td id="tuscitas"></td>     
+                <td></td>   
+        </tr> 
+        <tr > 
+            <th id="cabecera">11:00 </th>   
+                <td></td>
+                <td id="tuscitas"></td>
+                <td></td>
+                <td></td>     
+                <td></td>   
+        </tr> 
+        <tr > 
+            <th id="cabecera">12:00 </th>   
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>     
+                <td id="tuscitas"></td>   
+        </tr> 
+        <tr > 
+            <th id="cabecera">13:00 </th>   
+                <td id="nodisponible"></td>
+                <td id="nodisponible"></td>
+                <td id="nodisponible"></td>
+                <td id="nodisponible"></td>     
+                <td id="nodisponible"></td>   
+        </tr> 
+        <tr > 
+            <th id="cabecera">14:00 </th>   
+                <td id="tuscitas"></td>
+                <td></td>
+                <td></td>
+                <td></td>     
+                <td></td>   
+        </tr> 
+        <tr > 
+            <th id="cabecera">15:00 </th>   
+                <td id="tuscitas"></td>
+                <td></td>
+                <td></td>
+                <td id="tueleccion"></td>     
+                <td></td>   
+        </tr> 
+        <tr > 
+            <th id="cabecera">16:00 </th>   
+                <td></td>
+                <td id="nodisponible"></td>
+                <td></td>
+                <td id="tueleccion"></td>     
+                <td id="nodisponible"></td>   
+        </tr> 
+        <tr > 
+            <th id="cabecera">17:00 </th>   
+                <td></td>
+                <td id="nodisponible"></td>
+                <td id="tuscitas"></td>
+                <td></td>     
+                <td id="nodisponible"></td>   
+        </tr> 
+        </table>
+        <p class="cuadro">¿Desea guardar los cambios?<br><br>
+            <a href="descripciondecita.html"><button class=si>Sí</button></a>
+		    <button class=no>No</button>
+        </p>
+		
+      </body>
+</html>
