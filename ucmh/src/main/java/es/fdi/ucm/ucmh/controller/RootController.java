@@ -25,5 +25,8 @@ public class RootController {
 	public String estadisticasPaciente() {
 		return "estadisiticasPaciente";
 	}
-	
+	@GetMapping("/miHorarioPsicologo.html")
+	public String miHorarioPsicologo() {
+		return "miHorarioPsicologo";
+	}
 }
