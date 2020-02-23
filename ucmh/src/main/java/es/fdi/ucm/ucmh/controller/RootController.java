@@ -21,9 +21,24 @@ public class RootController {
 			return "misCitas";
 		}
 		else if(webUsers.equals("estadisticasPaciente.html")) {
-			return "estadisiticasPaciente";
+			return "estadisticasPaciente";
 		}
-		else if(webUsers.equals("")) {
+		else if(webUsers.equals("crearCitaGrupal.html")) {
+			return "crearCitaGrupal";
+		}
+		else if(webUsers.equals("miHorarioPsicologo.html")) {
+			return "miHorarioPsicologo";
+		}
+		else if(webUsers.equals("descripcionDeCita.html")) {
+			return "descripcionDeCita";
+		}
+		else if(webUsers.equals("horarioPsicologo.html")) {
+			return "horarioPsicologo";
+		}
+		else if(webUsers.equals("admin.html")) {
+			return "admin";
+		}
+		else if(webUsers.equals("/")) {
 			return "index";
 		}
 		else {
