@@ -1,34 +1,35 @@
+/*AJUSTES CUERPO*/
 body{
     font-family: arial;
-    background-color: salmon;
+    background-color: rgb(214, 240, 241);
 }
+
+/*AJUSTES TABLA*/
 table#citas {
     border-collapse: collapse;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 100px;
-    margin-top: 100px;
+   
     height: 75%;
     width: 75%;
 }
-
 table#citas th, table#citas td{
     border: 1px solid black;
     padding: 3px 10px;
     text-align: center;
 }
 tr#cabecera{
-    background-color: #0f5e04;
+    background-color: #0a497c;
     color: white;
     font-weight: bold;
 }
 tr#cuerpopar{
-    background-color: #3cdd26;
+    background-color: #b3e7e9;
     color: rgb(22, 2, 2);
     
 }
 tr#cuerpoimpar{
-    background-color: #2aa01a;
+    background-color: #91bccf;
     color: rgb(22, 2, 2);
     
 }
@@ -38,13 +39,69 @@ tr#cuerpoimpar{
     height: 15px;
     width: 15px;
 }
+/*tabla de crear citas*/
+th#cabecera{
+  background-color: #0a497c;
+  color: white;
+  font-weight: bold;
+}
+td#nodisponible{
+  background-color: #e27f45;
+}
+td#tuscitas{
+  background-color: #6f6dce;
+}
+td#tueleccion{
+  background-color: #b3db9b;
+}
 
+p.cuadro{
+  border: 3px solid #0a497c;
+  background-color: #cddceb;
+  padding: 5px;
+  margin-top: 30px;
+  margin-right: 25%;
+  margin-left: 25%;
+}
+.si{
+  border: 2px solid #0a497c;
+  background-color: #bdcedf;
+  width: 3em; 
+  height: 2em;
+  font-weight: bold;
+
+}
+.no{
+  border: 2px solid #0a497c;
+  background-color: #bdcedf;	
+  width: 3em; 
+  height: 2em;
+  font-weight: bold;
+
+	
+}
+/*AJUSTES BUSCADOR*/
+#buscafecha {
+	color: #000000;
+  padding: 5px;
+  font-weight: bold;
+  text-align: center;
+}
+.texto{
+  color: #000000;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 100px;
+
+}
+
+/*AJUSTES CABECERA*/
 .header {
     overflow: hidden;
-    background-color: #cbdd24;
+    background-color: #2271a5;
     padding: 20px 10px;
+    border-radius: 4px;
   }
-  
   .header a {/*vinculo*/
     float: left;
     color: black;
@@ -55,33 +112,27 @@ tr#cuerpoimpar{
     line-height: 25px;
     border-radius: 4px;
   }
-  
   .header .logo {
     height: 100px;
     width: 100px;
+    border-radius: 4px;
   }
-  
   .header a:hover {
-    background-color: rgb(69, 228, 220);
+    background-color: rgb(164, 204, 226);
     color: black;
   }
-  
-  /* Style the active/current link*/
   .header a.active {
-    background-color: dodgerblue;
+    background-color: rgb(148, 177, 206);
     color: white;
   }
-
   .header a.logout{
-      background-color: red;
+      background-color: rgb(104, 21, 21);
       color: black;
+      font-weight: bold;
   }
-  
   .header-right {
     float: right;
   }
-  
-  /* Add media queries for responsiveness - when the screen is 500px wide or less, stack the links on top of each other */
   @media screen and (max-width: 500px) {
     .header a {
       float: none;
