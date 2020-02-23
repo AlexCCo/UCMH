@@ -1,0 +1,14 @@
+#Barra {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+  }
+
+  table {
+    margin-left: 15%;
+    margin-top: 70px;
+    width: 70%;
+    border-collapse: collapse;
+  }
