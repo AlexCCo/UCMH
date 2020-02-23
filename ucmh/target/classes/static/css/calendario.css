@@ -1,8 +1,9 @@
+@charset "UTF-8";
 /*instrucciones generales*/
 * {
 	margin: auto;
 }
-/*cabecera de la página*/
+/*cabecera de la pï¿½gina*/
 h1 {
 	text-align: center;
 	padding: 0.5em;
@@ -35,7 +36,7 @@ h1 {
 	color: #808000;
 	background-color: #ffffff
 }
-/*línea de la fecha actual*/
+/*lï¿½nea de la fecha actual*/
 #fechaactual {
 	font: bold 12pt arial;
 	padding: 0.4em
