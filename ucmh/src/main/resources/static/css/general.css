@@ -10,7 +10,6 @@ table#citas {
     border-collapse: collapse;
     margin-left: auto;
     margin-right: auto;
-   
     height: 75%;
     width: 75%;
 }
@@ -40,6 +39,30 @@ tr#cuerpoimpar{
     height: 15px;
     width: 15px;
 }
+/*DATOS USUARIOS PLATAFORMA*/
+#psicologos-img{
+  height: 100px;
+  width: 100px;
+  float: left;
+  margin-top: 50px;
+  margin-left: 50px;
+}
+#datosPsicologo{
+  float :lef;
+  margin-top: 50px;
+  margin-left: 170px;
+}
+table#horario {
+  border-collapse: collapse;
+  margin-left: 170;
+  height: 75%;
+  width: 75%;
+}
+table#horario th, table#horario td{
+  border: 1px solid black;
+  padding: 3px 10px;
+  text-align: center;
+}
 /*tabla de crear citas*/
 th#cabecera{
   background-color: #0a497c;
@@ -54,6 +77,15 @@ td#tuscitas{
 }
 td#tueleccion{
   background-color: #b3db9b;
+}
+td#bien{
+background-color: green;
+}
+td#mal{
+background-color: red;
+}
+td#regular{
+background-color: lightsalmon;
 }
 
 p.cuadro{
@@ -125,6 +157,7 @@ p.cuadro{
   .header a.active {
     background-color: rgb(148, 177, 206);
     color: white;
+    margin-right: 5px;
   }
   .header a.logout{
       background-color: rgb(104, 21, 21);
