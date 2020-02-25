@@ -2,86 +2,100 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-
-		<title>Admin</title>
-
-		<link rel="stylesheet" href="css/admin.css">
-		<link rel="stylesheet" href="../static/css/main.css">
-		<link rel="stylesheet" href="../static/css/normalize.css">
-		<link rel="stylesheet" href="../static/css/materialize.css">
-		<link rel="stylesheet" href="../static/css/my-theme.css">
-
-
-		<link href="https://fonts.googleapis.com/css?family=Muli|Oswald&display=swap" rel="stylesheet">
-		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-		<meta name="theme-color" content="#fafafa">
-
+		<title>Mi horario</title>
+		<link rel="stylesheet" href="css/general.css">
 	</head>
-	<body>
-
-		<!--[if IE]>
-			<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
-		<![endif]-->
-
-		<!-- Add your site or application content here -->
-
-		<nav id="menu">
-			<div class="nav-wrapper">
-				<a href="#" id="logo" class="brand-logo">UCMH</a>
-				<a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-				<ul id="nav-mobile" class="right hide-on-med-and-down">
-						<a class="waves-effect waves-light btn">Cerrar sesión</a>
-				</ul>
+	  <body>
+		<div class="header">
+			<img class="logo" src= "../static/image/Logo.jpg">
+			 <div class="header-right">
+			  <a class="active" href="index.html">Home</a>
+			  <a class="logout" href="#log-out">Log-out</a>
 			</div>
-		</nav>
+	  </div> 
+	  <div class="header-right">
+		<br>
+		<strong>Bienvenido:</strong>
+		<a href="#miperfil"> David Peña.</a>
+	</div> 	
+	<div class="texto"> Psicólogos actuales:<br><br>
+    </div>
 
-		<!-- Menú desplegable mobile-->
+		<table id="citas">
+			<tr id="cabecera">
+				<th>Psicólogo</th>
+				<th>Sueldo</th>
+				<th>Horas trabajadas</th>
+				<th>Más infomación</th>	
+			</tr>
+			<tr id="cuerpopar">
+				<td> Marcos Gómez</td>
+				<td> 1000</td>
+				<td>13</td>
+				<td><a  href="ejemploPsicologo.html"><img id="mensaje-img" src="../static/image/usuarioPlantilla.jpg"/></a></td>
+	
+			</tr>
+			<tr id="cuerpoimpar">
+				<td> Pablo Martínez</td>
+				<td> 2000</td>
+				<td>17</td>
+				<td ><a  href="#mensajes"><img id="mensaje-img" src="../static/image/usuarioPlantilla.jpg"/></a></td>
+	
+			</tr>
+			<tr id="cuerpopar">
+				<td> Sara Sanz</td>
+				<td> 1500</td>
+				<td>20</td>
+				<td><a  href="#mensajes"><img id="mensaje-img" src="../static/image/usuarioPlantilla.jpg"/></a></td>
+	
+			</tr>
+			</table>
 
-		<ul class="sidenav" id="mobile-demo">
-			<li><a>Cerrar sesión</a></li>
-		</ul>
 
-		<h4 class="center-align">Panel de administración</h4>
-
-		<div class="row">
-			<div class="col s6">
-				<ul class="collapsible">
-				  <li>
-				    <div class="collapsible-header">
-				      <i class="material-icons">face</i>
-				      Psicólogos
-				      <span class="new badge">4</span></div>
-				    <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
-				  </li>
-				  <li>
-				    <div class="collapsible-header">
-				      <i class="material-icons">group</i>
-				      Pacientes
-				      <span class="badge">1</span></div>
-				    <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
-				  </li>
-				</ul>
-			</div>
+		</div> 	
+		<div class="texto"> Pacientes actuales:<br><br>
 		</div>
-
-
-		<script src="../static/js/vendor/modernizr-3.8.0.min.js"></script>
-	  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-	  <script>window.jQuery || document.write('<script src="../static/js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
-	  <script src="../static/js/plugins.js"></script>
-	  <script src="../static/js/vendor/materialize.min.js"></script>
-
-	  <script src="../static/js/main.js"></script>
-
-		<script>
-		$(document).ready(function(){
-				$('.sidenav').sidenav();
-				$('.collapsible').collapsible();
-
-		});
-		</script>
-
-	</body>
-</html>
+	
+			<table id="citas">
+				<tr id="cabecera">
+					<th>Paciente</th>
+					<th>Psicólogo</th>
+					<th>Horas de terapia</th>
+					<th>Estadísticas</th>	
+					<th>Más información</th>	
+				</tr>
+				<tr id="cuerpopar">
+					<td> Carla Gómez</td>
+					<td> Pablo Martínez</td>
+					<td>13</td>
+					<td id="bien"></td>
+					<td><a  href="#mensajes"><img id="mensaje-img" src="../static/image/usuarioPlantilla.jpg"/></a></td>
+		
+				</tr>
+				<tr id="cuerpoimpar">
+					<td> Marta Peña</td>
+					<td> Sara Sanz</td>
+					<td>12</td>
+					<td id="mal"></td>
+					<td ><a  href="#mensajes"><img id="mensaje-img" src="../static/image/usuarioPlantilla.jpg"/></a></td>
+		
+				</tr>
+				<tr id="cuerpopar">
+					<td> Santiago Sanz</td>
+					<td> Pablo Martínez</td>
+					<td>20</td>
+					<td id="regular"></td>
+					<td><a  href="#mensajes"><img id="mensaje-img" src="../static/image/usuarioPlantilla.jpg"/></a></td>
+		
+				</tr>
+				<tr id="cuerpoimpar">
+					<td> Lucke Skywalker</td>
+					<td> Marcos Gómez</td>
+					<td>17</td>
+					<td id="bien"></td>
+					<td ><a  href="#mensajes"><img id="mensaje-img" src="../static/image/usuarioPlantilla.jpg"/></a></td>
+		
+				</tr>
+				</table>
+	  </body>
+	</html>

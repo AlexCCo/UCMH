@@ -11,39 +11,29 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class RootController {
 	private static Logger log = LogManager.getLogger(RootController.class);
+	private static String [] availableViews = {
+		"ajustesPaciente",
+		"misCitas",
+		"estadisticasPaciente",
+		"crearCitaGrupal",
+		"miHorarioPsicologo",
+		"descripcionDeCita",
+		"horarioPsicologo",
+		"admin",
+		"/"
+	};
 	
+	public RootController() {
+		
+	}
 	@RequestMapping(value = "/{usersTemplates}", method = RequestMethod.GET)
 	public String indexPage(@PathVariable("usersTemplates") final String webUsers) {
-		if(webUsers.equals("ajustesPaciente.html")) {
-			return "ajustesPaciente";
+		for (String page : availableViews) {
+			if(webUsers.equals(page + ".html")) {
+				return webUsers;
+			}
 		}
-		else if(webUsers.equals("misCitas.html")) {
-			return "misCitas";
-		}
-		else if(webUsers.equals("estadisticasPaciente.html")) {
-			return "estadisticasPaciente";
-		}
-		else if(webUsers.equals("crearCitaGrupal.html")) {
-			return "crearCitaGrupal";
-		}
-		else if(webUsers.equals("miHorarioPsicologo.html")) {
-			return "miHorarioPsicologo";
-		}
-		else if(webUsers.equals("descripcionDeCita.html")) {
-			return "descripcionDeCita";
-		}
-		else if(webUsers.equals("horarioPsicologo.html")) {
-			return "horarioPsicologo";
-		}
-		else if(webUsers.equals("admin.html")) {
-			return "admin";
-		}
-		else if(webUsers.equals("/")) {
-			return "index";
-		}
-		else {
-			throw new ResourceNotFound();
-		}
+		throw new ResourceNotFound();
 	}
 
 	//ERRORS HANDLING
