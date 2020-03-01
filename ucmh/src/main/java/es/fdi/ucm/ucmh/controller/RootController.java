@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import es.fdi.ucm.ucmh.exceptionHandlers.ResourceNotFound;
 
+
 @Controller
 public class RootController {
 	private static Logger log = LogManager.getLogger(RootController.class);
@@ -24,7 +25,8 @@ public class RootController {
 		"descripcionDeCita",
 		"horarioPsicologo",
 		"admin",
-		"/"
+		"/",
+		"index"
 	};
 	
 	public RootController() {
