@@ -16,46 +16,46 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer ID;
-	
+
 	private String firstName;
 	private String secondName;
 	private String mail;
 	private String password;
 	private String phoneNumber;
 	private String Type;
-	
+
 	//user
 	@ManyToOne //duda
 	private User psychologist;//solo lo tendran los pacientes
 	//------
-	
+
 	//date
-	@OneToMany(mappedBy="Patient")
-	private Collection<Date> PatientsDate;
-	
+	@OneToMany(mappedBy="patient")
+	private Collection<Date> patientsDate;
+
 	@OneToMany(mappedBy="pychologist")
 	private Collection<Date> psichologistsDate;
 	//-----
-	
+
 	//groupDate
-	@OneToMany(mappedBy="Patient")
-	private Collection<GroupDate> PatientsGroupDate;
-	
+	@OneToMany(mappedBy="patient")
+	private Collection<GroupDate> patientsGroupDate;
+
 	@OneToMany(mappedBy="pychologist")
 	private Collection<GroupDate> psichologistsGroupDate;
 	//-----
 	//message
 	@OneToMany(mappedBy="from")
-	private  Collection<Message>MessageSent;
-	
+	private  Collection<Message> messageSent;
+
 	@OneToMany(mappedBy="to")
-	private  Collection<Message>receivedMessage;
+	private  Collection<Message> receivedMessage;
 	//-----
-	
+
 	@Version
 	private Integer version;
 	//-------------------------------------------
-	
+
 	public Integer getID() {
 		return ID;
 	}
@@ -111,10 +111,10 @@ public class User {
 		this.psychologist = psychologist;
 	}
 	public Collection<Date> getPatientsDate() {
-		return PatientsDate;
+		return this.patientsDate;
 	}
 	public void setPatientsDate(Collection<Date> patientsDate) {
-		PatientsDate = patientsDate;
+		this.patientsDate = patientsDate;
 	}
 	public Collection<Date> getPsichologistsDate() {
 		return psichologistsDate;
@@ -123,10 +123,10 @@ public class User {
 		this.psichologistsDate = psichologistsDate;
 	}
 	public Collection<GroupDate> getPatientsGroupDate() {
-		return PatientsGroupDate;
+		return this.patientsGroupDate;
 	}
 	public void setPatientsGroupDate(Collection<GroupDate> patientsGroupDate) {
-		PatientsGroupDate = patientsGroupDate;
+		this.patientsGroupDate = patientsGroupDate;
 	}
 	public Collection<GroupDate> getPsichologistsGroupDate() {
 		return psichologistsGroupDate;
@@ -135,10 +135,10 @@ public class User {
 		this.psichologistsGroupDate = psichologistsGroupDate;
 	}
 	public Collection<Message> getMessageSent() {
-		return MessageSent;
+		return this.messageSent;
 	}
 	public void setMessageSent(Collection<Message> messageSent) {
-		MessageSent = messageSent;
+		this.messageSent = messageSent;
 	}
 	public Collection<Message> getReceivedMessage() {
 		return receivedMessage;
@@ -146,6 +146,6 @@ public class User {
 	public void setReceivedMessage(Collection<Message> receivedMessage) {
 		this.receivedMessage = receivedMessage;
 	}
-	
-	
+
+
 }

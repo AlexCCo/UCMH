@@ -15,13 +15,13 @@ public class Date {
 	private Integer ID;
 	private String fecha;
 	@ManyToOne
-	private User patiente;
+	private User patient;
 	@ManyToOne
 	private User pychologist;
 	@Version
 	private Integer version;
 	//------------------------------------------
-	
+
 	public Integer getID() {
 		return ID;
 	}
@@ -41,10 +41,10 @@ public class Date {
 		this.version = version;
 	}
 	public User getPatiente() {
-		return patiente;
+		return patient;
 	}
-	public void setPatiente(User patiente) {
-		this.patiente = patiente;
+	public void setPatiente(User patient) {
+		this.patient = patient;
 	}
 	public User getPychologist() {
 		return pychologist;
@@ -52,5 +52,5 @@ public class Date {
 	public void setPychologist(User pychologist) {
 		this.pychologist = pychologist;
 	}
-	
+
 }

@@ -15,7 +15,7 @@ public class GroupDate {
 	private Integer ID;
 	private String fecha;
 	@ManyToOne
-	private User patiente;
+	private User patient;
 	@ManyToOne
 	private User pychologist;
 	@Version
@@ -47,11 +47,11 @@ public class GroupDate {
 	}
 
 	public User getPatiente() {
-		return patiente;
+		return patient;
 	}
 
-	public void setPatiente(User patiente) {
-		this.patiente = patiente;
+	public void setPatiente(User patient) {
+		this.patient = patient;
 	}
 
 	public User getPychologist() {
