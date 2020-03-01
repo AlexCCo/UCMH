@@ -16,16 +16,18 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer ID;
+	
 	private String firstName;
 	private String secondName;
 	private String mail;
 	private String password;
 	private String phoneNumber;
+	private String Type;
 	
+	//user
 	@ManyToOne //duda
 	private User psychologist;//solo lo tendran los pacientes
-	
-	private String Type;
+	//------
 	
 	//date
 	@OneToMany(mappedBy="Patient")
@@ -41,6 +43,13 @@ public class User {
 	
 	@OneToMany(mappedBy="pychologist")
 	private Collection<GroupDate> psichologistsGroupDate;
+	//-----
+	//message
+	@OneToMany(mappedBy="from")
+	private  Collection<Message>MessageSent;
+	
+	@OneToMany(mappedBy="to")
+	private  Collection<Message>receivedMessage;
 	//-----
 	
 	@Version
@@ -94,6 +103,48 @@ public class User {
 	}
 	public void setVersion(Integer version) {
 		this.version = version;
+	}
+	public User getPsychologist() {
+		return psychologist;
+	}
+	public void setPsychologist(User psychologist) {
+		this.psychologist = psychologist;
+	}
+	public Collection<Date> getPatientsDate() {
+		return PatientsDate;
+	}
+	public void setPatientsDate(Collection<Date> patientsDate) {
+		PatientsDate = patientsDate;
+	}
+	public Collection<Date> getPsichologistsDate() {
+		return psichologistsDate;
+	}
+	public void setPsichologistsDate(Collection<Date> psichologistsDate) {
+		this.psichologistsDate = psichologistsDate;
+	}
+	public Collection<GroupDate> getPatientsGroupDate() {
+		return PatientsGroupDate;
+	}
+	public void setPatientsGroupDate(Collection<GroupDate> patientsGroupDate) {
+		PatientsGroupDate = patientsGroupDate;
+	}
+	public Collection<GroupDate> getPsichologistsGroupDate() {
+		return psichologistsGroupDate;
+	}
+	public void setPsichologistsGroupDate(Collection<GroupDate> psichologistsGroupDate) {
+		this.psichologistsGroupDate = psichologistsGroupDate;
+	}
+	public Collection<Message> getMessageSent() {
+		return MessageSent;
+	}
+	public void setMessageSent(Collection<Message> messageSent) {
+		MessageSent = messageSent;
+	}
+	public Collection<Message> getReceivedMessage() {
+		return receivedMessage;
+	}
+	public void setReceivedMessage(Collection<Message> receivedMessage) {
+		this.receivedMessage = receivedMessage;
 	}
 	
 	

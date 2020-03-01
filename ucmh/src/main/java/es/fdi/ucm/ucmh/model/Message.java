@@ -14,11 +14,15 @@ public class Message {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer ID;
 	private String fecha;
+	
 	@ManyToOne
 	private User from;
+	
 	@ManyToOne
 	private User to;
+	
 	private String text;
+	
 	@Version
 	private Integer version;
 	//------------------------------------------
@@ -59,5 +63,6 @@ public class Message {
 	public void setTo(User to) {
 		this.to = to;
 	}
+	
 	
 }

@@ -9,48 +9,57 @@ import javax.persistence.Version;
 
 @Entity
 public class GroupDate {
-	//---------------Atributos-----------------
-		@Id
-		@GeneratedValue(strategy = GenerationType.IDENTITY)
-		private Integer ID;
-		private String fecha;
-		@ManyToOne
-		private User patiente;
-		@ManyToOne
-		private User pychologist;
-		@Version
-		private Integer version;
-		//------------------------------------------
-		
-		public Integer getID() {
-			return ID;
-		}
-		public void setID(Integer iD) {
-			ID = iD;
-		}
-		public String getFecha() {
-			return fecha;
-		}
-		public void setFecha(String fecha) {
-			this.fecha = fecha;
-		}
-		public Integer getVersion() {
-			return version;
-		}
-		public void setVersion(Integer version) {
-			this.version = version;
-		}
-		public User getPatiente() {
-			return patiente;
-		}
-		public void setPatiente(User patiente) {
-			this.patiente = patiente;
-		}
-		public User getPychologist() {
-			return pychologist;
-		}
-		public void setPychologist(User pychologist) {
-			this.pychologist = pychologist;
-		}
-		
+	// ---------------Atributos-----------------
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer ID;
+	private String fecha;
+	@ManyToOne
+	private User patiente;
+	@ManyToOne
+	private User pychologist;
+	@Version
+	private Integer version;
+	// ------------------------------------------
+
+	public Integer getID() {
+		return ID;
+	}
+
+	public void setID(Integer iD) {
+		ID = iD;
+	}
+
+	public String getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(String fecha) {
+		this.fecha = fecha;
+	}
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+
+	public User getPatiente() {
+		return patiente;
+	}
+
+	public void setPatiente(User patiente) {
+		this.patiente = patiente;
+	}
+
+	public User getPychologist() {
+		return pychologist;
+	}
+
+	public void setPychologist(User pychologist) {
+		this.pychologist = pychologist;
+	}
+
 }
