@@ -1,0 +1,35 @@
+@charset "UTF-8";
+.si{
+	color:blue;
+	width: 3em; 
+	height: 2em;
+	margin-right: 10em;
+}
+.no{
+	color:red;
+	width: 3em; 
+	height: 2em;
+	
+}
+.img{
+	
+	width: 8em; 
+	height: 8em;
+}
+
+p.cuadro{
+	box-sizing: content-box;
+	border: 3px solid blue;
+	background:RGB(236, 208, 178);
+	padding: 10px;
+}
+.tabla{
+
+}
+#f{
+	display: flex;
+	
+}
+#b{
+	background:RGB(241, 228, 215);
+}

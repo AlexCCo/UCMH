@@ -1,0 +1,24 @@
+@charset "UTF-8";
+.appointment_calendar th, .appointment_calendar td  {
+	text-align: center;
+	border: 1px solid rgb(190, 190, 190);
+	padding: 10px;
+}
+.appointment_notification {
+	border: 1px solid rgb(0, 0, 0);
+	text-align: center;
+	padding: 10px 15px;
+}
+.appointment_header {
+	border-bottom: 1px solid rgb(0, 0, 0);
+	text-align: right;
+	padding: 10px 15px;
+}
+.exit_button {
+	cursor: pointer;
+  border: none;
+  outline: none;
+  background: none;
+  font-size: 1.25rem;
+  font-weight: bold;
+}

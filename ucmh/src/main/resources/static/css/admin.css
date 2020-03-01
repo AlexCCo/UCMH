@@ -1,0 +1,11 @@
+@charset "UTF-8";
+.psychologist_view, .pacients_view { 
+	border: 1px solid gray 
+}
+.psychologist_view p, .pacients_view p {
+	display: inline;
+}
+.psychologist_view {
+	margin-bottom: 20px;
+	
+}
