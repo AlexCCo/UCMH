@@ -1,49 +1,43 @@
 package es.fdi.ucm.ucmh.controller;
 
-import es.fdi.ucm.ucmh.exceptionHandlers.ResourceNotFound;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+import es.fdi.ucm.ucmh.exceptionHandlers.ResourceNotFound;
 
 @Controller
 public class RootController {
 	private static Logger log = LogManager.getLogger(RootController.class);
+	private static String [] availableViews = {
+		"ajustesPaciente",
+		"misCitas",
+		"estadisticasPaciente",
+		"crearCitaGrupal",
+		"miHorarioPsicologo",
+		"descripcionDeCita",
+		"horarioPsicologo",
+		"admin",
+		"/"
+	};
 	
+	public RootController() {
+		
+	}
 	@RequestMapping(value = "/{usersTemplates}", method = RequestMethod.GET)
 	public String indexPage(@PathVariable("usersTemplates") final String webUsers) {
-		if(webUsers.equals("ajustesPaciente.html")) {
-			return "ajustesPaciente";
+		for (String page : availableViews) {
+			if(webUsers.equals(page + ".html")) {
+				return webUsers;
+			}
 		}
-		else if(webUsers.equals("misCitas.html")) {
-			return "misCitas";
-		}
-		else if(webUsers.equals("estadisticasPaciente.html")) {
-			return "estadisticasPaciente";
-		}
-		else if(webUsers.equals("crearCitaGrupal.html")) {
-			return "crearCitaGrupal";
-		}
-		else if(webUsers.equals("miHorarioPsicologo.html")) {
-			return "miHorarioPsicologo";
-		}
-		else if(webUsers.equals("descripcionDeCita.html")) {
-			return "descripcionDeCita";
-		}
-		else if(webUsers.equals("horarioPsicologo.html")) {
-			return "horarioPsicologo";
-		}
-		else if(webUsers.equals("admin.html")) {
-			return "admin";
-		}
-		else if(webUsers.equals("/")) {
-			return "index";
-		}
-		else {
-			throw new ResourceNotFound();
-		}
+		throw new ResourceNotFound();
 	}
 
 	//ERRORS HANDLING
