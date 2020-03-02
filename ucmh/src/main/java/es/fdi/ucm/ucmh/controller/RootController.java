@@ -26,7 +26,7 @@ public class RootController {
 		"horarioPsicologo",
 		"admin",
 		"/",
-		"index"
+		"leeme"
 	};
 	
 	public RootController() {
