@@ -1,5 +1,6 @@
 package es.fdi.ucm.ucmh.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,7 +15,8 @@ public class Message {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer ID;
 	private String fecha;
-	
+	@Column(name="estadoAnimo", nullable=true)
+	private Animosity estadoAnimo;
 	@ManyToOne
 	private User from;
 	
