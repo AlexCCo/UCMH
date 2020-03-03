@@ -32,18 +32,18 @@ public class User {
 
 	//date
 	@OneToMany(mappedBy="patient")
-	private Collection<Date> patientsDate;
+	private Collection<Appointment> patientsDate;
 
 	@OneToMany(mappedBy="pychologist")
-	private Collection<Date> psichologistsDate;
+	private Collection<Appointment> psichologistsDate;
 	//-----
 
 	//groupDate
 	@ManyToMany(mappedBy="patient")
-	private Collection<GroupDate> patientsGroupDate;
+	private Collection<GroupAppointment> patientsGroupDate;
 
 	@OneToMany(mappedBy="pychologist")
-	private Collection<GroupDate> psichologistsGroupDate;
+	private Collection<GroupAppointment> psichologistsGroupDate;
 	//-----
 	//message
 	@OneToMany(mappedBy="from")
@@ -111,28 +111,28 @@ public class User {
 	public void setPsychologist(User psychologist) {
 		this.psychologist = psychologist;
 	}
-	public Collection<Date> getPatientsDate() {
+	public Collection<Appointment> getPatientsDate() {
 		return this.patientsDate;
 	}
-	public void setPatientsDate(Collection<Date> patientsDate) {
+	public void setPatientsDate(Collection<Appointment> patientsDate) {
 		this.patientsDate = patientsDate;
 	}
-	public Collection<Date> getPsichologistsDate() {
+	public Collection<Appointment> getPsichologistsDate() {
 		return psichologistsDate;
 	}
-	public void setPsichologistsDate(Collection<Date> psichologistsDate) {
+	public void setPsichologistsDate(Collection<Appointment> psichologistsDate) {
 		this.psichologistsDate = psichologistsDate;
 	}
-	public Collection<GroupDate> getPatientsGroupDate() {
+	public Collection<GroupAppointment> getPatientsGroupDate() {
 		return this.patientsGroupDate;
 	}
-	public void setPatientsGroupDate(Collection<GroupDate> patientsGroupDate) {
+	public void setPatientsGroupDate(Collection<GroupAppointment> patientsGroupDate) {
 		this.patientsGroupDate = patientsGroupDate;
 	}
-	public Collection<GroupDate> getPsichologistsGroupDate() {
+	public Collection<GroupAppointment> getPsichologistsGroupDate() {
 		return psichologistsGroupDate;
 	}
-	public void setPsichologistsGroupDate(Collection<GroupDate> psichologistsGroupDate) {
+	public void setPsichologistsGroupDate(Collection<GroupAppointment> psichologistsGroupDate) {
 		this.psichologistsGroupDate = psichologistsGroupDate;
 	}
 	public Collection<Message> getMessageSent() {

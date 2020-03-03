@@ -1,5 +1,7 @@
 package es.fdi.ucm.ucmh.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,12 +10,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 
 @Entity
-public class Date {
+public class Appointment {
 	//---------------Atributos-----------------
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer ID;
-	private String fecha;
+	private LocalDateTime fecha;
 	@ManyToOne
 	private User patient;
 	@ManyToOne
@@ -28,10 +30,10 @@ public class Date {
 	public void setID(Integer iD) {
 		ID = iD;
 	}
-	public String getFecha() {
+	public LocalDateTime getFecha() {
 		return fecha;
 	}
-	public void setFecha(String fecha) {
+	public void setFecha(LocalDateTime fecha) {
 		this.fecha = fecha;
 	}
 	public Integer getVersion() {
