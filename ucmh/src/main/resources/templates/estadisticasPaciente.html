@@ -1,123 +1,71 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>Estadisticas del paciente</title>
-<link rel="Stylesheet2" href="css/estadisticasPaciente.css">
-<link rel="Stylesheet" href="css/calendario.css">
-</head>
-<body align="center">
-	<br>
-	<p>
-		tipo de vista: <select name="vistas">
-			<option value="mensual">mensual</option>
-			<option value="medica">medica</option>
-		</select>
-	</p>
-	<br>
-	<div id="fechaactual">
-		<i onclick="actualizar()">HOY: </i>
-	</div>
-	<div id="buscafecha">
-		<form action="#" name="buscar">
-			<p>
-				Buscar MES <select name="buscames">
-					<option value="0">Enero</option>
-					<option value="1">Febrero</option>
-					<option value="2">Marzo</option>
-					<option value="3">Abril</option>
-					<option value="4">Mayo</option>
-					<option value="5">Junio</option>
-					<option value="6">Julio</option>
-					<option value="7">Agosto</option>
-					<option value="8">Septiembre</option>
-					<option value="9">Octubre</option>
-					<option value="10">Noviembre</option>
-					<option value="11">Diciembre</option>
-				</select> AÑO <input type="text" name="buscaanno" maxlength="4" size="4"
-					value="2020" /> <input type="button" value="BUSCAR"
-					onclick="mifecha()" />
-			</p>
-		</form>
-	</div>
-	<div id="calendario">
-		<div id="anterior" onclick="mesantes()"></div>
-		<div id="posterior" onclick="mesdespues()"></div>
-		<h2 id="titulos"></h2>
-		<table id="diasc">
-			<tr id="fila0">
-				<th>Lunes</th>
-				<th>Martes</th>
-				<th>Miercoles</th>
-				<th>Jueves</th>
-				<th>Viernes</th>
-				<th>Sábado</th>
-				<th>Domingo</th>
-			</tr>
-			<tr id="fila1">
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr id="fila2">
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr id="fila3">
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr id="fila4">
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr id="fila5">
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr id="fila6">
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-			</tr>
-		</table>
 
-	</div>
-	<br>
-	<div ></div>
-		<h2 id="sentir" >¿como te sientes este dia?</h2>
-		<button>bien</button>
-		<button>regular</button>
-		<button>mal</button>
-		<button>fatal</button>
-	</div>
-</body>
-</html>
+		<div class="calendar">
+
+			<div class="col leftCol">
+				<div class="content">
+					<h1 class="date">Friday<span>September 12th</span></h1>
+					<div class="notes">
+						<p>
+							<input type="text" value="" placeholder="new note"/>
+							<a href="#" title="Add note" class="addNote animate">+</a>
+						</p>
+						<ul class="noteList">
+							<li>Headbutt a lion<a href="#" title="Remove note" class="removeNote animate">x</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="col rightCol">
+				<div class="content">
+					<h2 class="year">2013</h2>
+					<ul class="months">
+						<li><a href="#" title="Jan" data-value="1">Jan</a></li>
+						<li><a href="#" title="Feb" data-value="2">Feb</a></li>
+						<li><a href="#" title="Mar" data-value="3">Mar</a></li>
+						<li><a href="#" title="Apr" data-value="4">Apr</a></li>
+						<li><a href="#" title="May" data-value="5">May</a></li>
+						<li><a href="#" title="Jun" data-value="6">Jun</a></li>
+						<li><a href="#" title="Jul" data-value="7">Jul</a></li>
+						<li><a href="#" title="Aug" data-value="8">Aug</a></li>
+						<li><a href="#" title="Sep" data-value="9" class="selected">Sep</a></li>
+						<li><a href="#" title="Oct" data-value="10">Oct</a></li>
+						<li><a href="#" title="Nov" data-value="11">Nov</a></li>
+						<li><a href="#" title="Dec" data-value="12">Dec</a></li>
+					</ul>
+					<div class="clearfix"></div>
+					<ul class="weekday">
+						<li><a href="#" title="Mon" data-value="1">Mon</a></li>
+						<li><a href="#" title="Tue" data-value="2">Tue</a></li>
+						<li><a href="#" title="Wed" data-value="3">Wed</a></li>
+						<li><a href="#" title="Thu" data-value="4">Thu</a></li>
+						<li><a href="#" title="Fri" data-value="5">Fri</a></li>
+						<li><a href="#" title="Say" data-value="6">Sat</a></li>
+						<li><a href="#" title="Sun" data-value="7">Sun</a></li>
+					</ul>
+					<div class="clearfix"></div>
+					<ul class="days">
+						<script>
+							for( var _i = 1; _i <= 31; _i += 1 ){
+								var _addClass = '';
+								if( _i === 12 ){ _addClass = ' class="selected"'; }
+								
+								switch( _i ){
+									case 8:
+									case 10:
+									case 27:
+										_addClass = ' class="event"';
+									break;
+								}
+
+								document.write( '<li><a href="#" title="'+_i+'" data-value="'+_i+'"'+_addClass+'>'+_i+'</a></li>' );
+							}
+						</script>
+					</ul>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+
+			<div class="clearfix"></div>
+
+		</div>
