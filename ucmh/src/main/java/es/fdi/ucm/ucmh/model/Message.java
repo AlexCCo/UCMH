@@ -1,5 +1,7 @@
 package es.fdi.ucm.ucmh.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +16,7 @@ public class Message {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer ID;
-	private String fecha;
+	private LocalDateTime fecha;
 	@Column(name="estadoAnimo", nullable=true)
 	private Animosity estadoAnimo;
 	@ManyToOne
@@ -35,10 +37,10 @@ public class Message {
 	public void setID(Integer iD) {
 		ID = iD;
 	}
-	public String getFecha() {
+	public LocalDateTime getFecha() {
 		return fecha;
 	}
-	public void setFecha(String fecha) {
+	public void setFecha(LocalDateTime fecha) {
 		this.fecha = fecha;
 	}
 	public String getText() {

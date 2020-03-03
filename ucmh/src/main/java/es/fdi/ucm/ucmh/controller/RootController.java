@@ -35,7 +35,7 @@ public class RootController {
 	@RequestMapping(value = "/{usersTemplates}", method = RequestMethod.GET)
 	public String indexPage(@PathVariable("usersTemplates") final String webUsers) {
 		for (String page : availableViews) {
-			if(webUsers.equals(page + ".html")) {
+			if(webUsers.equals(page)) {
 				return webUsers;
 			}
 		}
