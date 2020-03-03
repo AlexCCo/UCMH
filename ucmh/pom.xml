@@ -8,7 +8,7 @@
 		<version>2.2.4.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>es.fdi.ucm.UCMH</groupId>
+	<groupId>es.fdi.ucm.ucmh</groupId>
 	<artifactId>artifact_ucmh</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ucmh</name>

@@ -13,7 +13,7 @@
 }
 .img{
 	
-	width: 8em; 
+	width: 8em !important; 
 	height: 8em;
 }
 

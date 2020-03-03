@@ -4,24 +4,30 @@
 <meta charset="UTF-8">
 <title>Ajustes</title>
 <link rel=Stylesheet href="css/ajustesPaciente.css">
+  <link rel="stylesheet" href="css/schedule-style.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/materialize.css">
+  <link rel="stylesheet" href="css/my-theme.css">
 </head>
 <body align="center">
-	<br>
-	<br>
-
-	<div>
-		<p class="cuadro">Desea solicitar un cambio de psicólogo?</p>
-		<button class=si>si</button>
-		<button class=no>no</button>
-	</div>
-	<br>
-	<br>
+  <nav id="menu">
+    <div class="nav-wrapper">
+      <a href="#" id="logo" class="brand-logo">UCMH</a>
+      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li><a href = "misCitas.html">Mi horario</a></li>
+          <li class = "active"><a href="ajustesPaciente.html">Ajustes</a></li>
+          <a class="waves-effect waves-light btn">Cerrar sesión</a>
+      </ul>
+    </div>
+  </nav>
 	<br>
 	<br>
 
 	<div>
 		<h1>¿Desea contactar con su Psicologo/a?</h1>
-		<h2>Datos de su psicólogo</h2>
+		<!--<h2>Datos de su psicólogo</h2>
 		<img class=img src="image/usuarioPlantilla.jpg"
 			alt="foto del psicolog@" />
 		<table class=tabla align=center>
@@ -37,8 +43,45 @@
 				<td>Horario:</td>
 				<td><input type="text" name="Horario"></td>
 			</tr>
-		</table>
+		</table>-->
+		
+  <div class="row">
+    <div class="col s12 m7">
+      <div class="card">
+        <div class="card-image">
+          <img class=img src="image/usuarioPlantilla.jpg">
+          <span>Mi Psicólogo</span>
+        </div>
+        <div class="card-content">
+          <p>Gumersindo Bartolomé Martínez Martínez</p>
+          <p>Hola buenas</p>
+          <p>Resto de datos</p>
+        </div>
+        <div class="card-action">
+        
+			  <div class="row">
+			    <form class="col s12">
+			      <div class="row">
+			        <div class="input-field col s12">
+			          <input id="email" type="email" class="validate">
+			          <label for="email"></label>
+			        </div>
+			      </div>
+			    </form>
+			  </div>
+        
+            <button class="btn waves-effect waves-light" type="submit" name="action">
+    		<i class="material-icons right">Contactar</i>
+  			</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
+	</div>
+		<div>
+		<p>¿Desea solicitar un cambio de psicólogo?</p>
+		<a class="waves-effect waves-light btn-small">Solicitar cambio</a>
 	</div>
 </body>
 </html>
