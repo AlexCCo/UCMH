@@ -26,9 +26,7 @@ public class Message {
 	private User to;
 	
 	private String text;
-	
-	@Version
-	private Integer version;
+
 	//------------------------------------------
 	
 	public Integer getID() {
@@ -48,12 +46,6 @@ public class Message {
 	}
 	public void setText(String text) {
 		this.text = text;
-	}
-	public Integer getVersion() {
-		return version;
-	}
-	public void setVersion(Integer version) {
-		this.version = version;
 	}
 	public User getFrom() {
 		return from;

@@ -22,8 +22,7 @@ public class GroupAppointment {
 	private Collection<User> patient;
 	@ManyToOne
 	private User pychologist;
-	@Version
-	private Integer version;
+
 	// ------------------------------------------
 
 	public Integer getID() {
@@ -40,14 +39,6 @@ public class GroupAppointment {
 
 	public void setFecha(LocalDateTime fecha) {
 		this.fecha = fecha;
-	}
-
-	public Integer getVersion() {
-		return version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
 	}
 
 	public User getPychologist() {

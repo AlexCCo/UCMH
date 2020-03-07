@@ -53,8 +53,6 @@ public class User {
 	private  Collection<Message> receivedMessage;
 	//-----
 
-	@Version
-	private Integer version;
 	//-------------------------------------------
 
 	public Integer getID() {
@@ -98,12 +96,6 @@ public class User {
 	}
 	public void setType(String type) {
 		Type = type;
-	}
-	public Integer getVersion() {
-		return version;
-	}
-	public void setVersion(Integer version) {
-		this.version = version;
 	}
 	public User getPsychologist() {
 		return psychologist;
