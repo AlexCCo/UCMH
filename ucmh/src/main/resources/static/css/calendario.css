@@ -1,107 +1,91 @@
-@charset "UTF-8";
-/*instrucciones generales*/
-* {
-	margin: auto;
-}
-/*cabecera de la p�gina*/
-h1 {
-	text-align: center;
-	padding: 0.5em;
-}
-/*div principal del calendario*/
-#calendario {
-	text-align: center;
-	}
-/*tabla del calendario*/
-#diasc {
-	border: 1px solid black;
-	bordercolor: #000000;
-	border-collapse: separate;
-	border-spacing: 4px;
-}
+        ul {
+            list-style-type: none;
+        }
 
-#diasc th, #diasc td {
-	border: 1px solid black;
-	font: normal 14pt arial;
-	width: 70px;
-	height: 30px;
-}
+        * {
+            margin: 0;
+            box-sizing: border-box;
+        }
 
-#diasc th {
-	COLOR: #000000;
-	BACKGROUND-COLOR: #808000
-}
+        .calendar {
+            margin: 100px auto;
+            width: 600px;
+            background-color: #fff;
+            box-shadow: 0px 0px 15px 4px rgba(0, 0, 0, 0.2);
+       
+        }
 
-#diasc td {
-	color: #808000;
-	background-color: #ffffff
-}
-/*l�nea de la fecha actual*/
-#fechaactual {
-	font: bold 12pt arial;
-	padding: 0.4em
-}
+        .month {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 40px 30px;
+            text-align: center;
+            background-color: #2ecc71;
+            color: #fff;
+        }
 
-#fechaactual i {
-	cursor: pointer;
-}
+        .weekdays {
+            background-color: #27ae60;
+            color: #fff;
+            padding: 7px 0;
+            display: flex;
+        }
 
-#fechaactual i:hover {
-	color: #808000;
-	text-decoration: underline;
-}
-/*formulario de busqueda de fechas*/
-#buscafecha {
-	
-	color: #000000;
-	padding: 5px
-}
+        .days {
+            font-weight: 300;
+            padding: 10px 0;
+            display: flex;
+            flex-wrap: wrap;
+        }
 
-#buscafecha select, #buscafecha input {
-	background-color:#808000 ;
-	color:#000000;
-	font: bold 10pt arial;
-}
+        .weekdays div,
+        .days div {
+            text-align: center;
+            width: 14.28%;
+        }
 
-#buscafecha [type=text] {
-	text-align: center;
-}
+        .days div {
+            padding: 10px 0;
+            margin-bottom: 10px;
+            transition: all 0.4s;
+        }
 
-#buscafecha  [type=button] {
-	cursor: pointer;
-}
-/*cabecera del calendario*/
-#anterior {
-	float: left;
-	width: 100px;
-	font: bold 12pt arial;
-	padding: 0.5em 0.1em;
-	cursor: pointer;
-}
+        .prev_date {
+            color: #999;
+        }
 
-#posterior {
-	float: right;
-	width: 100px;
-	font: bold 12pt arial;
-	padding: 0.5em 0.1em;
-	cursor: pointer;
-}
+        .today {
+            background-color: #27ae60;
+            color: #fff;
+        }
 
-#anterior:hover {
-	color: blue;
-	text-decoration: underline;
-}
+        .days div:hover {
+            cursor: pointer;
+            background-color: #dfe6e9
+        }
 
-#posterior:hover {
-	color: blue;
-	text-decoration: underline;
-}
+        .prev,
+        .next {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 23px;
+            background-color: rgba(0, 0, 0, 0.1);
+            transition: all 0.4s;
+        }
 
-#titulos {
-	font: normal 20pt "arial black";
-	padding: 0.2em;
-}
+        .prev:hover,
+        .next:hover {
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
 
-#sentir {
- border: 1px solid black;
-}
+        #month {
+            font-size: 30px;
+            font-weight: 500;
+        }
