@@ -20,14 +20,10 @@ public class RootController {
 		"ajustesPaciente",
 		"misCitas",
 		"estadisticasPaciente",
-		"crearCitaGrupal",
-		"miHorarioPsicologo",
-		"descripcionDeCita",
 		"horarioPsicologo",
 		"misPacientes",
 		"admin",
 		"/",
-		"leeme"
 	};
 	
 	public RootController() {}
