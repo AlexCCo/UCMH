@@ -24,14 +24,15 @@ public class RootController {
 		"miHorarioPsicologo",
 		"descripcionDeCita",
 		"horarioPsicologo",
+		"misPacientes",
 		"admin",
 		"/",
 		"leeme"
 	};
 	
-	public RootController() {
-		
-	}
+	public RootController() {}
+	
+	
 	@RequestMapping(value = "/{usersTemplates}", method = RequestMethod.GET)
 	public String indexPage(@PathVariable("usersTemplates") final String webUsers) {
 		for (String page : availableViews) {
