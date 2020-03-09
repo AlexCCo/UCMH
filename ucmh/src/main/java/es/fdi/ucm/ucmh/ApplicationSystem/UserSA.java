@@ -27,7 +27,6 @@ public class UserSA {
 			u.setPassword(transfer.getPassword());
 			u.setType(transfer.getType());
 			u.setSecondName(transfer.getSecondName());
-
 			em.persist(u);
 			em.getTransaction().commit();
 			return u.getID();
