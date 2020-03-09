@@ -59,26 +59,28 @@
 					<p>Horario: 9:00-17:00</p>
 				</div>
 			</div>
-		</div>
-		<div class="card-action">
-			<a href="#">Contactar</a> 
-			<a href="#modal2">Cambio de psicólogo</a>
-		</div>
-	</div>
-	
+		
 
+	</div>
+	</div>
+		<div class="card-action">
+			<a href="#">Contactar</a> <a href="#modal2">Cambio de psicólogo</a>
+		</div>
 	<div id="modal2" class="modal">
 		<div class="modal-content">
-			<h4>¿Desea cambiar de psicólogo?</h4>
-			<p>¿Cual es el motivo de su petición?</p>
-			<textarea id="textarea1" class="materialize-textarea"></textarea>
+			<h4>Cita grupal</h4>
+			<p>A bunch of text</p>
 		</div>
 		<div class="modal-footer">
 			<a href="#!" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
-			<a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
 		</div>
 	</div>
-	
+
+
+
+
+
+
 
 	<script src="js/vendor/modernizr-3.8.0.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -91,15 +93,25 @@
 	</script>
 	<script src="js/plugins.js"></script>
 	<script src="js/vendor/materialize.min.js"></script>
+	<script src="js/vendor/schedule-util.js"></script>
+	<script src="js/vendor/schedule-main.js"></script>
 
 	<script src="js/main.js"></script>
-
 	<script>
 		$(document).ready(function() {
-			$('.modal').modal();
-			$('.trigger-modal').modal();
 			$('.sidenav').sidenav();
+			var x = document.getElementsByClassName(".modal");
+			x.modal();
+			//$('.modal').modal();
+			$('.trigger-modal').modal();
 		});
-	</script>
-</body>
+		</script>
+
+		  <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+		  <script>
+		    window.ga = function () { ga.q.push(arguments) }; ga.q = []; ga.l = +new Date;
+		    ga('create', 'UA-XXXXX-Y', 'auto'); ga('set','transport','beacon'); ga('send', 'pageview')
+		  </script>
+		  <script src="https://www.google-analytics.com/analytics.js" async></script>
+		</body>
 </html>

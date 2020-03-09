@@ -2,161 +2,168 @@
 
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<title>Admin</title>
+<title>Admin</title>
 
-		<link rel="stylesheet" href="/css/admin.css">
-		<link rel="stylesheet" href="/css/main.css">
-		<link rel="stylesheet" href="/css/normalize.css">
-		<link rel="stylesheet" href="/css/calendario.css">
-		<link rel="stylesheet" href="/css/materialize.css">
-		<link rel="stylesheet" href="/css/my-theme.css">
-		
+<link rel="stylesheet" href="/css/admin.css">
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/normalize.css">
+<link rel="stylesheet" href="/css/calendario.css">
+<link rel="stylesheet" href="/css/materialize.css">
+<link rel="stylesheet" href="/css/my-theme.css">
 
 
-		<link href="https://fonts.googleapis.com/css?family=Muli|Oswald&display=swap" rel="stylesheet">
-		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-		<meta name="theme-color" content="#fafafa">
+<link
+	href="https://fonts.googleapis.com/css?family=Muli|Oswald&display=swap"
+	rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet">
 
-	</head>
-	<body onload="renderDate()">
+<meta name="theme-color" content="#fafafa">
 
-		<!--[if IE]>
+</head>
+<body onload="renderDate()">
+
+	<!--[if IE]>
 			<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
 		<![endif]-->
 
-		<!-- Add your site or application content here -->
+	<!-- Add your site or application content here -->
 
 
-		  <nav id="menu">
-		    <div class="nav-wrapper">
-		      <a href="#" id="logo" class="brand-logo">UCMH</a>
-		      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-		      <ul id="nav-mobile" class="right hide-on-med-and-down">
-		          <li><a href="misCitas">Mis citas</a></li>
-		          <li class="active"><a href="estadisticasPaciente">Estadisticas</a></li>
-		          <li><a href="ajustesPaciente">Ajustes</a></li>
-		          <a class="waves-effect waves-light btn">Cerrar sesión</a>
-		      </ul>
-		    </div>
-		  </nav>
-		  
-
-  <!-- Menú desplegable mobile-->
-
-		  <ul class="sidenav" id="mobile-demo">
-		    <li><a>Mis citas</a></li>
-		    <li class="active"><a href="estadisticasPaciente">Estadisticas</a></li>
-		    <li><a href="ajustesPaciente">Ajustes</a></li>
-		    <li><a>Cerrar sesión</a></li>
-		  </ul>
-
-		<h4 class="center-align">Estadísticas de ánimo</h4>
-		
-		        <div class="calendar">
-		            <div class="month">
-		                <div class="prev" onclick="moveDate('prev')">
-		                    <span>&#10094;</span> <nav id="menu">
-		    <div class="nav-wrapper">
-		      <a href="#" id="logo" class="brand-logo">UCMH</a>
-		      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-		      <ul id="nav-mobile" class="right hide-on-med-and-down">
-		          <li><a href="misCitas">Mis citas</a></li>
-		          <li class="active"><a href="estadisticasPaciente">Estadisticas</a></li>
-		          <li><a href="ajustesPaciente">Ajustes</a></li>
-		          <a class="waves-effect waves-light btn">Cerrar sesión</a>
-		      </ul>
-		    </div>
-		  </nav>
-		                </div>
-		                <div>
-		                    <h2 id="month"></h2>
-		                    <p id="date_str"></p>
-		                </div>
-		                <div class="next" onclick="moveDate('next')">
-		                    <span>&#10095;</span>
-		                </div>
-		            </div>
-		            <div class="weekdays">
-		                <div>Dom</div>
-		                <div>Lun</div>
-		                <div>Mar</div>
-		                <div>Mie</div>
-		                <div>Jue</div>
-		                <div>Vie</div>
-		                <div>Sab</div>
-		            </div>
-		            <div class="days">
-
-            </div>
-		
-		<div id="modal" class="modal">
-		    <div class="modal-content">
-		      <h4 class="center-align">¿Cómo te sientes?</h4>
-		      
-		      <p>Selecciona el día que quieras rellenar con tu estado de ánimo</p>
-		      <input type="text" class="datepicker">
-		      
-		      <p>Selecciona tu estado de ánimo</p>
-		      <div>
-		      		<a class="waves-effect waves-light btn-small">
-		      			<i class="material-icons">sentiment_very_dissatisfied</i>
-	      			</a>
-		      		<a class="waves-effect waves-light btn-small">
-		      			<i class="material-icons">sentiment_dissatisfied</i>
-	      			</a>
-		      		<a class="waves-effect waves-light btn-small">
-		      			<i class="material-icons">sentiment_satisfied</i>
-	      			</a>
-		      		<a class="waves-effect waves-light btn-small">
-		      			<i class="material-icons">sentiment_satisfied_alt</i>
-		      		</a>
-		      		<a class="waves-effect waves-light btn-small">
-		      			<i class="material-icons">sentiment_very_satisfied</i>
-	      			</a>
-		      </div>
-		      
-		      <p>Explica porqué te siente así</p>
-			  <textarea class="materialize-textarea"></textarea>
-         	  
-		    </div>
-		    <div class="modal-footer">
-		      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
-		      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Aceptar</a>
-		    </div>
+	<nav id="menu">
+		<div class="nav-wrapper">
+			<a href="#" id="logo" class="brand-logo">UCMH</a> <a href="#"
+				data-target="mobile-demo" class="sidenav-trigger"><i
+				class="material-icons">menu</i></a>
+			<ul id="nav-mobile" class="right hide-on-med-and-down">
+				<li><a href="misCitas">Mis citas</a></li>
+				<li class="active"><a href="estadisticasPaciente">Estadisticas</a></li>
+				<li><a href="ajustesPaciente">Ajustes</a></li>
+				<a class="waves-effect waves-light btn">Cerrar sesión</a>
+			</ul>
 		</div>
-		
+	</nav>
+
+
+	<!-- Menú desplegable mobile-->
+
+	<ul class="sidenav" id="mobile-demo">
+		<li><a>Mis citas</a></li>
+		<li class="active"><a href="estadisticasPaciente">Estadisticas</a></li>
+		<li><a href="ajustesPaciente">Ajustes</a></li>
+		<li><a>Cerrar sesión</a></li>
+	</ul>
+
+	<h4 class="center-align">Estadísticas de ánimo</h4>
+
+	<div class="calendar">
+		<div class="month">
+			<div class="prev" onclick="moveDate('prev')">
+				<span>&#10094;</span>
+				<nav id="menu">
+					<div class="nav-wrapper">
+						<a href="#" id="logo" class="brand-logo">UCMH</a> <a href="#"
+							data-target="mobile-demo" class="sidenav-trigger"><i
+							class="material-icons">menu</i></a>
+						<ul id="nav-mobile" class="right hide-on-med-and-down">
+							<li><a href="misCitas">Mis citas</a></li>
+							<li class="active"><a href="estadisticasPaciente">Estadisticas</a></li>
+							<li><a href="ajustesPaciente">Ajustes</a></li>
+							<a class="waves-effect waves-light btn">Cerrar sesión</a>
+						</ul>
+					</div>
+				</nav>
+			</div>
+			<div>
+				<h2 id="month"></h2>
+				<p id="date_str"></p>
+			</div>
+			<div class="next" onclick="moveDate('next')">
+				<span>&#10095;</span>
+			</div>
+		</div>
+		<div class="weekdays">
+			<div>Dom</div>
+			<div>Lun</div>
+			<div>Mar</div>
+			<div>Mie</div>
+			<div>Jue</div>
+			<div>Vie</div>
+			<div>Sab</div>
+		</div>
+		<div class="days"></div>
+
+		<div id="modal" class="modal">
+			<div class="modal-content">
+				<h4 class="center-align">¿Cómo te sientes?</h4>
+
+				<p>Selecciona el día que quieras rellenar con tu estado de ánimo</p>
+				<input type="text" class="datepicker">
+
+				<p>Selecciona tu estado de ánimo</p>
+				<div>
+					<a class="waves-effect waves-light btn-small"> <i
+						class="material-icons">sentiment_very_dissatisfied</i>
+					</a> <a class="waves-effect waves-light btn-small"> <i
+						class="material-icons">sentiment_dissatisfied</i>
+					</a> <a class="waves-effect waves-light btn-small"> <i
+						class="material-icons">sentiment_satisfied</i>
+					</a> <a class="waves-effect waves-light btn-small"> <i
+						class="material-icons">sentiment_satisfied_alt</i>
+					</a> <a class="waves-effect waves-light btn-small"> <i
+						class="material-icons">sentiment_very_satisfied</i>
+					</a>
+				</div>
+
+				<p>Explica porqué te siente así</p>
+				<textarea class="materialize-textarea"></textarea>
+
+			</div>
+			<div class="modal-footer">
+				<a href="#!"
+					class="modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
+				<a href="#!"
+					class="modal-action modal-close waves-effect waves-green btn-flat">Aceptar</a>
+			</div>
+		</div>
+
 		<div class="fixed-action-btn">
-		 <a class="btn-floating btn-large red modal-trigger" href="#modal">
-		   <i class="large material-icons">add</i>
-		 </a>		
-	    </div>
+			<a class="btn-floating btn-large red modal-trigger" href="#modal">
+				<i class="large material-icons">add</i>
+			</a>
+		</div>
 
-	  <script src="/js/vendor/modernizr-3.8.0.min.js"></script>
-	  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-	  <script>window.jQuery || document.write('<script src="/js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
-	  <script src="/js/plugins.js"></script>
-	  <script src="/js/vendor/materialize.min.js"></script>
-	  <script src="/js/vendor/calendario.js"></script>
-	  
+		<script src="/js/vendor/modernizr-3.8.0.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			crossorigin="anonymous"></script>
+		<script>
+			window.jQuery
+					|| document
+							.write('<script src="/js/vendor/jquery-3.4.1.min.js"><\/script>')
+		</script>
+		<script src="/js/plugins.js"></script>
+		<script src="/js/vendor/materialize.min.js"></script>
+		<script src="/js/vendor/calendario.js"></script>
 
-	  <script src="/js/main.js"></script>
+
+		<script src="/js/main.js"></script>
 
 		<script>
-		$(document).ready(function(){
+			$(document).ready(function() {
 				$('.sidenav').sidenav();
 				$('.collapsible').collapsible();
-			    $('select').formSelect();
-			    $('.modal').modal();
-			    $('.trigger-modal').modal();
-			    $('.fixed-action-btn').floatingActionButton();
-			    $('.datepicker').datepicker();
-		});
+				$('select').formSelect();
+				$('.modal').modal();
+				$('.trigger-modal').modal();
+				$('.fixed-action-btn').floatingActionButton();
+				$('.datepicker').datepicker();
+			});
 		</script>
-
-	</body>
+</body>
 </html>
