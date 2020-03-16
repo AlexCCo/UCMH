@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Admin</title>
+<title>Estadisticas</title>
 
 <link rel="stylesheet" href="/css/admin.css">
 <link rel="stylesheet" href="/css/main.css">
@@ -65,19 +65,6 @@
 		<div class="month">
 			<div class="prev" onclick="moveDate('prev')">
 				<span>&#10094;</span>
-				<nav id="menu">
-					<div class="nav-wrapper">
-						<a href="#" id="logo" class="brand-logo">UCMH</a> <a href="#"
-							data-target="mobile-demo" class="sidenav-trigger"><i
-							class="material-icons">menu</i></a>
-						<ul id="nav-mobile" class="right hide-on-med-and-down">
-							<li><a href="misCitas">Mis citas</a></li>
-							<li class="active"><a href="estadisticasPaciente">Estadisticas</a></li>
-							<li><a href="ajustesPaciente">Ajustes</a></li>
-							<a class="waves-effect waves-light btn">Cerrar sesión</a>
-						</ul>
-					</div>
-				</nav>
 			</div>
 			<div>
 				<h2 id="month"></h2>
@@ -96,15 +83,16 @@
 			<div>Vie</div>
 			<div>Sab</div>
 		</div>
+		
 		<div class="days"></div>
-
+		
 		<div id="modal" class="modal">
 			<div class="modal-content">
-				<h4 class="center-align">¿Cómo te sientes?</h4>
-
-				<p>Selecciona el día que quieras rellenar con tu estado de ánimo</p>
-				<input type="text" class="datepicker">
-
+				<div>
+					<h4 class="center-align">¿Cómo te sientes?</h4>
+					<h5 class="center-align">Dia <span class="day-click-by-user"></span></h5>
+				</div>
+				
 				<p>Selecciona tu estado de ánimo</p>
 				<div>
 					<a class="waves-effect waves-light btn-small"> <i
@@ -119,11 +107,11 @@
 						class="material-icons">sentiment_very_satisfied</i>
 					</a>
 				</div>
-
+				
 				<p>Explica porqué te siente así</p>
 				<textarea class="materialize-textarea"></textarea>
-
 			</div>
+			
 			<div class="modal-footer">
 				<a href="#!"
 					class="modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
@@ -131,13 +119,7 @@
 					class="modal-action modal-close waves-effect waves-green btn-flat">Aceptar</a>
 			</div>
 		</div>
-
-		<div class="fixed-action-btn">
-			<a class="btn-floating btn-large red modal-trigger" href="#modal">
-				<i class="large material-icons">add</i>
-			</a>
-		</div>
-
+		
 		<script src="/js/vendor/modernizr-3.8.0.min.js"></script>
 		<script src="https://code.jquery.com/jquery-3.4.1.min.js"
 			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
