@@ -6,32 +6,26 @@
 
 		<title>Admin</title>
 
-		<link rel="stylesheet" href="css/admin.css">
+		<link rel="stylesheet" href="/css/admin.css">
 		<link rel="stylesheet" href="/css/main.css">
 		<link rel="stylesheet" href="/css/normalize.css">
 		<link rel="stylesheet" href="/css/materialize.css">
 		<link rel="stylesheet" href="/css/my-theme.css">
-
-
-		<link href="https://fonts.googleapis.com/css?family=Muli|Oswald&display=swap" rel="stylesheet">
+		
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Muli|Oswald&display=swap" rel="stylesheet">
 
 		<meta name="theme-color" content="#fafafa">
 
 	</head>
 	<body>
-
-		<!--[if IE]>
-			<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
-		<![endif]-->
-
-		<!-- Add your site or application content here -->
-
 		<nav id="menu">
 			<div class="nav-wrapper">
 				<a href="#" id="logo" class="brand-logo">UCMH</a>
 				<a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 				<ul id="nav-mobile" class="right hide-on-med-and-down">
+						<a class="waves-effect waves-light btn">Registrar psicologo</a>
+						<a class="waves-effect waves-light btn">Registrar paciente</a>
 						<a class="waves-effect waves-light btn">Cerrar sesión</a>
 				</ul>
 			</div>
@@ -43,7 +37,7 @@
 			<li><a>Cerrar sesión</a></li>
 		</ul>
 
-		<h4 class="center-align">Panel de administración</h4>
+		<h4 class="center-align">Panel de administración de <span th:text="${admin.firstName}"></span></h4>
 
 		<div class="row">
 			<div class="col s6">
@@ -52,116 +46,65 @@
 				    <div class="collapsible-header">
 				      <i class="material-icons">face</i>
 				      Psicólogos
-				      <span class="new badge">4</span></div>
+				    </div>
 				    <div class="collapsible-body">
 							<ul class="collection">
-			        <li class="collection-item avatar">
-			          <img src="/image/ejemplo.jpg" alt="" class="circle">
-			          <span class="title">Maria Antonia</span>
-			          <p>Trastorno de ansiedad <br>
-			             Receta: Pastillas fuertes
-			          </p>
-			          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-			        </li>
-			        <li class="collection-item avatar">
-			          <img src="/image/ejemplo.jpg" alt="" class="circle">
-			          <span class="title">Maria Antonia</span>
-			          <p>Trastorno de ansiedad <br>
-			             Receta: Pastillas fuertes
-			          </p>
-			          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-			        </li>
-			        <li class="collection-item avatar">
-			          <img src="/image/ejemplo.jpg" alt="" class="circle">
-			          <span class="title">Maria Antonia</span>
-			          <p>Trastorno de ansiedad <br>
-			             Receta: Pastillas fuertes
-			          </p>
-			          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-			        </li>
-			        <li class="collection-item avatar">
-			          <img src="/image/ejemplo.jpg" alt="" class="circle">
-			          <span class="title">Maria Antonia</span>
-			          <p>Trastorno de ansiedad <br>
-			             Receta: Pastillas fuertes
-			          </p>
-			          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-			        </li>
-			        <li class="collection-item avatar">
-			          <img src="/image/ejemplo.jpg" alt="" class="circle">
-			          <span class="title">Maria Antonia</span>
-			          <p>Trastorno de ansiedad <br>
-			             Receta: Pastillas fuertes
-			          </p>
-			          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-			        </li>
-			        <li class="collection-item avatar">
-			          <img src="/image/ejemplo.jpg" alt="" class="circle">
-			          <span class="title">Maria Antonia</span>
-			          <p>Trastorno de ansiedad <br>
-			             Receta: Pastillas fuertes
-			          </p>
-			          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-			        </li>
-			      </ul>
+							<!-- Example of what we want to show -->
+								<li class="collection-item avatar">
+				          <img src="/image/ejemplo.jpg" alt="" class="circle">
+				          <span class="title">Maria Antonia</span>
+				          <p>Trastorno de ansiedad <br>
+				             Receta: Pastillas fuertes
+				          </p>
+				          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+				        </li>
+				      <!-- end of example -->
+			      	</ul>
+			      	<div class="users-more-results">
+								<button id="less-psychologists" class="waves-effect waves-teal btn-flat">
+									<i class="material-icons">chevron_left</i>
+								</button>
+								<div class="users-results">
+									<p>mostrando 10 elementos - pagina <span class="psychologist-page"></span></p>
+								</div>
+								<button id="more-psychologists" class="waves-effect waves-teal btn-flat">
+									<i class="material-icons">chevron_right</i>
+								</button>
+							</div>
 						</div>
 				  </li>
+				  
 				  <li>
 				    <div class="collapsible-header">
 				      <i class="material-icons">group</i>
 				      Pacientes
-				      <span class="badge">1</span></div>
+				    </div>
 				    <div class="collapsible-body">
 							<ul class="collection">
-							<li class="collection-item avatar">
-								<img src="/image/ejemplo.jpg" alt="" class="circle">
-								<span class="title">Maria Antonia</span>
-								<p>Trastorno de ansiedad <br>
-									 Receta: Pastillas fuertes
-								</p>
-								<a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-							</li>
-							<li class="collection-item avatar">
-								<img src="/image/ejemplo.jpg" alt="" class="circle">
-								<span class="title">Maria Antonia</span>
-								<p>Trastorno de ansiedad <br>
-									 Receta: Pastillas fuertes
-								</p>
-								<a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-							</li>
-							<li class="collection-item avatar">
-								<img src="/image/ejemplo.jpg" alt="" class="circle">
-								<span class="title">Maria Antonia</span>
-								<p>Trastorno de ansiedad <br>
-									 Receta: Pastillas fuertes
-								</p>
-								<a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-							</li>
-							<li class="collection-item avatar">
-								<img src="/image/ejemplo.jpg" alt="" class="circle">
-								<span class="title">Maria Antonia</span>
-								<p>Trastorno de ansiedad <br>
-									 Receta: Pastillas fuertes
-								</p>
-								<a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-							</li>
-							<li class="collection-item avatar">
-								<img src="/image/ejemplo.jpg" alt="" class="circle">
-								<span class="title">Maria Antonia</span>
-								<p>Trastorno de ansiedad <br>
-									 Receta: Pastillas fuertes
-								</p>
-								<a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-							</li>
-							<li class="collection-item avatar">
-								<img src="/image/ejemplo.jpg" alt="" class="circle">
-								<span class="title">Maria Antonia</span>
-								<p>Trastorno de ansiedad <br>
-									 Receta: Pastillas fuertes
-								</p>
-								<a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-							</li>
-						</ul>
+								<!-- We should load them with AJAX -->
+								<!-- Example of what we want to show -->
+								<li class="collection-item avatar">
+									<img src="/image/ejemplo.jpg" alt="" class="circle">
+									<span class="title">Maria Antonia</span>
+									<p>Trastorno de ansiedad <br>
+										 Receta: Pastillas fuertes
+									</p>
+									<a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+								</li>
+								<!-- end of example -->
+								
+							</ul>
+							<div class="users-more-results">
+								<button id="less-patiens" class="waves-effect waves-teal btn-flat">
+									<i class="material-icons">chevron_left</i>
+								</button>
+								<div class="users-results">
+									<p>mostrando 10 elementos - pagina <span class="user-page"></span></p>
+								</div>
+								<button id ="more-patiens" class="waves-effect waves-teal btn-flat">
+									<i class="material-icons">chevron_right</i>
+								</button>
+							</div>
 						</div>
 				  </li>
 				</ul>
@@ -169,7 +112,7 @@
 
 			<div class="col s6">
 				<div class="card">
-					<div class="card-content">
+					<div class="card-content"><!-- 
 						<span class="card-title">Maria Antonia</span>
 							<div class ="row valign-wrapper">
 								<div class="col s4">
@@ -183,7 +126,7 @@
 					<div class="card-action">
 						<a href="#">Eliminar</a>
 						<a href="#">Contactar</a>
-					</div>
+					</div> -->
 				</div>
 		</div>
 
@@ -193,8 +136,7 @@
 	  <script>window.jQuery || document.write('<script src="/js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
 	  <script src="/js/plugins.js"></script>
 	  <script src="/js/vendor/materialize.min.js"></script>
-
-	  <script src="/js/main.js"></script>
+	  <script src="/js/admin.js"></script>
 
 		<script>
 		$(document).ready(function(){

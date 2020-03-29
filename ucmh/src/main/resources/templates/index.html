@@ -5,18 +5,20 @@
 	</head>
 	<body>
 		<ul>
+		<!-- the text selector here doesn't work and i don't know why -->
+			<li>Welcome <span th:text="#{index.welcome}">debugger</span></li>
 			<li style='list-style-type: none;'><b>See user templates</b></li>
-			<li><a href="ajustesPaciente">ajustesPaciente</a></li>
-			<li><a href="misCitas">misCitas</a></li>
-			<li><a href="estadisticasPaciente">estadisticasPaciente</a></li>
+			<li><a href="ajustesPaciente" th:href="@{user/10/ajustes}">ajustesPaciente</a></li>
+			<li><a href="misCitas" th:href="@{user/10/pagina-principal}">misCitas</a></li>
+			<li><a href="estadisticasPaciente" th:href="@{user/10/estadisticas}">estadisticasPaciente</a></li>
 			<li style='list-style-type: none;'><b>See psychologist templates</b></li>
-			<li><a href="crearCitaGrupal">crearCitaGrupal</a></li>
+			<li><a href="crearCitaGrupal">crearCitaGrupal???</a></li>
 			<li><a href="miHorarioPsicologo">miHorarioPsicologo</a></li>
 			<li><a href="descripcionDeCita">descripcionDeCita</a></li>
 			<li><a href="misPacientes">misPacientes</a></li>
 			<li><a href="horarioPsicologo">horarioPsicologo</a></li>
 			<li style='list-style-type: none;'><b>See admin template</b></li>
-			<li><a href="admin">admin</a></li>
+			<li><a href="admin" th:href="@{admin/1}">admin</a></li>
 		</ul>
 	</body>
 </html>

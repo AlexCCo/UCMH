@@ -75,15 +75,14 @@ function renderDate() {
     /*
      * We create a custom click listener where we will store the day
      * marked by our user.
-     * WE SHOULD CLEAR LOCALSTORAGE AFTER SENDING DATA TO OUR SERVER
     */
     for(let element of inner_days[0].childNodes){
     	let key_string = "marked-day-" + element.innerText;
-    	let value_string = "day-" + element.innerText;
+    	let value_string = element.innerText;
     	
     	element.addEventListener("click", function(e){
-    		localStorage.setItem(key_string, value_string);
-    		console.log("!!!!!!"+ element.innerText);
+    		document.getElementsByClassName("day-click-by-user")[0].innerHTML = value_string;
+    		console.log("!!!"+ document.getElementsByClassName("day-click-by-user")[0]);
     	})
     	
     	console.log(key_string+ ": "+ value_string);

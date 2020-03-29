@@ -16,10 +16,10 @@ public class User {
 	//------------Atributos---------------------
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer ID;
+	private Long ID;
 
 	private String firstName;
-	private String secondName;
+	private String lastName;
 	private String mail;
 	private String password;
 	private String phoneNumber;
@@ -55,10 +55,10 @@ public class User {
 
 	//-------------------------------------------
 
-	public Integer getID() {
+	public Long getID() {
 		return ID;
 	}
-	public void setID(Integer iD) {
+	public void setID(Long iD) {
 		ID = iD;
 	}
 	public String getFirstName() {
@@ -68,10 +68,10 @@ public class User {
 		this.firstName = firstName;
 	}
 	public String getSecondName() {
-		return secondName;
+		return lastName;
 	}
 	public void setSecondName(String secondName) {
-		this.secondName = secondName;
+		this.lastName = secondName;
 	}
 	public String getMail() {
 		return mail;

@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="/css/calendario.css">
 <link rel="stylesheet" href="/css/materialize.css">
 <link rel="stylesheet" href="/css/my-theme.css">
+<link rel="stylesheet" href="/css/estadisticasPaciente.css">
 
 
 
@@ -41,6 +42,7 @@
 				data-target="mobile-demo" class="sidenav-trigger"><i
 				class="material-icons">menu</i></a>
 			<ul id="nav-mobile" class="right hide-on-med-and-down">
+				<li><i class="welcome-msg">Bienvenido <span th:text="${user.firstName}">debug</span></i></li>
 				<li><a href="misCitas">Mis citas</a></li>
 				<li class="active"><a href="estadisticasPaciente">Estadisticas</a></li>
 				<li><a href="ajustesPaciente">Ajustes</a></li>
@@ -94,17 +96,21 @@
 				</div>
 				
 				<p>Selecciona tu estado de ánimo</p>
-				<div>
-					<a class="waves-effect waves-light btn-small"> <i
-						class="material-icons">sentiment_very_dissatisfied</i>
-					</a> <a class="waves-effect waves-light btn-small"> <i
-						class="material-icons">sentiment_dissatisfied</i>
-					</a> <a class="waves-effect waves-light btn-small"> <i
-						class="material-icons">sentiment_satisfied</i>
-					</a> <a class="waves-effect waves-light btn-small"> <i
-						class="material-icons">sentiment_satisfied_alt</i>
-					</a> <a class="waves-effect waves-light btn-small"> <i
-						class="material-icons">sentiment_very_satisfied</i>
+				<div class="emotion-state">
+					<a class="waves-effect waves-light btn-small">
+						<i class="material-icons">sentiment_very_dissatisfied</i>
+					</a>
+					<a class="waves-effect waves-light btn-small">
+						<i class="material-icons">sentiment_dissatisfied</i>
+					</a> 
+					<a class="waves-effect waves-light btn-small"> 
+						<i class="material-icons">sentiment_satisfied</i>
+					</a>
+					<a class="waves-effect waves-light btn-small"> 
+						<i class="material-icons">sentiment_satisfied_alt</i>
+					</a> 
+					<a class="waves-effect waves-light btn-small"> 
+						<i class="material-icons">sentiment_very_satisfied</i>
 					</a>
 				</div>
 				
@@ -129,12 +135,12 @@
 					|| document
 							.write('<script src="/js/vendor/jquery-3.4.1.min.js"><\/script>')
 		</script>
+		<script src="/js/vendor/calendario.js"></script>
 		<script src="/js/plugins.js"></script>
 		<script src="/js/vendor/materialize.min.js"></script>
-		<script src="/js/vendor/calendario.js"></script>
 
 
-		<script src="/js/main.js"></script>
+		<script src="/js/estadoDeAnimo.js"></script>
 
 		<script>
 			$(document).ready(function() {
