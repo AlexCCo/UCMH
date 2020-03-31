@@ -14,26 +14,60 @@ import es.fdi.ucm.ucmh.model.User;
 public class UserController {
 	@Autowired
 	EntityManager jpaEntityManager;
-	
+
 	@GetMapping(value = "/user/{userID}/{userPage}")
-	public String getUser(@PathVariable Long userID,@PathVariable String userPage, Model model) {
+	public String getUser(@PathVariable Long userID, @PathVariable String userPage, Model model) {
 		User person = jpaEntityManager.find(User.class, userID);
-		
-		if(person == null) {
+
+		if (person == null) {
 			return "404";
 		}
-		
+
 		model.addAttribute("user", person);
 		String pageToReturn = null;
-		
+
 		switch (userPage) {
-		case "ajustes": pageToReturn = "ajustesPaciente"; break;
-		case "pagina-principal": pageToReturn = "misCitas"; break;
-		case "estadisticas": pageToReturn = "estadisticasPaciente"; break;
+		case "ajustes":
+			pageToReturn = "ajustesPaciente";
+			break;
+		case "pagina-principal":
+			pageToReturn = "misCitas";
+			break;
+		case "estadisticas":
+			pageToReturn = "estadisticasPaciente";
+			break;
 		default:
 			break;
 		}
+
+		return pageToReturn;
+	}
+
+	@GetMapping(value = "/user/{userID}/psychologist/{userPage}")
+	public String getPsycologist(@PathVariable Long userID,  @PathVariable String userPage, Model model) {
+		User u = jpaEntityManager.find(User.class, userID);
 		
+		if (u == null)
+			return "404";
+		
+		if (u.getPsychologist() != null) //tiene un psicologo asignado
+			model.addAttribute("user", u.getPsychologist());
+		
+		String pageToReturn = null;
+		switch (userPage) {
+		case "ajustes":
+			pageToReturn = "ajustesPaciente";
+			break;
+		case "pagina-principal":
+			pageToReturn = "misCitas";
+			break;
+		case "estadisticas":
+			pageToReturn = "estadisticasPaciente";
+			break;
+		default:
+			break;
+		}
+
 		return pageToReturn;
 	}
 }

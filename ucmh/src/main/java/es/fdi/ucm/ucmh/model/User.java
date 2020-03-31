@@ -26,7 +26,7 @@ public class User {
 	private String Type;
 
 	//user
-	@ManyToOne //duda
+	@ManyToOne //duda	
 	private User psychologist;//solo lo tendran los pacientes
 	//------
 
@@ -67,10 +67,10 @@ public class User {
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
-	public String getSecondName() {
+	public String getLastName() {
 		return lastName;
 	}
-	public void setSecondName(String secondName) {
+	public void setLastName(String secondName) {
 		this.lastName = secondName;
 	}
 	public String getMail() {
