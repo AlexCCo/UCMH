@@ -6,9 +6,9 @@
 
     <title>Mis Pacientes</title>
 
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/materialize.css">
-    <link rel="stylesheet" href="css/my-theme.css">
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/materialize.css">
+    <link rel="stylesheet" href="/css/my-theme.css">
     <link href="https://fonts.googleapis.com/css?family=Muli|Oswald&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -21,7 +21,7 @@
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li><a href="horarioPsicologo">Mi horario</a></li>
-            <li class="active"><a>Pacientes</a></li>
+            <li class="active"> <a> Pacientes de <span th:text ="${psychologist.firstName}"> Pepe </span> </a></li>
             <a class="waves-effect waves-light btn">Cerrar sesión</a>
         </ul>
       </div>
@@ -39,55 +39,33 @@
     <div class="row">
 
       <div class="col s6">
-        <ul class="collection">
-        <li class="collection-item avatar">
-          <img src="image/ejemplo.jpg" alt="" class="circle">
-          <span class="title">Maria Antonia</span>
-          <p>Trastorno de ansiedad <br>
-             Receta: Pastillas fuertes
-          </p>
-          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-        </li>
-        <li class="collection-item avatar">
-          <img src="image/ejemplo.jpg" alt="" class="circle">
-          <span class="title">Maria Antonia</span>
-          <p>Trastorno de ansiedad <br>
-             Receta: Pastillas fuertes
-          </p>
-          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-        </li>
-        <li class="collection-item avatar">
-          <img src="image/ejemplo.jpg" alt="" class="circle">
-          <span class="title">Maria Antonia</span>
-          <p>Trastorno de ansiedad <br>
-             Receta: Pastillas fuertes
-          </p>
-          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-        </li>
-        <li class="collection-item avatar">
-          <img src="image/ejemplo.jpg" alt="" class="circle">
-          <span class="title">Maria Antonia</span>
-          <p>Trastorno de ansiedad <br>
-             Receta: Pastillas fuertes
-          </p>
-          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-        </li>
-        <li class="collection-item avatar">
-          <img src="image/ejemplo.jpg" alt="" class="circle">
-          <span class="title">Maria Antonia</span>
-          <p>Trastorno de ansiedad <br>
-             Receta: Pastillas fuertes
-          </p>
-          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-        </li>
-        <li class="collection-item avatar">
-          <img src="image/ejemplo.jpg" alt="" class="circle">
-          <span class="title">Maria Antonia</span>
-          <p>Trastorno de ansiedad <br>
-             Receta: Pastillas fuertes
-          </p>
-          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-        </li>
+        <ul class="collection" >
+        <table>
+        <tr th:if="${pacientes.empty}">
+        	<td colspan="2"> No hay pacientes </td>
+        </tr>
+        <tr th:each="u: ${pacientes}">
+        <td></td>
+        <td>
+	        <li class="collection-item avatar">
+	          <img src="image/ejemplo_opt.jpg" alt="" class="circle">
+	          <span class = "title" th:text="${u.firstName}"> Title </span>
+	          <span class = "title" th:text="${u.secondName}"> Title </span>
+	          <p>
+	          <span class = "title" th:text="${u.mail}"> Title </span><br>
+	          <span class = "title" th:text="${u.phoneNumber}"> Title </span><br>
+	          </p>
+	          <p>Trastorno de ansiedad <br>
+	             Receta: Pastillas fuertes
+	          </p>
+	          <form action = "#" th:action = "@{/psychologist/11}" method = "post" th:object = "${u}">
+	          	<input type = "text" th:field = "*{firstName}"/>
+	          </form>
+	          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+	        </li>
+	    </td>
+        </tr>
+        </table>
       </ul>
     </div>
 

@@ -8,3 +8,7 @@ VALUES (11, 'PSY', 'Carla', 'No Es Batman','carla@bigbrain.es', 'Carla', '201356
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
 VALUES (10, 'USER', 'Paco', 'Es Batman','pacoelmagias@elmundomagico.es', 'Paco', '2013568459', 11);
 
+INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
+VALUES (12, 'USER', 'Tomasa', 'Turbada','latomasaturbada@pimpam.es', 'Tomasa', '2013568459', 11);
+
+
