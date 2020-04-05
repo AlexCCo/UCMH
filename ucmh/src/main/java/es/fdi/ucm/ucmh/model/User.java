@@ -1,32 +1,55 @@
 package es.fdi.ucm.ucmh.model;
 
 import java.util.Collection;
+import java.lang.Long;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Version;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "User.getUserListMoreThan", 
+			    query = "SELECT u "
+			    		+ "FROM User u "
+			    		+ "WHERE u.type = :userType AND (u.id >= :lastUser AND u.id < (:lastUser + :showUsers)) "
+			    		+ "ORDER BY u.id ASC "),
+	@NamedQuery(name = "User.getUserListLessThan", 
+			    query = "SELECT u "
+			    		+ "FROM User u "
+			    		+ "WHERE u.type = :userType AND (u.id < :lastUser AND u.id >= (:lastUser - :showUsers)) "
+			    		+ "ORDER BY u.id ASC "),
+	@NamedQuery(name = "User.getUserByFirstName",
+				query = "SELECT u "
+						+ "FROM User u "
+						+ "WHERE u.firstName = :userFirstName "),
+	@NamedQuery(name = "User.getUserById ",
+				query = "SELECT u "
+						+ "FROM User u "
+						+ "WHERE u.id = :userID ")
+})
 public class User {
 	//------------Atributos---------------------
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long ID;
+	private long id;
 
 	private String firstName;
 	private String lastName;
 	private String mail;
 	private String password;
 	private String phoneNumber;
-	private String Type;
+	private String type;
 
 	//user
-	@ManyToOne //duda
+	@ManyToOne
 	private User psychologist;//solo lo tendran los pacientes
 	//------
 
@@ -55,23 +78,26 @@ public class User {
 
 	//-------------------------------------------
 
-	public Long getID() {
-		return ID;
+	public long getId() {
+		return id;
 	}
-	public void setID(Long iD) {
-		ID = iD;
+	public void setId(long id) {
+		this.id = id;
 	}
+	
 	public String getFirstName() {
 		return firstName;
 	}
+	
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
-	public String getSecondName() {
+	public String getLastName() {
 		return lastName;
 	}
-	public void setSecondName(String secondName) {
-		this.lastName = secondName;
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 	public String getMail() {
 		return mail;
@@ -92,10 +118,10 @@ public class User {
 		this.phoneNumber = phoneNumber;
 	}
 	public String getType() {
-		return Type;
+		return type;
 	}
 	public void setType(String type) {
-		Type = type;
+		this.type = type;
 	}
 	public User getPsychologist() {
 		return psychologist;

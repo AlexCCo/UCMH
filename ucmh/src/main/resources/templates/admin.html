@@ -48,17 +48,15 @@
 				      Psicólogos
 				    </div>
 				    <div class="collapsible-body">
-							<ul class="collection">
-							<!-- Example of what we want to show -->
-								<li class="collection-item avatar">
+							<ul id="psychologist-collection" class="collection">
+							
+								<li class="collection-item avatar" th:each="psy : ${psychologist_list}">
 				          <img src="/image/ejemplo.jpg" alt="" class="circle">
-				          <span class="title">Maria Antonia</span>
-				          <p>Trastorno de ansiedad <br>
-				             Receta: Pastillas fuertes
-				          </p>
-				          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+				          <p class="title" th:text="|${psy.firstName}, ${psy.lastName}|"></p>
+				          <p> e-mail: <span th:text="${psy.mail}"></span></p>
+									<p> Tlf: <span th:text="${psy.phoneNumber}"></span></p>
 				        </li>
-				      <!-- end of example -->
+				        
 			      	</ul>
 			      	<div class="users-more-results">
 								<button id="less-psychologists" class="waves-effect waves-teal btn-flat">
@@ -80,18 +78,15 @@
 				      Pacientes
 				    </div>
 				    <div class="collapsible-body">
-							<ul class="collection">
+							<ul id="patient-collection" class="collection">
 								<!-- We should load them with AJAX -->
-								<!-- Example of what we want to show -->
-								<li class="collection-item avatar">
-									<img src="/image/ejemplo.jpg" alt="" class="circle">
-									<span class="title">Maria Antonia</span>
-									<p>Trastorno de ansiedad <br>
-										 Receta: Pastillas fuertes
-									</p>
-									<a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-								</li>
-								<!-- end of example -->
+								
+								<li class="collection-item avatar" th:each="pat : ${patients_list}">
+				          <img src="/image/ejemplo.jpg" alt="" class="circle">
+				          <p class="title" th:text="|${pat.firstName}, ${pat.lastName}|"></p>
+				          <p> e-mail: <span th:text="${pat.mail}"></span></p>
+									<p> Tlf: <span th:text="${pat.phoneNumber}"></span></p>
+				        </li>
 								
 							</ul>
 							<div class="users-more-results">

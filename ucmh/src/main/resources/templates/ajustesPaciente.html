@@ -43,19 +43,20 @@
 		<li><a>Cerrar sesión</a></li>
 	</ul>
 
-	<h4 class="center-align">Ajustes de paciente</h4>
+	<h4 class="center-align">Ajustes de <spam th:text="${user.firstName}"></spam></h4>
 
 	<div class="card">
 		<div class="card-content">
-			<span class="card-title">Maria Antonia</span>
+			<span class="card-title" th:text="${user.firstName}"></span>
 			<div class="row valign-wrapper">
 				<div class="col s4">
 					<img src="image/ejemplo.jpg" alt="" class="responsive-img">
 				</div>
 				<div class="col s8">
-					<p>Nombre: Marta</p>
-					<p>Apellidos: García Sanz</p>
-					<p>Correo electrónico: hectarra@ucm.es</p>
+					<h4>Tu psicolog@${user.psychologist.firstName}</h4>
+					<p>Nombre:<spam th:text="${user.psychologist.firstName}"></spam></p>
+					<p>Apellidos:<spam th:text="${user.psychologist.lastName}"></spam></p>
+					<p>Correo electrónico: <spam th:text="${user.psychologist.mail}"></spam></p>
 					<p>Horario: 9:00-17:00</p>
 				</div>
 			</div>
