@@ -44,17 +44,34 @@
 				<ul class="collapsible">
 				  <li>
 				    <div class="collapsible-header">
-				      <i class="material-icons">face</i>
-				      Psicólogos
+				      <p class="user-type-header">
+				      	<i class="material-icons">
+				      		face
+				      	</i>
+				      	Psicólogos
+				      </p>
+				      <div class="user-browser">
+				      	<form action="">
+				      		<input type="text">
+				      	</form>
+				      </div>
 				    </div>
 				    <div class="collapsible-body">
-							<ul id="psychologist-collection" class="collection">
+							<ul id="psychologist-collection" class="card collection">
 							
 								<li class="collection-item avatar" th:each="psy : ${psychologist_list}">
-				          <img src="/image/ejemplo.jpg" alt="" class="circle">
-				          <p class="title" th:text="|${psy.firstName}, ${psy.lastName}|"></p>
-				          <p> e-mail: <span th:text="${psy.mail}"></span></p>
-									<p> Tlf: <span th:text="${psy.phoneNumber}"></span></p>
+									<div class="user-info">
+					          <img src="/image/ejemplo.jpg" alt="" class="circle">
+					          <p class="title" th:text="|${psy.firstName}, ${psy.lastName}|"></p>
+					          <p>Id: <span class="user-id" th:text="${psy.id}"></span></p>
+					          <p> e-mail: <span th:text="${psy.mail}"></span></p>
+										<p> Tlf: <span th:text="${psy.phoneNumber}"></span></p>
+									</div>
+									<div class="user-delete">
+										<button class="delete-psy waves-effect waves-red-darken-4 red lighten-1 btn-flat">
+											delete
+										</button>
+									</div>
 				        </li>
 				        
 			      	</ul>
@@ -78,14 +95,22 @@
 				      Pacientes
 				    </div>
 				    <div class="collapsible-body">
-							<ul id="patient-collection" class="collection">
+							<ul id="patient-collection" class="card collection">
 								<!-- We should load them with AJAX -->
 								
 								<li class="collection-item avatar" th:each="pat : ${patients_list}">
-				          <img src="/image/ejemplo.jpg" alt="" class="circle">
-				          <p class="title" th:text="|${pat.firstName}, ${pat.lastName}|"></p>
-				          <p> e-mail: <span th:text="${pat.mail}"></span></p>
-									<p> Tlf: <span th:text="${pat.phoneNumber}"></span></p>
+									<div class="user-info">
+					          <img src="/image/ejemplo.jpg" alt="" class="circle">
+					          <p class="title" th:text="|${pat.firstName}, ${pat.lastName}|"></p>
+					          <p>Id: <span class="user-id" th:text="${pat.id}"></span></p>
+					          <p> e-mail: <span th:text="${pat.mail}"></span></p>
+										<p> Tlf: <span th:text="${pat.phoneNumber}"></span></p>
+									</div>
+									<div class="user-delete">
+										<button class="delete-pat waves-effect waves-red-darken-4 red lighten-1 btn-flat">
+											delete
+										</button>
+									</div>
 				        </li>
 								
 							</ul>

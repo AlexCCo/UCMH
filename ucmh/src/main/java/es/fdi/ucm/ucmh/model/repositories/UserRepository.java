@@ -26,10 +26,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	 * @param userType a string representing the user type we want to query
 	 * @return A list of users
 	 * */
-	//public List<User> getUserList(String userType);
 	public LinkedList<User> getUserListMoreThan(String userType, long lastUser, int showUsers);
 	public LinkedList<User> getUserListLessThan(String userType, long lastUser, int showUsers);
 	
+	
+	public LinkedList<User> findPatientsOf(User psychologistId);
 	/**
 	 * This method will query a list of users that match the first name
 	 * @param userFirstName a string representing the user first name

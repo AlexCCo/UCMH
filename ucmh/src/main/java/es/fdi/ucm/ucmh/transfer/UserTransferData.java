@@ -3,14 +3,16 @@ package es.fdi.ucm.ucmh.transfer;
 import es.fdi.ucm.ucmh.model.User;
 
 public class UserTransferData {
+	private long id;
 	private String firstName;
 	private String lastName;
 	private String mail;
 	private String phoneNumber;
 	private String psychologistName;//solo lo tendran los pacientes
 	
-	public UserTransferData(String firstName, String lastName, 
+	public UserTransferData(long id, String firstName, String lastName, 
 			String mail, String phoneNumber, String psychologistName) {
+		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.mail = mail;
@@ -19,6 +21,21 @@ public class UserTransferData {
 	}
 	
 	
+	/**
+	 * @return the id
+	 */
+	public long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(long id) {
+		this.id = id;
+	}
+
+
 	/**
 	 * @return the firstName
 	 */
