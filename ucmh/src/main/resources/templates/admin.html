@@ -44,17 +44,29 @@
 				<ul class="collapsible">
 				  <li>
 				    <div class="collapsible-header">
-				      <i class="material-icons">face</i>
-				      Psicólogos
+				      <p class="user-type-header">
+				      	<i class="material-icons">
+				      		face
+				      	</i>
+				      	Psicólogos
+				      </p>
 				    </div>
 				    <div class="collapsible-body">
-							<ul id="psychologist-collection" class="collection">
+							<ul id="psychologist-collection" class="card collection">
 							
 								<li class="collection-item avatar" th:each="psy : ${psychologist_list}">
-				          <img src="/image/ejemplo.jpg" alt="" class="circle">
-				          <p class="title" th:text="|${psy.firstName}, ${psy.lastName}|"></p>
-				          <p> e-mail: <span th:text="${psy.mail}"></span></p>
-									<p> Tlf: <span th:text="${psy.phoneNumber}"></span></p>
+									<div class="user-info">
+					          <img src="/image/ejemplo.jpg" alt="" class="circle">
+					          <p class="title" th:text="|${psy.firstName}, ${psy.lastName}|"></p>
+					          <p>Id: <span class="user-id" th:text="${psy.id}"></span></p>
+					          <p> e-mail: <span th:text="${psy.mail}"></span></p>
+										<p> Tlf: <span th:text="${psy.phoneNumber}"></span></p>
+									</div>
+									<div class="user-delete">
+										<button class="delete-psy waves-effect waves-red-darken-4 red lighten-1 btn-flat">
+											delete
+										</button>
+									</div>
 				        </li>
 				        
 			      	</ul>
@@ -74,18 +86,28 @@
 				  
 				  <li>
 				    <div class="collapsible-header">
-				      <i class="material-icons">group</i>
-				      Pacientes
+				      <p class="user-type-header">
+				      	<i class="material-icons">face</i>
+				      	Pacientes
+				      </p>
 				    </div>
 				    <div class="collapsible-body">
-							<ul id="patient-collection" class="collection">
+							<ul id="patient-collection" class="card collection">
 								<!-- We should load them with AJAX -->
 								
 								<li class="collection-item avatar" th:each="pat : ${patients_list}">
-				          <img src="/image/ejemplo.jpg" alt="" class="circle">
-				          <p class="title" th:text="|${pat.firstName}, ${pat.lastName}|"></p>
-				          <p> e-mail: <span th:text="${pat.mail}"></span></p>
-									<p> Tlf: <span th:text="${pat.phoneNumber}"></span></p>
+									<div class="user-info">
+					          <img src="/image/ejemplo.jpg" alt="" class="circle">
+					          <p class="title" th:text="|${pat.firstName}, ${pat.lastName}|"></p>
+					          <p>Id: <span class="user-id" th:text="${pat.id}"></span></p>
+					          <p> e-mail: <span th:text="${pat.mail}"></span></p>
+										<p> Tlf: <span th:text="${pat.phoneNumber}"></span></p>
+									</div>
+									<div class="user-delete">
+										<button class="delete-pat waves-effect waves-red-darken-4 red lighten-1 btn-flat">
+											delete
+										</button>
+									</div>
 				        </li>
 								
 							</ul>
@@ -96,7 +118,7 @@
 								<div class="users-results">
 									<p>mostrando 10 elementos - pagina <span class="user-page"></span></p>
 								</div>
-								<button id ="more-patiens" class="waves-effect waves-teal btn-flat">
+								<button id="more-patiens" class="waves-effect waves-teal btn-flat">
 									<i class="material-icons">chevron_right</i>
 								</button>
 							</div>
@@ -107,21 +129,22 @@
 
 			<div class="col s6">
 				<div class="card">
-					<div class="card-content"><!-- 
-						<span class="card-title">Maria Antonia</span>
-							<div class ="row valign-wrapper">
-								<div class="col s4">
-									<img src="/image/ejemplo.jpg" alt="" class="responsive-img">
-								</div>
-								<div class="col s8">
-									<p>Aquí iría toda la info del usuario. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-								</div>
-							</div>
-						</div>
-					<div class="card-action">
-						<a href="#">Eliminar</a>
-						<a href="#">Contactar</a>
-					</div> -->
+					<div class="card-content">
+			      <div class="user-browser">
+						  <div class="user-browser-form">
+						    <input placeholder="Nombre del usuario" type="text" name="name" id="name">
+						  </div>
+						  <div class="user-browser-form">
+						    <input placeholder="Apellido del usuario" type="text" name="surname" id="surname">
+						  </div>
+						  <button id="user-browser-browse-button">Buscar</button>
+			      </div>
+			      <div class="browser-results">
+			      	<ul id="browser-collection" class="card collection">
+			      		
+			      	</ul>
+			      </div>
+					</div>
 				</div>
 		</div>
 

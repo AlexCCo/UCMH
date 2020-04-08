@@ -1,6 +1,6 @@
 @charset "UTF-8";
 .psychologist_view, .pacients_view { 
-	border: 1px solid gray 
+	border: 1px solid gray; 
 }
 .psychologist_view p, .pacients_view p {
 	display: inline;
@@ -15,4 +15,13 @@ div.users-more-results {
 }
 div.users-results {
 	display: inline-block;
+}
+
+.user-info, .user-delete {
+	display: inline-block;
+}
+.user-delete {
+	float: right;
+	margin-right: 0;
+	margin-left: auto;
 }

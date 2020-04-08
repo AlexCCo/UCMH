@@ -1,6 +1,5 @@
 package es.fdi.ucm.ucmh.controller;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -10,25 +9,29 @@ import javax.persistence.EntityManager;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.fdi.ucm.ucmh.model.User;
 import es.fdi.ucm.ucmh.model.repositories.UserRepository;
+import es.fdi.ucm.ucmh.transfer.JSONTransferMessage;
 import es.fdi.ucm.ucmh.transfer.UserTransferData;
 
 @Controller
 public class AdminController {
 	private static Logger log = LogManager.getLogger(AdminController.class);
 	private static final int SHOW_MAX_USERS = 10;
+	
+	private final String ADMIN_TYPE = "ADMIN";
 	
 	private final long FIRST_PAT_ID = 30l;
 	private final String PATIENT_TYPE = "USER";
@@ -47,11 +50,24 @@ public class AdminController {
 	@Autowired
 	private UserRepository userRepository;
 	
+	/**
+	 * It will retrieve the initial state of the admin page.
+	 * The admin can create, delete and see the information about all of the users
+	 * registered in the application
+	 * 
+	 * @param adminId The id of the admin, require to load the corresponding HTML page
+	 * @param model A model given by Spring MVC. It is use to store information needed
+	 * by the template engine to render the corresponding view, in this case, our HTML
+	 * page
+	 * 
+	 * @return It returns a string that indicates to the Spring's ViewResolvers what
+	 * view (in this case HTML page) we want to render and send to our client
+	 * */
 	@GetMapping(value = "/admin/{adminId}")
 	public String getAdminPage(@PathVariable Long adminId, Model model) {
 		User admin = entityManager.find(User.class, adminId);
-		
-		if(admin == null) {
+
+		if(!checkAdmin(adminId)) {
 			return "404";
 		}
 		
@@ -91,10 +107,17 @@ public class AdminController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody List<UserTransferData> getListUser(@PathVariable Long adminId, @PathVariable String type,
 												@PathVariable String queryType) {
+		
+		List<UserTransferData> sendData = new LinkedList<UserTransferData>();
+		
+		if(!checkAdmin(adminId)) {
+			return sendData;
+		}
+		
 		LinkedList<User> queryRequest = new LinkedList<User>();
-		List<UserTransferData> sendData = new ArrayList<UserTransferData>();
 		boolean moreOrlessFlag = true; //more = true, less = false
-		type = type.toUpperCase();
+		
+		type = type.toUpperCase();		
 		
 		log.debug("AJAX request with user type: " + type + ". Made by admin: " + adminId);
 		System.out.println("AJAX request with user type: " + type + ". Made by admin: " + adminId);
@@ -170,25 +193,121 @@ public class AdminController {
 		
 		for(User u : queryRequest) {
 			if(u.getPsychologist() == null) {
-				sendData.add(new UserTransferData(u.getFirstName(), u.getLastName(),
-						u.getMail(), u.getPhoneNumber(), ""));
+				sendData.add(new UserTransferData(u.getId(), u.getFirstName(), u.getLastName(),
+						u.getMail(), u.getPhoneNumber(), "", u.getType()));
 			}
 			else {
-				sendData.add(new UserTransferData(u.getFirstName(), u.getLastName(),
+				sendData.add(new UserTransferData(u.getId(), u.getFirstName(), u.getLastName(),
 						u.getMail(), u.getPhoneNumber(),
-						u.getPsychologist().getFirstName() + ", " +u.getPsychologist().getLastName()));
+						u.getPsychologist().getFirstName() + ", " +u.getPsychologist().getLastName(), u.getType()));
 			}
 		}
 		
 		return sendData;
-	}
+	}	
 	
-	@RequestMapping(value = "/admin/{adminId}/user?name={userName}",
+	@RequestMapping(value = "/admin/{adminId}/get-browser-result",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody User getSingleUser(@PathVariable Long adminId, @PathVariable String userName) {
+	public @ResponseBody List<UserTransferData> getUsersByName(@RequestParam(required = true, name = "name") String userName,
+															   @RequestParam(required = true, name = "surname") String lastName,
+															   @PathVariable Long adminId) {
+		List<UserTransferData> sendResult = new LinkedList<UserTransferData>();
+
+		if(!checkAdmin(adminId) || (userName.isEmpty() && lastName.isEmpty())) {
+			return sendResult;
+		}
+		
+		if(userName.isEmpty()) {
+			userName = "%";
+		}
+		else {
+			lastName = "%";
+		}
+		
+		System.out.println(System.lineSeparator() + "browser request made by admin: " + adminId + " to obtain"
+				+ " the user with name: " + userName + " and last name: " + lastName);
+		
+		for(User u : userRepository.getUserByName(userName, lastName)) {
+			if(u.getPsychologist() == null) {
+				sendResult.add(new UserTransferData(u.getId(), u.getFirstName(), u.getLastName(),
+						u.getMail(), u.getPhoneNumber(), "", u.getType()));
+			}
+			else {
+				sendResult.add(new UserTransferData(u.getId(), u.getFirstName(), u.getLastName(),
+						u.getMail(), u.getPhoneNumber(),
+						u.getPsychologist().getFirstName() + ", " +u.getPsychologist().getLastName(), u.getType()));
+			}
+		}
 		
 		
-		return null;
+		return sendResult;
+	}
+	
+	
+	/**
+	 * It will delete one user from the Data Base. You can't delete Administrators
+	 * 
+	 * @param admingId Id of the admin performing the delete action on the database
+	 * @param userId Id of the user to be deleted
+	 * 
+	 * @return It will return a JSON format string telling the client if the action took place
+	 * or it couldn't 
+	 * The JSON string will be as the following example:
+	 * {
+	 * 	"result":"OK" if everything went well or "Error" if don't 
+	 * }
+	 * */
+	@PostMapping(value = "/admin/{adminId}/user-delete-{userId}",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody JSONTransferMessage deleteSingleUser(@PathVariable Long adminId, @PathVariable Long userId) {
+		
+		System.out.println(System.lineSeparator() +  "delete user: " + userId + " request made by admin: " + adminId);
+		
+		if(!checkAdmin(adminId) || checkAdmin(userId)) {
+			return new JSONTransferMessage("Error");
+		}
+			
+		User u = entityManager.find(User.class, userId);
+			
+		/*
+		 * JPA doesn't have any support to create, via annotations, somethin like this
+		 * CREATE TABLE USER {
+		 * 		...
+		 * 	psychologistId bigint references USER ON DELETE SET NULL
+		 * 		...
+		 * }
+		 * 
+		 * This SQL code tells the Data Base Management System to set the attribute
+		 * "psychologistId" to null when the row it is referenced is deleted
+		 * */
+		if(u.getType().equals(PSYCHOLOGIST_TYPE)) {
+			System.out.println(System.lineSeparator() + "Obtaining all patients of user: " + u.getId());
+			LinkedList<User> patientsOf = userRepository.findPatientsOf(u);
+			
+			for(User patient : patientsOf) {
+				patient.setPsychologist(null);
+			}
+		}
+		
+		userRepository.deleteById(userId);
+		return new JSONTransferMessage("OK");
+	}
+	
+	/**
+	 * Checks if the given id belongs to an admin or not
+	 * 
+	 * @param adminId A Long value representing an ID
+	 * 
+	 * @return <b>true</b> if it belongs to an admin. <b>False</b> otherwise
+	 * */
+	private boolean checkAdmin(Long adminId) {
+		User admin = entityManager.find(User.class, adminId);
+		
+		if(admin == null || !admin.getType().equals(ADMIN_TYPE)) {
+			return false;
+		}
+		
+		return true;
 	}
 }
