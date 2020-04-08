@@ -51,9 +51,9 @@ INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number
 VALUES (40, 'USER', 'Sora', 'Sora','sora2@pmail.es', 'Paco', '2013569059', 17,'Loquísimo', 'Pastillas super fuertes');
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id,disorder, treatment) 
 VALUES (41, 'USER', 'Saro', 'Sal','sarosal@bmail.es', 'Paco', '2013521459', 14,'Loquísimo', 'Pastillas super fuertes');
-INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id,,disorder, treatment) 
+INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id,disorder, treatment) 
 VALUES (42, 'USER', 'Irene', 'ramirez','iremi@bmail.es', 'Paco', '2016661459', 14,'Loquísimo', 'Pastillas super fuertes');
-INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id,,disorder, treatment) 
+INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id,disorder, treatment) 
 VALUES (43, 'USER', 'Irene', 'Gomez','inemez@bmail.es', 'Paco', '2013521333', 14,'Loquísimo', 'Pastillas super fuertes');
-INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id,,disorder, treatment) 
+INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id,disorder, treatment) 
 VALUES (44, 'USER', 'Irene', 'Gonzalez','regon@bmail.es', 'Paco', '2013521777', 14,'Loquísimo', 'Pastillas super fuertes');
