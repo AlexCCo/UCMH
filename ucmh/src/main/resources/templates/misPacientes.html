@@ -44,13 +44,13 @@
         <tr th:if="${pacientes.empty}">
         	<td colspan="2"> No hay pacientes </td>
         </tr>
-        <tr th:each="u: ${pacientes}">
+        <tr th:each="u, itemstat: *{pacientes}">
         <td></td>
         <td>
 	        <li class="collection-item avatar">
 	          <img src="image/ejemplo_opt.jpg" alt="" class="circle">
 	          <span class = "title" th:text="${u.firstName}"> Title </span>
-	          <span class = "title" th:text="${u.secondName}"> Title </span>
+	          <span class = "title" th:text="${u.lastName}"> Title </span>
 	          <p>
 	          <span class = "title" th:text="${u.mail}"> Title </span><br>
 	          <span class = "title" th:text="${u.phoneNumber}"> Title </span><br>
@@ -58,10 +58,11 @@
 	          <p>Trastorno de ansiedad <br>
 	             Receta: Pastillas fuertes
 	          </p>
-	          <form action = "#" th:action = "@{/psychologist/11}" method = "post" th:object = "${u}">
-	          	<input type = "text" th:field = "*{firstName}"/>
+	          <form action="#" th:action="@{/modify/{id}(id=${u.id})}" method="post" th:object="${u}">
+	             <span class = "title" th:text="${u.firstName}"> Title </span>
+	          	<!-- <p>Nombre: <input type = "text" th:field = "*{firstName}"/></p> -->
 	          </form>
-	          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+	          <a th:id="${u.id}" class="secondary-content pacientBTN"><i class="material-icons">face</i></a>
 	        </li>
 	    </td>
         </tr>
@@ -72,13 +73,19 @@
     <div class="col s6">
       <div class="card">
         <div class="card-content">
-          <span class="card-title">Maria Antonia</span>
+          <span class="card-title" id="pacientName"></span>
             <div class ="row valign-wrapper">
               <div class="col s4">
                 <img src="image/ejemplo.jpg" alt="" class="responsive-img">
               </div>
               <div class="col s8">
-                <p>Aquí iría toda la info del usuario. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+              <form action="#" method="post">
+	             <span class = "title"></span>
+	          	 <p>Trastorno: <input type = "text" id="pacientDisorder"/></p>
+	          	 <p>Tratamiento: <input type = "text" id="pacientTreatment"/></p>
+	          	 <a class="savePacient" href="#">Guardar cambios</a>
+	          </form>
+              <p id=""></p>
               </div>
             </div>
           </div>
@@ -148,11 +155,44 @@
   <script src="js/main.js"></script>
 
   <script>
-  $(document).ready(function(){
-      $('.sidenav').sidenav();
-  });
+  //$(document).ready(function(){
+    //  $('.sidenav').sidenav();
+ // });
   </script>
 
+  <script type="text/javascript">
+  $( ".pacientBTN" ).click(function(e) {
+	  var id = $(this).attr("id");
+	  $.ajax({
+		  method: "GET",
+		  url: "/pacient/" + id,
+		  data: {}
+		})
+		  .done(function( msg ) {
+			  $("#pacientName").text(msg.firstName + " " + msg.lastName);
+			  $("#pacientDisorder").val(msg.disorder);
+			  $("#pacientTreatment").val(msg.treatment);
+			  //Es un punto porque es una clase y no un id
+			  $(".savePacient").attr("id", id); 
+		  });
+	});
+  </script>
+  
+  <script type="text/javascript">
+  $( ".savePacient" ).click(function(e) {
+	  var id = $(this).attr("id");
+	  var disorderB = $("#pacientDisorder").val();
+	  var treatmentB = $("#pacientTreatment").val();
+	  $.ajax({
+		  method: "POST",
+		  url: "/modify/" + id,
+		  data: {disorder : disorderB, treatment : treatmentB}
+	  })
+	  .done(function( msg ) {
+		  alert("Cambios guardados");
+	  });
+  });
+  </script>
 
   </body>
 </html>
