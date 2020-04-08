@@ -36,5 +36,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	 * @param userFirstName a string representing the user first name
 	 * @return A list of users
 	 * */
-	public List<User> getUserByFirstName(String userFirstName);
+	public List<User> getUserByName(String userFirstName, String userLastName);
 }

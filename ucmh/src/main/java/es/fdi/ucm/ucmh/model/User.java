@@ -37,7 +37,11 @@ import org.hibernate.annotations.OnDeleteAction;
 	@NamedQuery(name = "User.findPatientsOf",
 				query = "SELECT u "
 						+ "FROM User u "
-						+ "WHERE u.psychologist = :psychologistId ")
+						+ "WHERE u.psychologist = :psychologistId "),
+	@NamedQuery(name = "User.getUserByName",
+				query = "SELECT u "
+						+ "FROM User u "
+						+ "WHERE u.firstName LIKE :userFirstName AND u.lastName LIKE :userLastName AND u.type != 'ADMIN'")
 })
 public class User {
 	//------------Atributos---------------------

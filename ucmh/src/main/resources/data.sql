@@ -24,8 +24,12 @@ INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number
 VALUES (19, 'PSY', 'Manuel', 'Pelarez','manu_pelarez@yahoo.es', 'Manuel', '2013562069', null);
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
 VALUES (20, 'PSY', 'Emma', 'Stone','stone-emma@hotmail.es', 'Emma', '2013292059', null);
+INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id)
+VALUES (21, 'PSY', 'Emma', 'Stacy','stacy-emma@hotmail.es', 'Emma2', '8883292059', null);
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
-VALUES (21, 'PSY', 'Triss', 'Gold','triss-gold@gmail.es', 'Triss', '2010562059', null);
+VALUES (22, 'PSY', 'Emma', 'Brown','brown-emma@hotmail.es', 'Emma3', '9003292059', null);
+INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
+VALUES (23, 'PSY', 'Triss', 'Gold','triss-gold@gmail.es', 'Triss', '2010562059', null);
 --insert a default user
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
 VALUES (30, 'USER', 'Paco', 'Es Batman','pacoelmagias@elmundomagico.es', 'Paco', '2017568459', 11);
@@ -51,4 +55,9 @@ INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number
 VALUES (40, 'USER', 'Sora', 'Sora','sora2@pmail.es', 'Paco', '2013569059', 17);
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
 VALUES (41, 'USER', 'Saro', 'Sal','sarosal@bmail.es', 'Paco', '2013521459', 14);
-
+INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
+VALUES (42, 'USER', 'Irene', 'ramirez','iremi@bmail.es', 'Paco', '2016661459', 14);
+INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
+VALUES (43, 'USER', 'Irene', 'Gomez','inemez@bmail.es', 'Paco', '2013521333', 14);
+INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
+VALUES (44, 'USER', 'Irene', 'Gonzalez','regon@bmail.es', 'Paco', '2013521777', 14);
