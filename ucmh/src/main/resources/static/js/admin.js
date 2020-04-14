@@ -1,13 +1,21 @@
 const user_types = {
 	PSYCHOLOGIST: "PSY",
 	PATIENT: "USER"
-}
+};
 
 const user_methods = {
 		MORE: "more",
 		LESS: "less"
-}
+};
 
+const error_map_msg = {
+		"id": "Debe ser un numero",
+		"name": "El campo acepta solo letras",
+		"surname": "El campo acepta solo letras",
+		"mail": "Introduce un email valido, ejemplo: algunmail@gmail.com",
+		"phone": "Tiene que tener nueve numeros",
+		"pass": "Minimo 8 numeros y letras"
+};
 
 var requestData = new XMLHttpRequest();
 var patien_collection = document.getElementById("patient-collection");
@@ -27,6 +35,23 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	let delete_psy_btn = document.getElementsByClassName("delete-psy");
 	
 	let browse_btn = document.getElementById("user-browser-browse-button");
+	
+	let accept_register_btn = document.getElementsByClassName("accept-user");
+	
+	let reject_user_btn = document.getElementsByClassName("reject-user");
+	
+	for(const rjt_btn of reject_user_btn){
+		rjt_btn.addEventListener("click", (e) => {
+			clean_error_msg("pat", true);
+			clean_error_msg("psy", true);
+		})
+	}
+	
+	for(let accept of accept_register_btn){
+		accept.addEventListener("click", (e) => {
+			accept_handler(accept.id);
+		});
+	}
 	
 	browse_btn.addEventListener("click", (e) => {
 		get_users_by_name();
@@ -72,7 +97,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 function get_users(userType, userMethod){
 	//prepare the request object to get json data
-	let uri = document.URL + "/users-list-" + userType + "-" + userMethod;
+	let uri = `${document.URL}/users-list-${userType}-${userMethod}`;
 	let html_collection;
 	
 	requestData.open('GET', uri);
@@ -203,7 +228,7 @@ function delete_btn_handler(userType, btn_listened){
 	let btn_grandpa = (btn_listened.parentElement).parentElement
 	let user_id = btn_grandpa.firstElementChild.getElementsByClassName("user-id")[0].innerText;
 	//we start to create the AJAX request
-	let uri = document.URL + "/user-delete-" + user_id;
+	let uri = `${document.URL}/user-delete-${user_id}`;
 	
 	/*
 	 * We don't employ the 'DELETE' http method because it is marked as not safe and 
@@ -229,13 +254,20 @@ function delete_btn_handler(userType, btn_listened){
 	requestData.send();
 }
 
+/**
+ * It will retrieve a list of users in JSON format. The list of users will 
+ * match with the name, surname or both given by the client and they will be
+ * displayed into the HTML 
+ * */
 function get_users_by_name(){
 	let user_name = document.getElementById("name");
 	let user_lastName = document.getElementById("surname");
-	let uri =  document.URL + "/get-browser-result?name=" + user_name.value + "&surname=" + user_lastName.value;
+	let uri = `${document.URL}/get-browser-result?name=${user_name.value}&surname=${user_lastName.value}`;
 	console.log(uri);
-	requestData.open('GET', uri);
 	
+	//what type of access we want
+	requestData.open('GET', uri);
+	//what to do once its finished
 	requestData.onload = function() {
 		registerHTMLItems(browser_collection, requestData.responseText);
 		
@@ -254,11 +286,98 @@ function get_users_by_name(){
 			})
 		}
 	}
-	
+	//send the request
 	requestData.send();
 }
 
+/**
+ * It will perform the corresponding action of register a psychologist or
+ * a patient in the application.
+ * 
+ * @param btn_id A string representing the id of the <i>'accept'</i> button
+ * clicked by the administrator.
+ * */
+function accept_handler(btn_id){
+	let btn_type = btn_id.slice(-3);
+	let input_elements = ["firstName-input-",  "lastName-input-",
+						  "mail-input-", "phoneNumber-input-", "password-input-", "type-input-"];
+	let error_flag = false;
+	let string_msg = {
+			"firstName": "",
+			"lastName": "",
+			"mail": "",
+			"phoneNumber": "",
+			"type": "",
+			"password": "",
+	};
+	
+	clean_error_msg(btn_type, false);
+	
+	for(const elem of input_elements){
+		let input_type = elem.split("-");
+		let value_of = document.getElementById(elem.concat(btn_type));
+		
+		if(value_of == null || value_of.value.length == 0){
+			let error = document.getElementById(`error-${input_type[0]}-${btn_type}`);
+			error.style.display = "block";
+			error.innerText = "No puede estar vacio";
+			error_flag = true;
+		}
+		else if(!value_of.checkValidity()){
+			let error = document.getElementById(`error-${input_type[0]}-${btn_type}`);
+			error.style.display = "block";
+			error.innerText = error_map_msg[input_type[0]];
+			error_flag = true;
+		}
+		else{
+			console.log(`value: ${value_of.value}`);
+			string_msg[input_type[0]] = value_of.value;
+		}
+	}
+	
+	string_msg.type = string_msg.type.toUpperCase();
+	
+	const msg = JSON.stringify(string_msg);
+	
+	console.log(msg);
+	
+	if(!error_flag){
+		let uri = `${document.URL}/register-user/`;
+		//create the request
+		requestData.open('POST', uri);
+		//tell what to do one the request is done
+		requestData.onload = function() {
+			console.log("message was sent");
+		};
+		
+		requestData.setRequestHeader("Content-Type", "application/json");
+		//send the request
+		requestData.send(msg);
+		
+		console.log(uri);
+	}
+	console.log(msg);
+}
 
+/**
+ * It will clean the input and the error messages from the form of register psychologist or
+ * patient
+ * 
+ * @param userType The type of the user you are trying to register
+ * @param clear_input A boolean telling to clear the input text or not 
+ * */
+function clean_error_msg(userType, clear_input){
+	let input_elements = ["id", "name",  "surname", "mail", "phone", "pass"];
+	
+	for(const elem of input_elements){
+		let error = document.getElementById(`error-${elem}-${userType}`);
+		error.style.display = "none";
+		
+		if(clear_input){
+			document.getElementById(`${elem}-input-${userType}`).value = "";
+		}
+	}
+}
 
 
 

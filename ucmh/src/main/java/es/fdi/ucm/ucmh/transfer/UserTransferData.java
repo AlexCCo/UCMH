@@ -21,8 +21,7 @@ public class UserTransferData {
 		this.psychologistName = psychologistName;
 		this.type = type;
 	}
-	
-	
+		
 	/**
 	 * @return the id
 	 */
@@ -123,5 +122,13 @@ public class UserTransferData {
 	public void setType(String type) {
 		this.type = type;
 	}
+
+	@Override
+	public String toString() {
+		return "UserTransferData [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", mail=" + mail
+				+ ", phoneNumber=" + phoneNumber + ", psychologistName=" + psychologistName + ", type=" + type + "]";
+	}
+	
+	
 	
 }

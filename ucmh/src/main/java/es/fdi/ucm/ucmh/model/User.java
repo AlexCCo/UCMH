@@ -41,7 +41,11 @@ import org.hibernate.annotations.OnDeleteAction;
 	@NamedQuery(name = "User.getUserByName",
 				query = "SELECT u "
 						+ "FROM User u "
-						+ "WHERE u.firstName LIKE :userFirstName AND u.lastName LIKE :userLastName AND u.type != 'ADMIN'")
+						+ "WHERE u.firstName LIKE :userFirstName AND u.lastName LIKE :userLastName AND u.type != 'ADMIN'"),
+	@NamedQuery(name = "User.getLastId",
+				query = "SELECT MAX(u.id) "
+						+ "FROM User u "
+						+ "WHERE u.type = :userType")
 })
 public class User {
 	//------------Atributos---------------------
@@ -173,6 +177,23 @@ public class User {
 	public void setReceivedMessage(Collection<Message> receivedMessage) {
 		this.receivedMessage = receivedMessage;
 	}
+	
+	//auto-generated code
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", " + (firstName != null ? "firstName=" + firstName + ", " : "")
+				+ (lastName != null ? "lastName=" + lastName + ", " : "") + (mail != null ? "mail=" + mail + ", " : "")
+				+ (password != null ? "password=" + password + ", " : "")
+				+ (phoneNumber != null ? "phoneNumber=" + phoneNumber + ", " : "")
+				+ (type != null ? "type=" + type + ", " : "")
+				+ (psychologist != null ? "psychologist=" + psychologist + ", " : "")
+				+ (patientsDate != null ? "patientsDate=" + patientsDate + ", " : "")
+				+ (psichologistsDate != null ? "psichologistsDate=" + psichologistsDate + ", " : "")
+				+ (patientsGroupDate != null ? "patientsGroupDate=" + patientsGroupDate + ", " : "")
+				+ (psichologistsGroupDate != null ? "psichologistsGroupDate=" + psichologistsGroupDate + ", " : "")
+				+ (messageSent != null ? "messageSent=" + messageSent + ", " : "")
+				+ (receivedMessage != null ? "receivedMessage=" + receivedMessage : "") + "]";
+	}
 
-
+	
 }

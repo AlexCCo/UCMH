@@ -25,3 +25,23 @@ div.users-results {
 	margin-right: 0;
 	margin-left: auto;
 }
+.result-register {
+	color: green;
+	display: inline-block;
+	margin-right: 50px;
+}
+
+.error-msg-pat, .error-msg-psy {
+	display: none;
+	background-color: rgb(255, 232, 232);
+	border: 1px solid red;
+	color: red;
+}
+
+/*
+this is called attribute selector, more info in mdn.
+https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors
+*/
+input[class^="type-input-"] {
+	display: none;
+}

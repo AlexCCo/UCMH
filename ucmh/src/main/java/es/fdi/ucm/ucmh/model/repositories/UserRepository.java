@@ -22,14 +22,31 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	 * */
 	
 	/**
-	 * This method will query a list of users to the embedded DB
-	 * @param userType a string representing the user type we want to query
+	 * This method will query a list of users to the embedded DB in a range of<br>
+	 * <pre>           lastUser <= x < lastUser+showUsers </pre>
+	 * @param userType A string representing the user type we want to query
+	 * @param lastUser The if of the user to take as a lower bound
+	 * @param showUser The value indicating the range of users you want to query 
 	 * @return A list of users
 	 * */
 	public LinkedList<User> getUserListMoreThan(String userType, long lastUser, int showUsers);
+	
+	/**
+	 * This method will query a list of users to the embedded DB in a range of<br>
+	 * <pre>           lastUser - showUsers <= x < lastUser </pre>
+	 * @param userType A string representing the user type we want to query
+	 * @param lastUser The if of the user to take as a upper bound
+	 * @param showUser The value indicating the range of users you want to query 
+	 * @return A list of users
+	 * */
 	public LinkedList<User> getUserListLessThan(String userType, long lastUser, int showUsers);
 	
 	
+	/**
+	 * This query will retrieve a list of patients of the given psychologist
+	 * @param psychologistId The psychologist to obtain patients of
+	 * @return A list of patients
+	 * */
 	public LinkedList<User> findPatientsOf(User psychologistId);
 	/**
 	 * This method will query a list of users that match the first name
@@ -37,4 +54,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	 * @return A list of users
 	 * */
 	public List<User> getUserByName(String userFirstName, String userLastName);
+	
+	/**
+	 * It will query the last id used in the DB
+	 * @param userType type of the user to query the last id from
+	 * @return The long value representing the id
+	 * */
+	public long getLastId(String userType);
 }

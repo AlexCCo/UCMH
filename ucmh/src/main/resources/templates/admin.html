@@ -24,9 +24,9 @@
 				<a href="#" id="logo" class="brand-logo">UCMH</a>
 				<a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 				<ul id="nav-mobile" class="right hide-on-med-and-down">
-						<a class="waves-effect waves-light btn">Registrar psicologo</a>
-						<a class="waves-effect waves-light btn">Registrar paciente</a>
-						<a class="waves-effect waves-light btn">Cerrar sesión</a>
+						<a href="#psy-modal" class="waves-effect waves-light btn modal-trigger">Registrar psicologo</a>
+						<a href="#pat-modal" class="waves-effect waves-light btn modal-trigger">Registrar paciente</a>
+						<a href="#modal" class="waves-effect waves-light btn modal-trigger">Cerrar sesión</a>
 				</ul>
 			</div>
 		</nav>
@@ -146,9 +146,77 @@
 			      </div>
 					</div>
 				</div>
+			</div>
 		</div>
+		
+		<div id="psy-modal" class="modal psy-modal">
+			<div class="modal-content">
+				<h4>Registrar psicologo</h4>
+		  <p>Introduce los datos del psicologo:</p>
 
+		  <p class="error-msg-psy" id="error-name-psy"></p>
+      	<label for="name-input">Nombre:</label>
+		  <input name="name-input" type="text" id="firstName-input-psy" pattern="([a-z]+)">
 
+		  <p class="error-msg-psy" id="error-surname-psy"></p>
+      	<label for="last-name-input">Apellido:</label>
+		  <input name="last-name-input" type="text" id="lastName-input-psy" pattern="([a-z]+)">
+
+		  <p class="error-msg-psy" id="error-mail-psy"></p>
+      	<label for="mail-input">e-mail:</label>
+		  <input name="mail-input" type="email" id="mail-input-psy">
+
+		  <p class="error-msg-psy" id="error-phone-psy"></p>
+      	<label for="phone-input">Tlf:</label>
+		  <input name="phone-input" type="tel" id="phoneNumber-input-psy" pattern="([0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9])">
+
+		  <p class="error-msg-psy" id="error-pass-psy"></p>
+      	<label for="pass-input">password:</label>
+      	<input name="pass-input" type="text" pattern="([a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]([a-zA-Z0-9]*))" id="password-input-psy">
+			
+				<input name="type-input" type="text" value="psy" class="type-input-psy" id="type-input-psy">
+			</div>
+			<div class="modal-footer">
+				<p class="result-register">Result text</p>
+				<a class="modal-action waves-effect waves-green  btn-flat accept-user" id="accept-psy">Aceptar</a>
+				<a class="modal-action modal-close waves-effect waves-red btn-flat reject-user">Cancelar</a>
+			</div>
+		</div>
+		
+		<div id="pat-modal" class="modal pat-modal">
+			<div class="modal-content">
+				<h4>Registrar paciente</h4>
+      	<p>Introduce los datos del paciente:</p>
+      	
+      	<p class="error-msg-pat" id="error-name-pat"></p>
+      	<label for="name-input">Nombre:</label>
+      	<input name="name-input" type="text" id="firstName-input-pat" pattern="([a-z]+)">
+      	
+      	<p class="error-msg-pat" id="error-surname-pat"></p>
+      	<label for="last-name-input">Apellido:</label>
+      	<input name="last-name-input" type="text" id="lastName-input-pat">
+      	
+      	<p class="error-msg-pat" id="error-mail-pat"></p>
+      	<label for="mail-input">e-mail:</label>
+      	<input name="mail-input" type="email" id="mail-input-pat">
+      	
+      	<p class="error-msg-pat" id="error-phone-pat"></p>
+      	<label for="phone-input">Tlf:</label>
+      	<input name="phone-input" type="tel" pattern="([0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9])" id="phoneNumber-input-pat">
+      	
+      	<p class="error-msg-pat" id="error-pass-pat"></p>
+      	<label for="pass-input">password:</label>
+      	<input name="pass-input" type="text" pattern="([a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]([a-zA-Z0-9]*))" id="password-input-pat">
+      	
+      	<input name="type-input" type="text" value="user" class="type-input-pat" id="type-input-pat">
+			</div>
+			<div class="modal-footer">
+				<p class="result-register">Result text</p>
+				<a class="modal-action waves-effect waves-green btn-flat accept-user" id="accept-pat">Aceptar</a>
+				<a class="modal-action modal-close waves-effect waves-red btn-flat reject-user">Cancelar</a>
+			</div>
+		</div>
+		
 		<script src="/js/vendor/modernizr-3.8.0.min.js"></script>
 	  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 	  <script>window.jQuery || document.write('<script src="/js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
@@ -160,6 +228,8 @@
 		$(document).ready(function(){
 				$('.sidenav').sidenav();
 				$('.collapsible').collapsible();
+				$('.modal').modal();
+				$('.modal-trigger').modal();
 
 		});
 		</script>
