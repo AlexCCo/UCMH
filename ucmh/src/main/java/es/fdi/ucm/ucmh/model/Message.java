@@ -1,6 +1,10 @@
 package es.fdi.ucm.ucmh.model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,9 +12,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Version;
 
+import es.fdi.ucm.ucmh.model.Message;
+import es.fdi.ucm.ucmh.model.Message.Transfer;
+
 @Entity
+@NamedQueries({
+	@NamedQuery(name="Message.countUnread",
+	query="SELECT COUNT(m) FROM Message m "
+			+ "WHERE m.to.id = :userId")
+})
 public class Message {
 	//---------------Atributos-----------------
 	@Id
@@ -26,7 +40,58 @@ public class Message {
 	private User to;
 	
 	private String text;
-
+	
+	public static class Transfer {
+		private String from;
+		private String to;
+		private String text;
+		long id;
+		public Transfer(Message m) {
+			this.from = m.getFrom().getFirstName() + " " + m.getFrom().getLastName();
+			this.to = m.getTo().getFirstName() + " " + m.getTo().getLastName();;
+			this.text = m.getText();
+			this.id = m.getID();
+		}
+		public String getFrom() {
+			return from;
+		}
+		public void setFrom(String from) {
+			this.from = from;
+		}
+		public String getTo() {
+			return to;
+		}
+		public void setTo(String to) {
+			this.to = to;
+		}
+		public String getText() {
+			return text;
+		}
+		public void setText(String text) {
+			this.text = text;
+		}
+		public long getId() {
+			return id;
+		}
+		public void setId(long id) {
+			this.id = id;
+		}		
+	}
+	
+	/**
+	 * Convierte colecciones de mensajes a formato JSONificable
+	 * @param messages
+	 * @return
+	 * @throws JsonProcessingException
+	 */
+	public static List<Transfer> asTransferObjects(Collection<Message> messages) {
+		ArrayList<Transfer> all = new ArrayList<>();
+		for (Message m : messages) {
+			all.add(new Transfer(m));
+		}
+		return all;
+	}
+	
 	//------------------------------------------
 	
 	public Integer getID() {

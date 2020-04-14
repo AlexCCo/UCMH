@@ -63,6 +63,8 @@ public class User {
 	//user
 	@ManyToOne
 	private User psychologist;//solo lo tendran los pacientes
+	private String disorder;
+	private String treatment;
 	//------
 
 	//date
@@ -177,7 +179,7 @@ public class User {
 	public void setReceivedMessage(Collection<Message> receivedMessage) {
 		this.receivedMessage = receivedMessage;
 	}
-	
+
 	//auto-generated code
 	@Override
 	public String toString() {
@@ -193,6 +195,19 @@ public class User {
 				+ (psichologistsGroupDate != null ? "psichologistsGroupDate=" + psichologistsGroupDate + ", " : "")
 				+ (messageSent != null ? "messageSent=" + messageSent + ", " : "")
 				+ (receivedMessage != null ? "receivedMessage=" + receivedMessage : "") + "]";
+	}
+	
+	public String getTreatment() {
+		return treatment;
+	}
+	public void setTreatment(String treatment) {
+		this.treatment = treatment;
+	}
+	public String getDisorder() {
+		return disorder;
+	}
+	public void setDisorder(String disorder) {
+		this.disorder = disorder;
 	}
 
 	
