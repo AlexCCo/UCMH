@@ -12,6 +12,10 @@
     <link href="https://fonts.googleapis.com/css?family=Muli|Oswald&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
   </head>
   <body>
 
@@ -84,13 +88,30 @@
 	          	 <p>Trastorno: <input type = "text" id="pacientDisorder"/></p>
 	          	 <p>Tratamiento: <input type = "text" id="pacientTreatment"/></p>
 	          	 <a class="savePacient" href="#">Guardar cambios</a>
+	          	 <span></span>
+	          	 <span></span>
+	          	 <span></span>
 	          </form>
-              <p id=""></p>
               </div>
             </div>
+            <div class="sidebar">
+				<textarea id="message" placeholder="escribe a este usuario" rows="4" cols="20"></textarea>
+				<button class="sendmsg" type="submit">Enviar</button>
+			</div>
           </div>
+        <div class="col-md-12">
+	            <table id="conversation" class="table table-striped">
+	                <thead>
+	                <tr>
+	                    <th>MENSAJES:</th>
+	                </tr>
+	                </thead>
+	                <tbody id="message">
+	                </tbody>
+	            </table>
+       		 	</div>
         <div class="card-action">
-          <a href="#">Contactar</a>
+          <a id="contact" href="#">Contactar</a>
           <a href="#">Nueva cita</a>
         </div>
       </div>
@@ -160,6 +181,8 @@
  // });
   </script>
 
+
+
   <script type="text/javascript">
   $( ".pacientBTN" ).click(function(e) {
 	  var id = $(this).attr("id");
@@ -174,6 +197,7 @@
 			  $("#pacientTreatment").val(msg.treatment);
 			  //Es un punto porque es una clase y no un id
 			  $(".savePacient").attr("id", id); 
+			  $(".sendmsg").attr("id", id);
 		  });
 	});
   </script>
@@ -193,6 +217,18 @@
 	  });
   });
   </script>
-
+    <script type="text/javascript">
+   $( ".sendmsg" ).click(function(e) {
+  	var id = $(this).attr("id");
+  	$.ajax({
+  	method: "POST",
+  	 url: "/" + id + "/msg",
+  	data: {}
+  	})
+  	.done(function( msg ) {
+  	alert("Cambios guardados");
+  	});
+   });
+   </script>
   </body>
 </html>
