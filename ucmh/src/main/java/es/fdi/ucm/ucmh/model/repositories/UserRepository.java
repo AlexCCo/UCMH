@@ -4,7 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.lang.Long;
 
+import org.hibernate.annotations.RowId;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.fdi.ucm.ucmh.model.User;
@@ -39,6 +41,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	 * @param showUser The value indicating the range of users you want to query 
 	 * @return A list of users
 	 * */
+	
 	public LinkedList<User> getUserListLessThan(String userType, long lastUser, int showUsers);
 	
 	
@@ -54,11 +57,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	 * @return A list of users
 	 * */
 	public List<User> getUserByName(String userFirstName, String userLastName);
-	
-	/**
-	 * It will query the last id used in the DB
-	 * @param userType type of the user to query the last id from
-	 * @return The long value representing the id
-	 * */
-	public long getLastId(String userType);
 }

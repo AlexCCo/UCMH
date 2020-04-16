@@ -10,7 +10,6 @@ import javax.persistence.EntityManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -32,26 +31,24 @@ import es.fdi.ucm.ucmh.model.User;
 import es.fdi.ucm.ucmh.model.repositories.UserRepository;
 import es.fdi.ucm.ucmh.transfer.JSONTransferMessage;
 import es.fdi.ucm.ucmh.transfer.UserTransferData;
+import es.fdi.ucm.ucmh.utilities.CheckUserUtils;
 
 @Controller
+@RequestMapping(value = "/admin")
 public class AdminController {
-	private static Logger log = LogManager.getLogger(AdminController.class);
+	private static Logger LOG = LogManager.getLogger(AdminController.class);
 	/**
 	 * This is the total number of users an admin can query at a time
 	 * */
 	private static final int SHOW_MAX_USERS = 10;
 	
-	private final String ADMIN_TYPE = "ADMIN";
-	
 	private final long FIRST_PAT_ID = 100l;
-	private final String PATIENT_TYPE = "USER";
-	
 	private final long FIRST_PSY_ID = 10l;
-	private final String PSYCHOLOGIST_TYPE = "PSY";
 	
 	/*-----------------------------------------------------
 	 * There would be more petitions for more admins so
 	 * this variable will have race conditions when it is updated
+	 * Research the use of Scopes in Spring
 	 */
 	private long lastPatUser;
 	private long lastPsyUser;
@@ -67,72 +64,31 @@ public class AdminController {
 	@Autowired
 	private UserRepository userRepository;
 	
-	/*
-	 * There would be more petitions for more admins so
-	 * this variable will have race conditions when it is updated
-	 */
-	private long lastPatId = userRepository.getLastId(PATIENT_TYPE);
-	private long lastPsyId = userRepository.getLastId(PSYCHOLOGIST_TYPE);
-
+	
 	/**
-	 * Checks if the given id belongs to an admin or not
+	 * It will insert a new user generating a new id for it into the database.<br>
+	 * This operation will be atomic because it may risk a race condition while
+	 * generating the new id.
 	 * 
-	 * @param adminId A Long value representing an ID
+	 * @param theNewUser The user to insert. If it already has an id, that id will
+	 * be discarded.
 	 * 
 	 * @return
-	 * <b>true</b> if it belongs to an admin.<br>
-	 * <b>False</b> otherwise.
+	 * <b>true</b> if the operation was successful.<br>
+	 * <b>false</b> otherwise
 	 * */
-	private boolean checkAdmin(Long adminId) {
-		User admin = entityManager.find(User.class, adminId);
-		
-		if(admin == null || !admin.getType().equals(ADMIN_TYPE)) {
+	private synchronized boolean insertNewUser(User theNewUser) {
+		if(!theNewUser.getType().equals(CheckUserUtils.USER_TYPE)
+				&& !theNewUser.getType().equals(CheckUserUtils.PSYCHOLOGIST_TYPE)) {
 			return false;
 		}
 		
-		return true;
-	}
-	
-	/**
-	 * It will check if there is already an id inside the DB
-	 * 
-	 * @param userId The id to test the collision
-	 * @return 
-	 * <b>true</b> if there is a collision<br>
-	 * <b>false</b> otherwise.
-	 * */
-	private boolean checkIdCollision(Long userId) {
-		User u = entityManager.find(User.class, userId);
+		System.out.println(System.lineSeparator() + theNewUser.toString());
 		
-		if(u == null) {
-			return false;
-		}
+		userRepository.saveAndFlush(theNewUser);
 		
 		return true;
-	}
-	
-	private synchronized long updateNextUserId(String userType) {
-		long userId;
-		userType = userType.toUpperCase();
-		
-		if(userType == PATIENT_TYPE) {
-			lastPatId++;
-			userId = lastPatId;
-		}
-		else if(userType == PSYCHOLOGIST_TYPE) {
-			lastPsyId++;
-			userId = lastPsyId + 1;
-		}
-		else {
-			return -1;
-		}
-		
-		if(checkIdCollision(userId)) {
-			return -1;
-		}
-		
-		return userId;
-	} 
+	}	
 	
 	/**
 	 * It will retrieve the initial state of the admin page.
@@ -147,28 +103,29 @@ public class AdminController {
 	 * @return It returns a string that indicates to the Spring's ViewResolvers what
 	 * view (in this case HTML page) we want to render and send to our client
 	 * */
-	@GetMapping(value = "/admin/{adminId}")
+	@GetMapping(value = "/{adminId}")
 	public String getAdminPage(@PathVariable Long adminId, Model model) {
-		User admin = entityManager.find(User.class, adminId);
-
-		if(!checkAdmin(adminId)) {
+		User admin = CheckUserUtils.checkAndRetrieveAdmin(adminId, entityManager);
+		
+		if(admin == null) {
 			return "404";
 		}
 		
 		lastPatUser = FIRST_PAT_ID;
 		lastPsyUser = FIRST_PSY_ID;
 		
-		log.debug("Before repositore query");
+		LOG.debug("Before repositore query");
 		
-		lastListPat = userRepository.getUserListMoreThan(PATIENT_TYPE, lastPatUser, SHOW_MAX_USERS);
-		lastListPsy = userRepository.getUserListMoreThan(PSYCHOLOGIST_TYPE, lastPsyUser, SHOW_MAX_USERS);
+		lastListPat = userRepository.getUserListMoreThan(CheckUserUtils.USER_TYPE, lastPatUser, SHOW_MAX_USERS);
+		lastListPsy = userRepository.getUserListMoreThan(CheckUserUtils.PSYCHOLOGIST_TYPE, lastPsyUser, SHOW_MAX_USERS);
 		
-		lastPatUser += SHOW_MAX_USERS;
-		lastPsyUser += SHOW_MAX_USERS;
+		lastPatUser = lastListPat.getLast().getId() + 1;
+		lastPsyUser = lastListPsy.getLast().getId() + 1;
 		
 		model.addAttribute("patients_list", lastListPat);
 		model.addAttribute("psychologist_list", lastListPsy);
 		model.addAttribute("admin", admin);
+		model.addAttribute("showNum", SHOW_MAX_USERS);
 		
 		return "admin";
 	}
@@ -186,7 +143,7 @@ public class AdminController {
 	 * 
 	 * @see SHOW_MAX_USERS
 	 * */
-	@RequestMapping(value = "/admin/{adminId}/users-list-{type}-{queryType}",
+	@RequestMapping(value = "/{adminId}/users-list-{type}-{queryType}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody List<UserTransferData> getListUser(@PathVariable Long adminId, @PathVariable String type,
@@ -194,7 +151,7 @@ public class AdminController {
 		
 		List<UserTransferData> sendData = new LinkedList<UserTransferData>();
 		
-		if(!checkAdmin(adminId)) {
+		if(!CheckUserUtils.checkAdmin(adminId, entityManager)) {
 			//log info or warning
 			System.out.println("Request rejected, user with id: " + adminId + " tried to query a whole list of users");
 			return sendData;
@@ -205,7 +162,7 @@ public class AdminController {
 		type = type.toUpperCase();		
 		
 		//it could be an info log too
-		log.debug("AJAX request with user type: " + type + ". Made by admin: " + adminId);
+		LOG.debug("AJAX request with user type: " + type + ". Made by admin: " + adminId);
 		System.out.println("AJAX request with user type: " + type + ". Made by admin: " + adminId);
 		
 		try {
@@ -268,7 +225,7 @@ public class AdminController {
 		}	
 		
 		//i couldn't make it work, that's why i use the syso 
-		log.debug("Values of lastPatUser and lastPsyUser: (" + lastPatUser + ", " + lastPsyUser + ")");
+		LOG.debug("Values of lastPatUser and lastPsyUser: (" + lastPatUser + ", " + lastPsyUser + ")");
 		System.out.println("Values of lastPatUser and lastPsyUser: (" + lastPatUser + ", " + lastPsyUser + ")");
 
 		/* We are doing all of these weird process just to make sure hibernate does less
@@ -310,7 +267,7 @@ public class AdminController {
 	 * 
 	 * @return It will return a list in JSON format of the results.
 	 * */
-	@RequestMapping(value = "/admin/{adminId}/get-browser-result",
+	@RequestMapping(value = "/{adminId}/get-browser-result",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody List<UserTransferData> getUsersByName(@RequestParam(required = true, name = "name") String userName,
@@ -321,7 +278,7 @@ public class AdminController {
 				+ " the user with name: " + userName + " and last name: " + lastName);
 		List<UserTransferData> sendResult = new LinkedList<UserTransferData>();
 
-		if(!checkAdmin(adminId) || (userName.isEmpty() && lastName.isEmpty())) {
+		if(!CheckUserUtils.checkAdmin(adminId, entityManager) || (userName.isEmpty() && lastName.isEmpty())) {
 			//log info or warning
 			System.out.println("Request rejected, user with id: " + adminId + " tried to query some users");
 			return sendResult;
@@ -364,13 +321,13 @@ public class AdminController {
 	 * 	"result":"OK" if everything went well or "Error" if don't 
 	 * }
 	 * */
-	@PostMapping(value = "/admin/{adminId}/user-delete-{userId}",
+	@PostMapping(value = "/{adminId}/user-delete-{userId}",
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody JSONTransferMessage deleteSingleUser(@PathVariable Long adminId, @PathVariable Long userId) {
 		//log info
 		System.out.println(System.lineSeparator() +  "delete user: " + userId + " request made by admin: " + adminId);
 		
-		if(!checkAdmin(adminId) || checkAdmin(userId)) {
+		if(!CheckUserUtils.checkAdmin(adminId, entityManager) || CheckUserUtils.checkAdmin(userId, entityManager)) {
 			//log info or warning
 			System.out.println("Request rejected, user with id: " + adminId + " tried to delete an user");
 			return new JSONTransferMessage("Error");
@@ -379,7 +336,7 @@ public class AdminController {
 		User u = entityManager.find(User.class, userId);
 			
 		/*
-		 * JPA doesn't have any support to create, via annotations, somethin like this
+		 * JPA doesn't have any support to create, via annotations, something like this
 		 * CREATE TABLE USER {
 		 * 		...
 		 * 	psychologistId bigint references USER ON DELETE SET NULL
@@ -389,7 +346,7 @@ public class AdminController {
 		 * This SQL code tells the Data Base Management System to set the attribute
 		 * "psychologistId" to null when the row it is referenced is deleted
 		 * */
-		if(u.getType().equals(PSYCHOLOGIST_TYPE)) {
+		if(u.getType().equals(CheckUserUtils.PSYCHOLOGIST_TYPE)) {
 			//log debug
 			System.out.println(System.lineSeparator() + "Obtaining all patients of user: " + u.getId());
 			LinkedList<User> patientsOf = userRepository.findPatientsOf(u);
@@ -410,7 +367,6 @@ public class AdminController {
 	 * <pre>
 	 * {
 	 *    "firstName": "a",
-	 *    "id": "1",
 	 *    "lastName": "s",
 	 *    "mail": "a@s",
 	 *    "password": "123412341234",
@@ -419,7 +375,7 @@ public class AdminController {
 	 * }
 	 * </pre>
 	 * */
-	@PostMapping(value = "/admin/{adminId}/register-user",
+	@PostMapping(value = "/{adminId}/register-user",
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code = HttpStatus.ACCEPTED)
@@ -428,7 +384,7 @@ public class AdminController {
 		System.out.println(System.lineSeparator() + "Register user request made by admin: " + adminId);
 		System.out.println("Trying to register the user: " + userInfo);
 		
-		if(!checkAdmin(adminId)) {
+		if(!CheckUserUtils.checkAdmin(adminId, entityManager)) {
 			//log info or warning
 			System.out.println("Request rejected, user with id: " + adminId + " tried to register a new user!");
 			return new JSONTransferMessage("Error");
@@ -466,12 +422,11 @@ public class AdminController {
 			return new JSONTransferMessage("Error");
 		}		
 		
-		
-		
 		System.out.println(System.lineSeparator() + theNewUser.toString());
+		boolean result = insertNewUser(theNewUser);
 		
-		userRepository.save(theNewUser);
+		System.out.println(result ? "Ok" : "Error");
 		
-		return new JSONTransferMessage("Success!");
+		return new JSONTransferMessage(result ? "Ok" : "Error");
 	}
 }

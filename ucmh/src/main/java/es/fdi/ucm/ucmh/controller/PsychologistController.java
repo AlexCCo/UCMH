@@ -29,9 +29,10 @@ import es.fdi.ucm.ucmh.model.User;
 import es.fdi.ucm.ucmh.model.repositories.UserRepository;
 import es.fdi.ucm.ucmh.controller.UserController;
 import es.fdi.ucm.ucmh.model.Message;
+
+
 @Controller
 public class PsychologistController {
-	
 	private static final Logger log = LogManager.getLogger(UserController.class);
 	
 	@Autowired
@@ -42,7 +43,7 @@ public class PsychologistController {
 	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
 	
-	@GetMapping("/psychologist/{id}")
+	@GetMapping("/psy/{id}")
 	public String getUser(@PathVariable long id, Model model, HttpSession session) {
 		User psy = entityManager.find(User.class, id);
 		model.addAttribute("psychologist", psy);
@@ -108,7 +109,7 @@ public class PsychologistController {
 		rootNode.put("from", sender.getFirstName() +  " " + sender.getLastName());
 		rootNode.put("to", u.getFirstName() +  " " + u.getLastName());
 		rootNode.put("text", text);
-		rootNode.put("id", m.getID());
+		rootNode.put("id", m.getId());
 		String json = mapper.writeValueAsString(rootNode);
 		
 		log.info("Sending a message to {} with contents '{}'", id, json);

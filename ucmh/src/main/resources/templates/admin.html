@@ -24,9 +24,10 @@
 				<a href="#" id="logo" class="brand-logo">UCMH</a>
 				<a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 				<ul id="nav-mobile" class="right hide-on-med-and-down">
-						<a href="#psy-modal" class="waves-effect waves-light btn modal-trigger">Registrar psicologo</a>
-						<a href="#pat-modal" class="waves-effect waves-light btn modal-trigger">Registrar paciente</a>
-						<a href="#modal" class="waves-effect waves-light btn modal-trigger">Cerrar sesión</a>
+					<li><a href="#psy-modal" class="waves-effect waves-light btn modal-trigger">Registrar psicologo</a></li>
+					<li><a href="#pat-modal" class="waves-effect waves-light btn modal-trigger">Registrar paciente</a></li>
+					<li><a href="#pat-modal" th:href="@{/admin/{id}/messages(id = ${admin.id})}" class="waves-effect waves-light btn modal-trigger">Mensajes recibidos</a></li>
+					<li><a href="#modal" class="waves-effect waves-light btn modal-trigger">Cerrar sesión</a></li>
 				</ul>
 			</div>
 		</nav>
@@ -75,7 +76,7 @@
 									<i class="material-icons">chevron_left</i>
 								</button>
 								<div class="users-results">
-									<p>mostrando 10 elementos - pagina <span class="psychologist-page"></span></p>
+									<p>mostrando <span id="num-elements" th:text="${showNum}"> 10</span> elementos - pagina <span class="psychologist-page"></span></p>
 								</div>
 								<button id="more-psychologists" class="waves-effect waves-teal btn-flat">
 									<i class="material-icons">chevron_right</i>

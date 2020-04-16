@@ -1,7 +1,6 @@
 package es.fdi.ucm.ucmh.model;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -14,10 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Version;
 
 import es.fdi.ucm.ucmh.model.Message;
-import es.fdi.ucm.ucmh.model.Message.Transfer;
+import es.fdi.ucm.ucmh.transfer.MessageTransferData;
 
 @Entity
 @NamedQueries({
@@ -29,10 +27,13 @@ public class Message {
 	//---------------Atributos-----------------
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer ID;
-	private LocalDateTime fecha;
+	private long id;
+	
+	private LocalDateTime date;
+	
 	@Column(name="estadoAnimo", nullable=true)
 	private Animosity estadoAnimo;
+	
 	@ManyToOne
 	private User from;
 	
@@ -41,89 +42,115 @@ public class Message {
 	
 	private String text;
 	
-	public static class Transfer {
-		private String from;
-		private String to;
-		private String text;
-		long id;
-		public Transfer(Message m) {
-			this.from = m.getFrom().getFirstName() + " " + m.getFrom().getLastName();
-			this.to = m.getTo().getFirstName() + " " + m.getTo().getLastName();;
-			this.text = m.getText();
-			this.id = m.getID();
+	/**
+	 * Convierte colecciones de mensajes a lista de mensajes
+	 * que cumplen el formato JSON
+	 * 
+	 * @param messages
+	 * Una coleccion representando un conjuntos de mensajes
+	 * @return
+	 * Una lista de MessageTransferData que cumple el formato
+	 * JSON
+	 *  
+	 * @throws JsonProcessingException
+	 * 
+	 * @see MessageTransferData
+	 */
+	public static List<MessageTransferData> asMessageTransferDataObjects(Collection<Message> messages) {
+		ArrayList<MessageTransferData> all = new ArrayList<>();
+		
+		for (Message m : messages) {
+			all.add(new MessageTransferData(m));
 		}
-		public String getFrom() {
-			return from;
-		}
-		public void setFrom(String from) {
-			this.from = from;
-		}
-		public String getTo() {
-			return to;
-		}
-		public void setTo(String to) {
-			this.to = to;
-		}
-		public String getText() {
-			return text;
-		}
-		public void setText(String text) {
-			this.text = text;
-		}
-		public long getId() {
-			return id;
-		}
-		public void setId(long id) {
-			this.id = id;
-		}		
+		
+		return all;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(long id) {
+		this.id = id;
 	}
 	
 	/**
-	 * Convierte colecciones de mensajes a formato JSONificable
-	 * @param messages
-	 * @return
-	 * @throws JsonProcessingException
+	 * @return the date
 	 */
-	public static List<Transfer> asTransferObjects(Collection<Message> messages) {
-		ArrayList<Transfer> all = new ArrayList<>();
-		for (Message m : messages) {
-			all.add(new Transfer(m));
-		}
-		return all;
+	public LocalDateTime getDate() {
+		return date;
 	}
-	
-	//------------------------------------------
-	
-	public Integer getID() {
-		return ID;
+
+	/**
+	 * @param date the date to set
+	 */
+	public void setDate(LocalDateTime date) {
+		this.date = date;
 	}
-	public void setID(Integer iD) {
-		ID = iD;
+
+	/**
+	 * @return the estadoAnimo
+	 */
+	public Animosity getEstadoAnimo() {
+		return estadoAnimo;
 	}
-	public LocalDateTime getFecha() {
-		return fecha;
+
+	/**
+	 * @param estadoAnimo the estadoAnimo to set
+	 */
+	public void setEstadoAnimo(Animosity estadoAnimo) {
+		this.estadoAnimo = estadoAnimo;
 	}
-	public void setFecha(LocalDateTime fecha) {
-		this.fecha = fecha;
-	}
-	public String getText() {
-		return text;
-	}
-	public void setText(String text) {
-		this.text = text;
-	}
+
+	/**
+	 * @return the from
+	 */
 	public User getFrom() {
 		return from;
 	}
+
+	/**
+	 * @param from the from to set
+	 */
 	public void setFrom(User from) {
 		this.from = from;
 	}
+
+	/**
+	 * @return the to
+	 */
 	public User getTo() {
 		return to;
 	}
+
+	/**
+	 * @param to the to to set
+	 */
 	public void setTo(User to) {
 		this.to = to;
 	}
+
+	/**
+	 * @return the text
+	 */
+	public String getText() {
+		return text;
+	}
+
+	/**
+	 * @param text the text to set
+	 */
+	public void setText(String text) {
+		this.text = text;
+	}
 	
+	//------------------------------------------
+		
 	
 }

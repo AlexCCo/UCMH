@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Admin</title>
+
+		<link rel="stylesheet" href="/css/messages.css">
+		<link rel="stylesheet" href="/css/main.css">
+		<link rel="stylesheet" href="/css/normalize.css">
+		<link rel="stylesheet" href="/css/materialize.css">
+		<link rel="stylesheet" href="/css/my-theme.css">
+		
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Muli|Oswald&display=swap" rel="stylesheet">
+
+		<meta name="theme-color" content="#fafafa">
+
+	</head>
+	<body>
+		<nav id="menu">
+			<div class="nav-wrapper">
+				<a href="#" id="logo" class="brand-logo">UCMH</a>
+				<a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+				<ul id="nav-mobile" class="right hide-on-med-and-down">
+						<li><a class="waves-effect waves-light btn modal-trigger">Mensajes recibidos</a></li>
+						<a href="#modal" class="waves-effect waves-light btn modal-trigger">Cerrar sesión</a>
+				</ul>
+			</div>
+		</nav>
+		
+		<h4 class="center-align">Panel de mensajes de <span th:text="${user.firstName}"></span></h4>
+		
+		<div class="row">
+			<div class="col s5">
+				<ul id="users-collection" class="card collection">
+					
+					<!-- The structure of this list will be change, do not create any dependency -->
+					<li class="collection-item avatar" th:each="sender : ${receive_messages}">
+						<div class="user-info">
+		          <img src="/image/ejemplo.jpg" alt="" class="circle">
+		          <p class="title" th:text="|${sender.firstName}, ${sender.lastName}|"></p>
+		          <p>Id: <span class="user-id" th:text="${psy.id}"></span></p>
+		          <p> e-mail: <span th:text="${sender.mail}"></span></p>
+							<p> Tlf: <span th:text="${sender.phoneNumber}"></span></p>
+						</div>
+						<div class="user-delete">
+							<button class="delete-psy waves-effect waves-red-darken-4 red lighten-1 btn-flat">
+								delete
+							</button>
+						</div>
+		       </li>
+		       
+		    	</ul>
+		    	<div class="users-more-results">
+					<button id="less-psychologists" class="waves-effect waves-teal btn-flat">
+						<i class="material-icons">chevron_left</i>
+					</button>
+					<div class="users-results">
+						<p>mostrando <span id="num-elements" th:text="${showNum}">10</span> elementos - pagina <span class="psychologist-page"></span></p>
+					</div>
+					<button id="more-psychologists" class="waves-effect waves-teal btn-flat">
+						<i class="material-icons">chevron_right</i>
+					</button>
+				</div>
+			</div>	
+				
+				
+			<div class="col s6 text-chat card-panel">
+				<div class="header-msg-info">
+					<span id="user-name-chat">paco</span>
+				</div>
+				<div class="body-msg">
+					<div class="chat-container">
+					
+						<div class=message-wrap>
+							<div class="message-from">
+								<div class="message-owner">paco</div>
+								<div class="message-content">
+									oaiuhdsoshaoahofhfaifhasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+								</div>
+							</div>
+						</div>
+						
+						<div class=message-wrap>
+							<div class="message-to">
+								<div class="message-owner">tu</div>
+								<div class="message-content">
+									oaiuhdsoshaoahofhfaifhas
+								</div>
+							</div>
+						</div>
+						
+						<div class=message-wrap>
+							<div class="message-from">
+								<div class="message-owner">paco</div>
+								<div class="message-content">
+									oaiuhdsoshaoahofhfaifhas
+								</div>
+							</div>
+						</div>
+						
+						<div class=message-wrap>
+							<div class="message-from">
+								<div class="message-owner">paco</div>
+								<div class="message-content">
+									oaiuhdsoshaoahofhfaifhas
+								</div>
+							</div>
+						</div>
+						
+						<div class=message-wrap>
+							<div class="message-from">
+								<div class="message-owner">paco</div>
+								<div class="message-content">
+									oaiuhdsoshaoahofhfaifhas
+								</div>
+							</div>
+						</div>
+						
+						<div class=message-wrap>
+							<div class="message-from">
+								<div class="message-owner">paco</div>
+								<div class="message-content">
+									oaiuhdsoshaoahofhfaifhas
+								</div>
+							</div>
+						</div>
+						
+						<div class=message-wrap>
+							<div class="message-from">
+								<div class="message-owner">paco</div>
+								<div class="message-content">
+									oaiuhdsoshaoahofhfaifhas
+								</div>
+							</div>
+						</div>
+						
+						<div class=message-wrap>
+							<div class="message-to">
+								<div class="message-owner">tu</div>
+								<div class="message-content">
+									oaiuhdsoshaoahofhfaifhas
+								</div>
+							</div>
+						</div>
+						
+						<div class=message-wrap>
+							<div class="message-from">
+								<div class="message-owner">paco</div>
+								<div class="message-content">
+									oaiuhdsoshaoahofhfaifhas
+								</div>
+							</div>
+						</div>
+						
+						<div class=message-wrap>
+							<div class="message-from">
+								<div class="message-owner">paco</div>
+								<div class="message-content">
+									oaiuhdsoshaoahofhfaifhas
+								</div>
+							</div>
+						</div>
+						
+						<div class=message-wrap>
+							<div class="message-to">
+								<div class="message-owner">tu</div>
+								<div class="message-content">
+									oaiuhdsoshaoahofhfaifhas
+								</div>
+							</div>
+						</div>
+						
+						<div class=message-wrap>
+							<div class="message-from">
+								<div class="message-owner">paco</div>
+								<div class="message-content">
+									oaiuhdsoshaoahofhfaifhas
+								</div>
+							</div>
+						</div>
+						
+						<div class=message-wrap>
+							<div class="message-from">
+								<div class="message-owner">paco</div>
+								<div class="message-content">
+									oaiuhdsoshaoahofhfaifhas
+								</div>
+							</div>
+						</div>
+						
+						<div class=message-wrap>
+							<div class="message-from">
+								<div class="message-owner">paco</div>
+								<div class="message-content">
+									oaiuhdsoshaoahofhfaifhas
+								</div>
+							</div>
+						</div>
+						
+						<div class=message-wrap>
+							<div class="message-to">
+								<div class="message-owner">tu</div>
+								<div class="message-content">
+									oaiuhdsoshaoahofhfaifhasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+								</div>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+				<div class="footer-msg-input">
+					<div class="text-input" contenteditable="true" placeholder="Escribe algo..." spellcheck="false"></div>
+				</div>
+			</div>
+				
+			
+		</div>
+		
+		
+		<script src="/js/vendor/modernizr-3.8.0.min.js"></script>
+	  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	  <script>window.jQuery || document.write('<script src="/js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
+	  <script src="/js/plugins.js"></script>
+	  <script src="/js/vendor/materialize.min.js"></script>
+	  <script src="/js/messages.js"></script>
+
+		<script>
+		$(document).ready(function(){
+				$('.sidenav').sidenav();
+				$('.collapsible').collapsible();
+				$('.modal').modal();
+				$('.modal-trigger').modal();
+
+		});
+		</script>
+		<style>
+			.text-chat {
+				margin-left: 90px !important;
+				padding: 0 0 !important;
+			}
+			
+			.header-msg-info {
+				background-color: rgb(227, 227, 232);
+				padding-top: 5px;
+				padding-bottom: 10px;
+			}
+			
+			#user-name-chat {
+				padding-left: 40px;
+			}
+			
+			.body-msg {
+				height: 715px;
+			}			
+			
+			.chat-container {
+				overflow: scroll;
+				overflow-x: hidden;
+				height: inherit;
+			}
+			
+			.message-wrap {
+				max-width: 75%;
+				padding: 13px 0 0 7px;
+			}
+			
+			.message-to, .message-from {
+				max-width: inherit;
+				padding: 3px 5px;
+				border-radius: 5px;
+				border: 1px solid black;
+				display: inline-block;
+				/*
+				info about it: https://stackoverflow.com/questions/3058866/how-to-force-a-line-break-in-a-long-word-in-a-div\
+				*/
+				overflow-wrap: break-word;  
+			}
+			
+			.message-to .message-owner, .message-to .message-content {
+				text-align: left !important;
+			}
+			
+			.footer-msg-input {
+				padding-left: 60px;
+				padding-top: 10px;
+				padding-bottom: 10px;
+			}
+			
+			/*
+			those (class-name | id | html-tag):name are called pseudo-classes
+			more info: https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes
+			
+			this expression here represent *ROUGHLY SPEAKING* the following statement:
+			 ~to every html tag that has class="text-input" attribute and it doesn't have
+			  childrens or text and it is noT focused, add one child that will be 
+			  considered the first child (always) with the content of the placeholder attribute's value~
+			  
+			*/
+			.text-input:empty:not(:focus)::before{
+    		content:attr(placeholder);
+			}
+			
+			.text-input:focus {
+				outline: none;
+			}
+			
+			.text-input {
+				text-align: left;
+				display: inline-block;
+				width: 65%;
+				height: 100%;
+				border: 0;
+				box-shadow: 0px 1px 0px rgb(204, 204, 255)
+			}
+		</style>
+	</body>
+</html>

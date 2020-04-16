@@ -170,7 +170,9 @@ function get_users(userType, userMethod){
 function registerHTMLItems(collection_items, response_text){
 
 	let user_data = JSON.parse(response_text);
+	let display_num_user = document.getElementById("num-elements");
 	
+	display_num_user.innerText = user_data.length;
 	console.log(user_data);
 	
 	collection_items.innerHTML = "";
@@ -367,7 +369,7 @@ function accept_handler(btn_id){
  * @param clear_input A boolean telling to clear the input text or not 
  * */
 function clean_error_msg(userType, clear_input){
-	let input_elements = ["id", "name",  "surname", "mail", "phone", "pass"];
+	let input_elements = ["name",  "surname", "mail", "phone", "pass"];
 	
 	for(const elem of input_elements){
 		let error = document.getElementById(`error-${elem}-${userType}`);

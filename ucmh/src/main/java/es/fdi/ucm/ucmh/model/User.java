@@ -1,38 +1,30 @@
 package es.fdi.ucm.ucmh.model;
 
 import java.util.Collection;
-import java.lang.Long;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityResult;
+import javax.persistence.FieldResult;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.validation.Constraint;
+import javax.persistence.SqlResultSetMapping;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import es.fdi.ucm.ucmh.utilities.CheckUserUtils;
 
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "User.getUserListMoreThan", 
 			    query = "SELECT u "
 			    		+ "FROM User u "
-			    		+ "WHERE u.type = :userType AND (u.id >= :lastUser AND u.id < (:lastUser + :showUsers)) "
-			    		+ "ORDER BY u.id ASC "),
-	@NamedQuery(name = "User.getUserListLessThan", 
-			    query = "SELECT u "
-			    		+ "FROM User u "
-			    		+ "WHERE u.type = :userType AND (u.id < :lastUser AND u.id >= (:lastUser - :showUsers)) "
+			    		+ "WHERE u.type = :userType AND u.id >= :lastUser AND ROWNUM <= :showUsers "
 			    		+ "ORDER BY u.id ASC "),
 	@NamedQuery(name = "User.findPatientsOf",
 				query = "SELECT u "
@@ -42,10 +34,18 @@ import org.hibernate.annotations.OnDeleteAction;
 				query = "SELECT u "
 						+ "FROM User u "
 						+ "WHERE u.firstName LIKE :userFirstName AND u.lastName LIKE :userLastName AND u.type != 'ADMIN'"),
-	@NamedQuery(name = "User.getLastId",
-				query = "SELECT MAX(u.id) "
-						+ "FROM User u "
-						+ "WHERE u.type = :userType")
+})
+
+@NamedNativeQueries({
+	@NamedNativeQuery( name = "User.getUserListLessThan", 
+					   query = "SELECT * "
+				    		+ "FROM (SELECT * " 
+				    		         + "FROM User " 
+				    		         + "WHERE id < :lastUser AND type = :userType " 
+				    		         + "ORDER BY id DESC) " 
+				    		+ "WHERE ROWNUM <= :showUsers "
+				    		+ "ORDER BY id ASC", 
+				       resultClass = User.class)
 })
 public class User {
 	//------------Atributos---------------------
@@ -135,6 +135,9 @@ public class User {
 		return type;
 	}
 	public void setType(String type) {
+		if(!CheckUserUtils.checkAllTypes(type)) {
+			throw new IllegalArgumentException("Type of user must be: USER, PSY or ADMIN");
+		}
 		this.type = type;
 	}
 	public User getPsychologist() {
