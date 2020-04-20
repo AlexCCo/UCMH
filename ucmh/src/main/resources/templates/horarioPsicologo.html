@@ -256,18 +256,18 @@
       <i class="material-icons">add</i>
     </a>
     <ul>
-      <li><a class="btn-floating blue modal-trigger" href="#modal2"><i class="material-icons">group</i></a></li>
-      <li><a class="btn-floating green modal-trigger" href="#modal1"><i class="material-icons">marcar no disponible</i></a></li>
+      <li><a class="btn-floating blue modal-trigger" href="#modal1"><i class="material-icons">group</i></a></li>
     </ul>
   </div>
 
   <div id="modal1" class="modal">
+    <form action="saveGroupAppointment" method="post" name="createGroupAppointmentForm">
     <div class="modal-content">
       <h4>Cita individual</h4>
 
       <!-- Selección del paciente -->
-
-      <p> Selecciona al paciente con el que vas a tener la cita </p>
+      <!-- Recargar con usuarios -->
+      <p> Selecciona los paciente con los que vas a tener la cita </p>
       <div class="input-field col s12 m6">
         <select class="icons">
           <option value="" disabled selected>Selecciona paciente</option>
@@ -281,36 +281,26 @@
       <!-- Selección de día -->
 
       <p> Selecciona día para la sesión </p>
-      <input type="text" class="datepicker">
+      <input name="day" type="text" class="datepicker">
 
 
       <!-- Selección de hora ini -->
 
       <p> Selecciona hora de la sesión </p>
-      <input type="text" class="timepicker">
+      <input name="start_hour" type="text" class="timepicker">
 
       <!-- Selección hora fin -->
 
       <p> Selecciona hora de fin de la sesión </p>
-      <input type="text" class="timepicker">
+      <input name="finish_hour" type="text" class="timepicker">
 
     </div>
     <div class="modal-footer">
-      <a href="#!" class="modal-close waves-effect waves-red btn-flat red">Cancelar</a>
-      <a href="#!" onclick="M.toast({html: 'Cita agregada'})" class="modal-close waves-effect waves-green btn-flat green">Aceptar</a>
+      <a href="" class="modal-close waves-effect waves-red btn-flat red">Cancelar</a>
+      <button type="submit" class="modal-close waves-effect waves-green btn-flat green">Aceptar</a>
     </div>
+  </form>
   </div>
-
-  <div id="modal2" class="modal">
-    <div class="modal-content">
-      <h4>Cita grupal</h4>
-      <p>A bunch of text</p>
-    </div>
-    <div class="modal-footer">
-      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
-    </div>
-  </div>
-
 
   <script src="js/vendor/modernizr-3.8.0.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -319,6 +309,37 @@
   <script src="js/vendor/materialize.min.js"></script>
   <script src="js/vendor/schedule-util.js"></script>
   <script src="js/vendor/schedule-main.js"></script>
+  <script type="text/javascript">
+    $(function() {
+       /*  Submit form using Ajax */
+       $('button[type=submit]').click(function(e) {
+
+          //Prevent default submission of form
+          e.preventDefault();
+
+          //Remove all errors
+          $('input').next().remove();
+
+          $.post({
+             url : 'saveGroupAppointment',
+             data : $('form[name=createGroupAppointmentForm]').serialize(),
+             success : function(res) {
+
+                if(res.validated){
+                   //Set response
+                   M.toast({html: 'Cita agregada'})
+                }else{
+                  //Set error messages
+                  M.toast({html: 'error'})
+                  $.each(res.errorMessages,function(key,value){
+      	            $('input[name='+key+']').after('<span class="error">'+value+'</span>');
+                  });
+                }
+             }
+          })
+       });
+    });
+</script>
 
   <script src="js/main.js"></script>
 
