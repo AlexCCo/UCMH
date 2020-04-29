@@ -1,9 +1,11 @@
 package es.fdi.ucm.ucmh.model;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 
 @Entity
 public class GroupAppointment {
@@ -22,23 +26,26 @@ public class GroupAppointment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer ID;
 	
-	@NotEmpty(message="Introduce la fecha de la cita")
-	private LocalDate date;
+	//@NotEmpty(message="Introduce la fecha de la cita")
+	@DateTimeFormat(pattern = "yyyy-mm-dd")
+	private Date date;
 	
-	@NotEmpty(message="Introduce hora de inicio")
+	//@NotEmpty(message="Introduce hora de inicio")
 	private LocalTime start_hour;
 	
-	@NotEmpty(message="Introduce hora de fin")
+	//@NotEmpty(message="Introduce hora de fin")
 	private LocalTime finish_hour;	
 	
 	//TODO mínimo dos
-	@NotEmpty(message="Introduce al menos dos usuarios")
+	//@NotEmpty(message="Introduce al menos dos usuarios")
 	@ManyToMany
 	private Collection<User> patient;
 	
-	@NotEmpty(message="Tienes que estar registrado")
+	//@NotEmpty(message="Tienes que estar registrado")
 	@ManyToOne
 	private User pychologist;
+	
+	private String example;
 
 	
 	public Integer getID() {
@@ -49,11 +56,11 @@ public class GroupAppointment {
 		ID = iD;
 	}
 
-	public LocalDate getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 
@@ -87,6 +94,14 @@ public class GroupAppointment {
 
 	public void setPychologist(User pychologist) {
 		this.pychologist = pychologist;
+	}
+
+	public String getExample() {
+		return example;
+	}
+
+	public void setExample(String example) {
+		this.example = example;
 	}
 
 	// ------------------------------------------

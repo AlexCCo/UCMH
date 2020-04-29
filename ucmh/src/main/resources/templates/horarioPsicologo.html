@@ -20,7 +20,37 @@
 
   <link href="https://fonts.googleapis.com/css?family=Muli|Oswald&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+ <script type="text/javascript">
+    $(function() {
+       /*  Submit form using Ajax */
+       $('button[type=submit]').click(function(e) {
 
+          //Prevent default submission of form
+          e.preventDefault();
+
+          //Remove all errors
+          //$('input').next().remove();
+
+          $.post({
+             url : 'saveGroupAppointment',
+             data : $('form[name=createGroupAppointmentForm]').serialize(),
+             success : function(res) {
+				console.log("Piruleta");
+                if(res.validated){
+                   //Set response
+                   M.toast({html: 'Cita agregada'})
+                }else{
+                  //Set error messages
+                  M.toast({html: 'error'})
+                  $.each(res.errorMessages,function(key,value){
+      	            $('input[name='+key+']').after('<span class="error">'+value+'</span>');
+                  });
+                }
+             }
+          })
+       });
+    });
+</script>
   <meta name="theme-color" content="#fafafa">
 </head>
 
@@ -267,6 +297,14 @@
 
       <!-- Selección del paciente -->
       <!-- Recargar con usuarios -->
+      
+      <div class="input-field col s6">
+          <input name="example" placeholder="Placeholder" id="first_name"  type="text" class="validate">
+          <label for="first_name">First Name</label>
+      </div>
+      
+      <!--
+      
       <p> Selecciona los paciente con los que vas a tener la cita </p>
       <div class="input-field col s12 m6">
         <select class="icons">
@@ -277,22 +315,22 @@
         </select>
         <label>Pacientes disponibles</label>
       </div>
+      
+		-->
 
-      <!-- Selección de día -->
 
       <p> Selecciona día para la sesión </p>
-      <input name="day" type="text" class="datepicker">
+      <input name="date" type="date">
 
 
-      <!-- Selección de hora ini -->
 
       <p> Selecciona hora de la sesión </p>
-      <input name="start_hour" type="text" class="timepicker">
+      <input name="start_hour" type="time">
 
-      <!-- Selección hora fin -->
 
       <p> Selecciona hora de fin de la sesión </p>
-      <input name="finish_hour" type="text" class="timepicker">
+      <input name="finish_hour" type="time">
+      
 
     </div>
     <div class="modal-footer">
@@ -309,38 +347,6 @@
   <script src="js/vendor/materialize.min.js"></script>
   <script src="js/vendor/schedule-util.js"></script>
   <script src="js/vendor/schedule-main.js"></script>
-  <script type="text/javascript">
-    $(function() {
-       /*  Submit form using Ajax */
-       $('button[type=submit]').click(function(e) {
-
-          //Prevent default submission of form
-          e.preventDefault();
-
-          //Remove all errors
-          $('input').next().remove();
-
-          $.post({
-             url : 'saveGroupAppointment',
-             data : $('form[name=createGroupAppointmentForm]').serialize(),
-             success : function(res) {
-
-                if(res.validated){
-                   //Set response
-                   M.toast({html: 'Cita agregada'})
-                }else{
-                  //Set error messages
-                  M.toast({html: 'error'})
-                  $.each(res.errorMessages,function(key,value){
-      	            $('input[name='+key+']').after('<span class="error">'+value+'</span>');
-                  });
-                }
-             }
-          })
-       });
-    });
-</script>
-
   <script src="js/main.js"></script>
 
   <script>

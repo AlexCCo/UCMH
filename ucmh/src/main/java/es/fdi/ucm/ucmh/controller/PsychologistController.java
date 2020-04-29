@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -32,6 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import es.fdi.ucm.ucmh.model.User;
+import es.fdi.ucm.ucmh.model.repositories.GroupAppointmentRepository;
 import es.fdi.ucm.ucmh.model.repositories.UserRepository;
 import es.fdi.ucm.ucmh.controller.UserController;
 import es.fdi.ucm.ucmh.model.GroupAppointment;
@@ -46,7 +48,11 @@ public class PsychologistController {
 	@Autowired
 	EntityManager entityManager;
 	
+	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	GroupAppointmentRepository groupappointmentRepository;
 	
 	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
@@ -147,8 +153,10 @@ public class PsychologistController {
          // Implement business logic to save employee into database
          //..
          respone.setValidated(true);
-         respone.setGroupAppointment(group_appointment);
+         respone.setGroupAppointment(group_appointment); //TODO revisar
+         groupappointmentRepository.saveAndFlush(group_appointment);
       }
       return respone;
    }
+      
 }
