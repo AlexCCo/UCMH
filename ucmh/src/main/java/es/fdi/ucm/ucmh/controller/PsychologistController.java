@@ -131,7 +131,7 @@ public class PsychologistController {
 		messagingTemplate.convertAndSend("/user/"+u.getFirstName()+"/queue/updates", json);
 		return "{\"result\": \"message sent.\"}";
 	}
-
+	
    @PostMapping(value = "/saveGroupAppointment", produces = { MediaType.APPLICATION_JSON_VALUE })
    @ResponseBody
    public GroupAppointmentJsonRespone saveEmployee(@ModelAttribute @Valid GroupAppointment group_appointment,

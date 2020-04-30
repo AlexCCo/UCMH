@@ -20,37 +20,50 @@
 
   <link href="https://fonts.googleapis.com/css?family=Muli|Oswald&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
- <script type="text/javascript">
-    $(function() {
-       /*  Submit form using Ajax */
-       $('button[type=submit]').click(function(e) {
+<script type="text/javascript">
+   $(function() {
+     //TODO params function
+      function insert(res) {
+           $("#example").append('<li class="cd-schedule__event">
+              <a data-start="13:00" data-end="14:00" data-content="event-abs-circuit" data-event="event-1" href="#0">
+                <em class="cd-schedule__name">Antonio</em>
+              </a>
+            </li>'
+          );
+      }
 
-          //Prevent default submission of form
-          e.preventDefault();
+      /*  Submit form using Ajax */
+      $('button[type=submit]').click(function(e) {
 
-          //Remove all errors
-          //$('input').next().remove();
+         //Prevent default submission of form
+         e.preventDefault();
 
-          $.post({
-             url : 'saveGroupAppointment',
-             data : $('form[name=createGroupAppointmentForm]').serialize(),
-             success : function(res) {
-				console.log("Piruleta");
-                if(res.validated){
-                   //Set response
-                   M.toast({html: 'Cita agregada'})
-                }else{
-                  //Set error messages
-                  M.toast({html: 'error'})
-                  $.each(res.errorMessages,function(key,value){
-      	            $('input[name='+key+']').after('<span class="error">'+value+'</span>');
-                  });
-                }
-             }
-          })
-       });
-    });
+         //Remove all errors
+         //$('input').next().remove();
+
+         $.post({
+            url : 'saveGroupAppointment',
+            data : $('form[name=createGroupAppointmentForm]').serialize(),
+            success : function(res) {
+               if(res.validated){
+                  //Set response
+                  M.toast({html: 'Cita agregada'})
+                  $('#resultContainer pre code').text(JSON.stringify(res.employee));
+              	  $('#resultContainer').show();
+                 // insert(res);
+               }else{
+                 /*Set error messages
+                 M.toast({html: 'error'})
+                 $.each(res.errorMessages,function(key,value){
+                   $('input[name='+key+']').after('<span class="error">'+value+'</span>');
+                 });*/
+               }
+            }
+         })
+      });
+   });
 </script>
+
   <meta name="theme-color" content="#fafafa">
 </head>
 
@@ -118,6 +131,7 @@
           <div class="cd-schedule__top-info"><span>Lunes</span></div>
 
           <ul>
+            
             <li class="cd-schedule__event">
               <a data-start="09:30" data-end="10:30" data-content="event-abs-circuit" data-event="event-1" href="#0">
                 <em class="cd-schedule__name">Antonio</em>
@@ -130,11 +144,12 @@
               </a>
             </li>
 
-            <li class="cd-schedule__event">
+            <li id="example" class="cd-schedule__event">
               <a data-start="14:00" data-end="15:15"  data-content="event-yoga-1" data-event="event-3" href="#0">
                 <em class="cd-schedule__name">Marcos</em>
               </a>
             </li>
+
           </ul>
         </li>
 
@@ -274,6 +289,14 @@
 
     <div class="cd-schedule__cover-layer"></div>
   </div> <!-- .cd-schedule -->
+  
+  <div id="resultContainer" style="display: none;">
+ <hr/>
+ <h4 style="color: green;">JSON Response From Server</h4>
+  <pre style="color: green;">
+    <code></code>
+   </pre>
+</div>
 
   <script src="js/schedule/schedule-util.js"></script> <!-- util functions included in the CodyHouse framework -->
   <script src="js/schedule/schedule-main.js"></script>
