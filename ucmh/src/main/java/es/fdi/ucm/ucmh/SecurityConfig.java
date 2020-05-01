@@ -2,8 +2,10 @@ package es.fdi.ucm.ucmh;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -21,6 +23,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
+	@Autowired
+	private Environment env;
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+		String debugProperty = env.getProperty("es.ucm.fdi.debug");
+		if (debugProperty != null && Boolean.parseBoolean(debugProperty.toLowerCase())) {
+			// allows access to h2 console iff running under debug mode
+			web.ignoring().antMatchers("/h2/**");
+		}
+    }
+
 	/**
 	 * Main security configuration.
 	 * 
@@ -35,7 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	    http
 	        .authorizeRequests()
 	            .antMatchers("/css/**", "/js/**", "/img/**", "/", "/error").permitAll()
-	            .antMatchers("/admin/**").hasRole("ADMIN")		 // <-- administration
+	            .antMatchers("/admin/**").hasRole("ADMIN")
+	            .antMatchers("/psy/**").hasRole("PSY")
 	            .anyRequest().authenticated()
 	            .and()
 			.formLogin()
