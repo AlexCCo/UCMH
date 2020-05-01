@@ -3,8 +3,8 @@ package es.fdi.ucm.ucmh.model;
 import java.util.Collection;
 
 import javax.persistence.Entity;
-import javax.persistence.EntityResult;
-import javax.persistence.FieldResult;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,9 +15,6 @@ import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.SqlResultSetMapping;
-
-import es.fdi.ucm.ucmh.utilities.CheckUserUtils;
 
 @Entity
 @NamedQueries({
@@ -34,6 +31,9 @@ import es.fdi.ucm.ucmh.utilities.CheckUserUtils;
 				query = "SELECT u "
 						+ "FROM User u "
 						+ "WHERE u.firstName LIKE :userFirstName AND u.lastName LIKE :userLastName AND u.type != 'ADMIN'"),
+	@NamedQuery(name="User.byMail",
+				query="SELECT u FROM User u "
+						+ "WHERE u.mail = :mail"),
 })
 
 @NamedNativeQueries({
@@ -58,7 +58,9 @@ public class User {
 	private String mail;
 	private String password;
 	private String phoneNumber;
-	private String type;
+
+	@Enumerated(EnumType.STRING)
+	private UserType type;
 
 	//user
 	@ManyToOne
@@ -91,6 +93,10 @@ public class User {
 	//-----
 
 	//-------------------------------------------
+
+	public boolean hasRole(Object role) {
+		return UserType.valueOf(role.toString()).equals(type);
+	}
 
 	public long getId() {
 		return id;
@@ -131,14 +137,18 @@ public class User {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	public String getType() {
+	public UserType getType() {
 		return type;
 	}
-	public void setType(String type) {
-		if(!CheckUserUtils.checkAllTypes(type)) {
-			throw new IllegalArgumentException("Type of user must be: USER, PSY or ADMIN");
-		}
+	public void setType(UserType type) {
 		this.type = type;
+	}
+	public void setType(String type) {
+		try {
+			setType(UserType.valueOf(type));
+		} catch (Exception e) {
+			throw new IllegalArgumentException("Invalid user type " + type);
+		}
 	}
 	public User getPsychologist() {
 		return psychologist;

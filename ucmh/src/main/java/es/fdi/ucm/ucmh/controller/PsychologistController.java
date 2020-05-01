@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -32,45 +33,41 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import es.fdi.ucm.ucmh.model.User;
-import es.fdi.ucm.ucmh.model.repositories.GroupAppointmentRepository;
-import es.fdi.ucm.ucmh.model.repositories.UserRepository;
-import es.fdi.ucm.ucmh.controller.UserController;
 import es.fdi.ucm.ucmh.model.GroupAppointment;
-import es.fdi.ucm.ucmh.model.GroupAppointmentJsonRespone;
+import es.fdi.ucm.ucmh.model.GroupAppointmentResponse;
 import es.fdi.ucm.ucmh.model.Message;
+import es.fdi.ucm.ucmh.model.User;
 
 
 @Controller
+@RequestMapping("/psy")
 public class PsychologistController {
-	private static final Logger log = LogManager.getLogger(UserController.class);
+	private static final Logger log = LogManager.getLogger(PsychologistController.class);
 	
 	@Autowired
 	EntityManager entityManager;
 	
 	@Autowired
-	UserRepository userRepository;
-	
-	@Autowired
-	GroupAppointmentRepository groupappointmentRepository;
-	
-	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
-	
-	@GetMapping("/psy/{id}")
-	public String getUser(@PathVariable long id, Model model, HttpSession session) {
-		User psy = entityManager.find(User.class, id);
-		model.addAttribute("psychologist", psy);
 		
-		model.addAttribute("pacientes", entityManager.createQuery(
-				"SELECT u FROM User u WHERE u.psychologist.id LIKE :id")
-				.setParameter("id", id)
-				.getResultList());
-		
-		if(psy == null)
-			return "404";
-		else
-			return "misPacientes";
+	@Autowired // this makes httpSession always available in each method
+	private HttpSession session;
+
+	private User userFromSession() {
+		return (User)session.getAttribute("u");
+	}
+
+	private User refreshUser(User u) {
+		return entityManager.find(User.class, u.getId());
+	}
+
+	@GetMapping("")
+	public String getUser(Model model) {
+		User psy = refreshUser(userFromSession());
+		model.addAttribute("pacientes", entityManager.createNamedQuery(
+			"User.findPatientsOf", User.class).setParameter("psychologistId", psy.getId())
+			.getResultList());
+		return "misPacientes";
 	}
 	
 	@PostMapping(path="/modify/{id}", produces = "application/json")
@@ -134,10 +131,11 @@ public class PsychologistController {
 	
    @PostMapping(value = "/saveGroupAppointment", produces = { MediaType.APPLICATION_JSON_VALUE })
    @ResponseBody
-   public GroupAppointmentJsonRespone saveEmployee(@ModelAttribute @Valid GroupAppointment group_appointment,
+   @Transactional
+   public GroupAppointmentResponse saveEmployee(@ModelAttribute @Valid GroupAppointment appointment,
          BindingResult result) {
 
-      GroupAppointmentJsonRespone respone = new GroupAppointmentJsonRespone();
+      GroupAppointmentResponse response = new GroupAppointmentResponse();
       
       if(result.hasErrors()){
          
@@ -147,16 +145,14 @@ public class PsychologistController {
                      Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage)
                  );
          
-         respone.setValidated(false);
-         respone.setErrorMessages(errors);
+         response.setValidated(false);
+         response.setErrorMessages(errors);
       }else{
-         // Implement business logic to save employee into database
-         //..
-         respone.setValidated(true);
-         respone.setGroupAppointment(group_appointment); //TODO revisar
-         groupappointmentRepository.saveAndFlush(group_appointment);
+         response.setValidated(true);
+         response.setGroupAppointment(appointment);
+		 entityManager.persist(response.getGroupAppointment());
       }
-      return respone;
+      return response;
    }
       
 }

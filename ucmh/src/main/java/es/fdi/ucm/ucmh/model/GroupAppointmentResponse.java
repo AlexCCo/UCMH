@@ -2,16 +2,16 @@ package es.fdi.ucm.ucmh.model;
 
 import java.util.Map;
 
-public class GroupAppointmentJsonRespone {
-	   private GroupAppointment group_appointment;
+public class GroupAppointmentResponse {
+	   private GroupAppointment appointment;
 	   private boolean validated;
 	   private Map<String, String> errorMessages;
 	   
 		public GroupAppointment getGroupAppointment() {
-			return group_appointment;
+			return appointment;
 		}
-		public void setGroupAppointment(GroupAppointment group_appointment) {
-			this.group_appointment = group_appointment;
+		public void setGroupAppointment(GroupAppointment appointment) {
+			this.appointment = appointment;
 		}
 		public boolean isValidated() {
 			return validated;
@@ -25,6 +25,4 @@ public class GroupAppointmentJsonRespone {
 		public void setErrorMessages(Map<String, String> errorMessages) {
 			this.errorMessages = errorMessages;
 		}
-
-	   
 	}

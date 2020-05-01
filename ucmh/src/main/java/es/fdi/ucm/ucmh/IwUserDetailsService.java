@@ -28,24 +28,15 @@ public class IwUserDetailsService implements UserDetailsService {
 
     public UserDetails loadUserByUsername(String username){
     	try {
-	        User u = entityManager.createNamedQuery("User.byUsername", User.class)
-                    .setParameter("username", username)
+	        User u = entityManager.createNamedQuery("User.byMail", User.class)
+                    .setParameter("mail", username)
                     .getSingleResult();
-	        // build UserDetails object
-	        ArrayList<SimpleGrantedAuthority> roles = new ArrayList<>();
 
-			switch (u.getType()) {
-				case ADMIN:
-					roles.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-					break;
-				case PSY:
-					roles.add(new SimpleGrantedAuthority("ROLE_PSY"));
-					break;
-				default:
-					throw new IllegalArgumentException("No roles found for user " + u);
-			}
+			ArrayList<SimpleGrantedAuthority> roles = new ArrayList<>();
 			roles.add(new SimpleGrantedAuthority("ROLE_USER"));
-	        return new org.springframework.security.core.userdetails.User(
+			roles.add(new SimpleGrantedAuthority("ROLE_" + u.getType()));
+
+			return new org.springframework.security.core.userdetails.User(
 	        		u.getMail(), u.getPassword(), roles); 
 	    } catch (Exception e) {
     		log.info("No such user: " + username + "(e = " + e.getMessage() + ")");

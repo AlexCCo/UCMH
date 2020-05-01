@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import es.fdi.ucm.ucmh.controller.MessageController;
 import es.fdi.ucm.ucmh.model.User;
-import es.fdi.ucm.ucmh.utilities.CheckUserUtils;
+import es.fdi.ucm.ucmh.model.UserType;
 
 @Controller
 public class MessageController{
@@ -27,22 +27,21 @@ public class MessageController{
 	@GetMapping(value = "/{userType}/{userId}/messages")
 	public String getAdminMessages(@PathVariable Long userId, @PathVariable String userType,
 								   Model model, HttpSession session) {
-		
+
 		System.out.println(System.lineSeparator() + "GET request made by: " + userId + " type: " + userType);
-		if(!CheckUserUtils.checkAllPaths(userType)) {
-			System.out.println(System.lineSeparator() + "GET request made by: " + userId + " REJECTED! bad path");
-			return "404";
-		}
-		
-		User u = CheckUserUtils.checkAndRetrieveUserBy(userId, entityManager, userType.toUpperCase());
-		
-		if(u == null) {
+
+		User u = entityManager.find(User.class, userId);
+		if (u == null) {
 			System.out.println(System.lineSeparator() + "GET request made by: " + userId + " REJECTED! bad user type");
 			return "404";
 		}
+
+		if ( ! UserType.isValidPath(userType)) {
+			System.out.println(System.lineSeparator() + "GET request made by: " + userId + " REJECTED! bad path");
+			return "404";
+		}		
 		
-		model.addAttribute("user", u);
-		
+		model.addAttribute("user", u);		
 		return "mensajesReEn";
 	}
 	
