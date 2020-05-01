@@ -103,7 +103,7 @@ public class AdminController {
 
 		// this would be better in a NamedQuery. Note that it *is* safe *only* because type is a UserType
 		List<User> result = entityManager.createQuery(
-			"SELECT u FROM User WHERE u.type == '" + type + "'",
+			"SELECT u FROM User u WHERE u.type = '" + type + "'",
 			User.class).getResultList();
 
 
@@ -145,8 +145,8 @@ public class AdminController {
 		
 		List<UserTransferData> toTransfer = new ArrayList<>();
 		for(User u : entityManager.createNamedQuery("User.getUserByName", User.class)
-			.setParameter("userName", userName)
-			.setParameter("lastName", lastName)
+			.setParameter("userFirstName", userName)
+			.setParameter("userLastName", lastName)
 			.getResultList()) {
 
 			toTransfer.add(new UserTransferData(u));

@@ -26,7 +26,7 @@ import javax.persistence.OneToMany;
 	@NamedQuery(name = "User.findPatientsOf",
 				query = "SELECT u "
 						+ "FROM User u "
-						+ "WHERE u.psychologist = :psychologistId "),
+						+ "WHERE u.psychologist.id = :psychologistId "),
 	@NamedQuery(name = "User.getUserByName",
 				query = "SELECT u "
 						+ "FROM User u "
