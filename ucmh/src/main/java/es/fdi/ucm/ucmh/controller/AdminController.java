@@ -1,17 +1,22 @@
 package es.fdi.ucm.ucmh.controller;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.lang.Long;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,11 +37,14 @@ import es.fdi.ucm.ucmh.model.repositories.UserRepository;
 import es.fdi.ucm.ucmh.transfer.JSONTransferMessage;
 import es.fdi.ucm.ucmh.transfer.UserTransferData;
 import es.fdi.ucm.ucmh.utilities.CheckUserUtils;
+import es.fdi.ucm.ucmh.model.UserType;
 
 @Controller
 @RequestMapping(value = "/admin")
 public class AdminController {
 	private static Logger LOG = LogManager.getLogger(AdminController.class);
+	private static BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
 	/**
 	 * This is the total number of users an admin can query at a time
 	 * */
@@ -46,6 +54,7 @@ public class AdminController {
 	private final long FIRST_PSY_ID = 10l;
 	
 	/*-----------------------------------------------------
+	 * PROB-R:
 	 * There would be more petitions for more admins so
 	 * this variable will have race conditions when it is updated
 	 * Research the use of Scopes in Spring
@@ -64,6 +73,9 @@ public class AdminController {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired // this makes httpSession always available in each method
+	//PROB-1:possible problem when two different ADMINs enter at the same time
+	private HttpSession session;
 	
 	/**
 	 * It will insert a new user generating a new id for it into the database.<br>
@@ -89,7 +101,15 @@ public class AdminController {
 		
 		return true;
 	}	
-	
+
+	private User userFromSession() {
+		return (User)session.getAttribute("u");
+	}
+
+	private User refreshUser(User u) {
+		return entityManager.find(User.class, u.getId());
+	}
+
 	/**
 	 * It will retrieve the initial state of the admin page.
 	 * The admin can create, delete and see the information about all of the users
@@ -127,6 +147,7 @@ public class AdminController {
 		model.addAttribute("admin", admin);
 		model.addAttribute("showNum", SHOW_MAX_USERS);
 		
+		//PROB-1:model.addAttribute("admin", userFromSession());
 		return "admin";
 	}
 	
@@ -237,15 +258,7 @@ public class AdminController {
 		 * than in reality it's needs*/
 		
 		for(User u : queryRequest) {
-			if(u.getPsychologist() == null) {
-				sendData.add(new UserTransferData(u.getId(), u.getFirstName(), u.getLastName(),
-						u.getMail(), u.getPhoneNumber(), "", u.getType()));
-			}
-			else {
-				sendData.add(new UserTransferData(u.getId(), u.getFirstName(), u.getLastName(),
-						u.getMail(), u.getPhoneNumber(),
-						u.getPsychologist().getFirstName() + ", " +u.getPsychologist().getLastName(), u.getType()));
-			}
+			sendData.add(new UserTransferData(u)); // old logic moved into UserTransferDAta: much more readable
 		}
 		
 		return sendData;
@@ -273,7 +286,8 @@ public class AdminController {
 	public @ResponseBody List<UserTransferData> getUsersByName(@RequestParam(required = true, name = "name") String userName,
 															   @RequestParam(required = true, name = "surname") String lastName,
 															   @PathVariable Long adminId) {
-		//log info/debug
+		
+		LOG.info("Requesting user (1st) {} (last) {}", userName, lastName);
 		System.out.println(System.lineSeparator() + "browser request made by admin: " + adminId + " to obtain"
 				+ " the user with name: " + userName + " and last name: " + lastName);
 		List<UserTransferData> sendResult = new LinkedList<UserTransferData>();
@@ -291,16 +305,9 @@ public class AdminController {
 			lastName = "%";
 		}
 		
+		//PROB-2: set parameters from named query
 		for(User u : userRepository.getUserByName(userName, lastName)) {
-			if(u.getPsychologist() == null) {
-				sendResult.add(new UserTransferData(u.getId(), u.getFirstName(), u.getLastName(),
-						u.getMail(), u.getPhoneNumber(), "", u.getType()));
-			}
-			else {
-				sendResult.add(new UserTransferData(u.getId(), u.getFirstName(), u.getLastName(),
-						u.getMail(), u.getPhoneNumber(),
-						u.getPsychologist().getFirstName() + ", " +u.getPsychologist().getLastName(), u.getType()));
-			}
+			sendResult.add(new UserTransferData(u));
 		}
 		
 		
@@ -346,9 +353,10 @@ public class AdminController {
 		 * This SQL code tells the Data Base Management System to set the attribute
 		 * "psychologistId" to null when the row it is referenced is deleted
 		 * */
-		if(u.getType().equals(CheckUserUtils.PSYCHOLOGIST_TYPE)) {
+		if(target.getType() == UserType.PSY) {
 			//log debug
 			System.out.println(System.lineSeparator() + "Obtaining all patients of user: " + u.getId());
+			//PROB-3: same as PROB-2
 			LinkedList<User> patientsOf = userRepository.findPatientsOf(u);
 			
 			for(User patient : patientsOf) {
@@ -382,7 +390,8 @@ public class AdminController {
 	public @ResponseBody JSONTransferMessage registerUser(@PathVariable Long adminId, @RequestBody String userInfo) {
 		//log info
 		System.out.println(System.lineSeparator() + "Register user request made by admin: " + adminId);
-		System.out.println("Trying to register the user: " + userInfo);
+		LOG.info("Register user request made by admin: {}", adminId);
+		LOG.info("Trying to register {}", userInfo);
 		
 		if(!CheckUserUtils.checkAdmin(adminId, entityManager)) {
 			//log info or warning
@@ -427,6 +436,28 @@ public class AdminController {
 		
 		System.out.println(result ? "Ok" : "Error");
 		
+	/*
+	********************************UNDER TESTING************************************
+
+	@Transactional
+	public @ResponseBody JSONTransferMessage registerUser(@RequestBody UserTransferData userInfo) {
+		//log info
+		LOG.info("Trying to register {}", userInfo);
+		User u = new User();
+		u.setFirstName(userInfo.firstName);
+		u.setLastName(userInfo.lastName);
+		u.setMail(userInfo.mail);
+		u.setPhoneNumber(userInfo.phoneNumber);
+		u.setType(userInfo.type);
+		u.setPsychologist(null);
+		u.setType(UserType.valueOf(userInfo.type));
+		u.setPassword(encoder.encode(userInfo.password));
+
+		// validate fields here!
+		boolean result = true;
+
+	}
+	*/
 		return new JSONTransferMessage(result ? "Ok" : "Error");
 	}
 }

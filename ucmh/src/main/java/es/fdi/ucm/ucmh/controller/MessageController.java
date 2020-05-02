@@ -25,6 +25,8 @@ import es.fdi.ucm.ucmh.transfer.MessageTransferData;
 import es.fdi.ucm.ucmh.transfer.TextWithDate;
 import es.fdi.ucm.ucmh.utilities.CheckUserUtils;
 
+import es.fdi.ucm.ucmh.model.UserType;
+
 @Controller
 public class MessageController{
 	private static final Logger LOG = LogManager.getLogger(MessageController.class);

@@ -6,6 +6,10 @@
 
 		<title>Admin</title>
 
+		<!--
+			UNDER TEST
+		<th:block th:replace="fragments/head :: header"></th:block>
+		-->
 		<link rel="stylesheet" href="/css/admin.css">
 		<link rel="stylesheet" href="/css/main.css">
 		<link rel="stylesheet" href="/css/normalize.css">
@@ -224,6 +228,10 @@
 	  <script src="/js/plugins.js"></script>
 	  <script src="/js/vendor/materialize.min.js"></script>
 	  <script src="/js/admin.js"></script>
+		<!-- UNDER TEST
+		<th:block th:replace="fragments/footer :: jslibs"></th:block>
+		<script src="/js/admin.js"></script>
+		-->
 
 		<script>
 		$(document).ready(function(){
@@ -231,7 +239,6 @@
 				$('.collapsible').collapsible();
 				$('.modal').modal();
 				$('.modal-trigger').modal();
-
 		});
 		</script>
 

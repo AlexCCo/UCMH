@@ -30,6 +30,11 @@ import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 public class SimpleBrokerWebSocketConfig implements WebSocketMessageBrokerConfigurer{
 
 	@Override
+    public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
+        registration.setSendTimeLimit(15 * 1000).setSendBufferSizeLimit(512 * 1024);
+    }
+
+	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		/*
 		 * this end-point will be used by the websocket to stablish a connection.

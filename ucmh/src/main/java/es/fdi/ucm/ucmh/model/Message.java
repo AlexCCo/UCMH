@@ -1,6 +1,9 @@
 package es.fdi.ucm.ucmh.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,9 +23,19 @@ import es.fdi.ucm.ucmh.model.Message;
 					+ "FROM Message m "
 					+ "WHERE m.to.id = :userId "
 					+ "ORDER BY m.date ASC")
+					
+/************************UNDER TEST**********************
+import es.fdi.ucm.ucmh.transfer.MessageTransferData;
+
+@Entity
+@NamedQueries({
+	@NamedQuery(name="Message.countUnread",
+	query="SELECT COUNT(m) FROM Message m "
+			+ "WHERE m.to.id = :userId")
+*/
+
 })
 public class Message {
-	//---------------Atributos-----------------
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
@@ -46,6 +59,36 @@ public class Message {
 	 */
 	@Column(name = "seen")
 	private boolean dirty;
+	
+	
+	/**
+	 * ****************************UNDER TEST**********************************
+	 * 
+	 * Convierte colecciones de mensajes a lista de mensajes
+	 * que cumplen el formato JSON
+	 * 
+	 * @param messages
+	 * Una coleccion representando un conjuntos de mensajes
+	 * @return
+	 * Una lista de MessageTransferData que cumple el formato
+	 * JSON
+	 *  
+	 * @throws JsonProcessingException
+	 * 
+	 * @see MessageTransferData
+	 *
+	public static List<MessageTransferData> asMessageTransferDataObjects(Collection<Message> messages) {
+		ArrayList<MessageTransferData> all = new ArrayList<>();
+		
+		for (Message m : messages) {
+			all.add(new MessageTransferData(m));
+		}
+		
+		return all;
+	}
+	*/
+
+
 	
 
 	/**
@@ -145,8 +188,4 @@ public class Message {
 	public void setDirty(boolean dirty) {
 		this.dirty = dirty;
 	}
-	
-	//------------------------------------------
-		
-	
 }

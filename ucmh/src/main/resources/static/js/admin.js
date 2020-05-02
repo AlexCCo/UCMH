@@ -1,6 +1,6 @@
 const user_types = {
 	PSYCHOLOGIST: "PSY",
-	PATIENT: "USER"
+	PATIENT: "PAT"
 };
 
 const user_methods = {
@@ -16,6 +16,9 @@ const error_map_msg = {
 		"phone": "Tiene que tener nueve numeros",
 		"pass": "Minimo 8 numeros y letras"
 };
+
+
+const requestPrefix = config.rootUrl + "admin/";
 
 var requestData = new XMLHttpRequest();
 var patien_collection = document.getElementById("patient-collection");
@@ -97,7 +100,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 function get_users(userType, userMethod){
 	//prepare the request object to get json data
-	let uri = `${document.URL}/users-list-${userType}-${userMethod}`;
+	let uri = `${requestPrefix}users-list-${userType}-${userMethod}`;
 	let html_collection;
 	
 	requestData.open('GET', uri);
@@ -230,13 +233,16 @@ function delete_btn_handler(userType, btn_listened){
 	let btn_grandpa = (btn_listened.parentElement).parentElement
 	let user_id = btn_grandpa.firstElementChild.getElementsByClassName("user-id")[0].innerText;
 	//we start to create the AJAX request
-	let uri = `${document.URL}/user-delete-${user_id}`;
+	let uri = `${requestPrefix}user-delete-${user_id}`;
 	
 	/*
 	 * We don't employ the 'DELETE' http method because it is marked as not safe and 
 	 * may lead to security risks in our web application
 	 * */
 	requestData.open('POST', uri);
+	/* UNDER TEST
+	requestData.setRequestHeader("X-CSRF-TOKEN", config.csrf.value);
+	*/
 	
 	//tell what to do once the data is loaded
 	requestData.onload = function() {
@@ -264,7 +270,7 @@ function delete_btn_handler(userType, btn_listened){
 function get_users_by_name(){
 	let user_name = document.getElementById("name");
 	let user_lastName = document.getElementById("surname");
-	let uri = `${document.URL}/get-browser-result?name=${user_name.value}&surname=${user_lastName.value}`;
+	let uri = `${requestPrefix}get-browser-result?name=${user_name.value}&surname=${user_lastName.value}`;
 	console.log(uri);
 	
 	//what type of access we want
@@ -344,14 +350,16 @@ function accept_handler(btn_id){
 	console.log(msg);
 	
 	if(!error_flag){
-		let uri = `${document.URL}/register-user/`;
+		let uri = `${requestPrefix}register-user/`;
 		//create the request
 		requestData.open('POST', uri);
 		//tell what to do one the request is done
 		requestData.onload = function() {
 			console.log("message was sent");
 		};
-		
+		/* UNDER TEST
+		requestData.setRequestHeader("X-CSRF-TOKEN", config.csrf.value);
+		*/
 		requestData.setRequestHeader("Content-Type", "application/json");
 		//send the request
 		requestData.send(msg);
