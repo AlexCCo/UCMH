@@ -180,22 +180,11 @@ public class PsychologistController {
 	
    @PostMapping(value = "/saveGroupAppointment", produces = { MediaType.APPLICATION_JSON_VALUE })
    @ResponseBody
-   
-	// LO VUESTRO
+   @Transactional
 	public GroupAppointmentJsonRespone saveEmployee(@ModelAttribute @Valid GroupAppointment group_appointment,
          BindingResult result) {
 
 	  GroupAppointmentJsonRespone respone = new GroupAppointmentJsonRespone();
-	  /*************************************** */
-
-
-   /* LO DEL PROFE
-	@Transactional
-   public GroupAppointmentResponse saveEmployee(@ModelAttribute @Valid GroupAppointment appointment,
-         BindingResult result) {
-
-	  GroupAppointmentResponse response = new GroupAppointmentResponse();
-	  /********************************************/
       
       if(result.hasErrors()){
          
@@ -205,7 +194,6 @@ public class PsychologistController {
                      Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage)
                  );
          
-		 //            LO VUESTRO
 		 respone.setValidated(false);
          respone.setErrorMessages(errors);
       }else{
@@ -213,21 +201,8 @@ public class PsychologistController {
          //..
          respone.setValidated(true);
          respone.setGroupAppointment(group_appointment); //TODO revisar
-         groupappointmentRepository.saveAndFlush(group_appointment);
-      }
+         entityManager.persist(respone.getGroupAppointment());      }
 	  return respone;
-	  /***************************************/
-
-
-	  	/* LO DEL PROFE
-		 response.setValidated(false);
-         response.setErrorMessages(errors);
-      }else{
-         response.setValidated(true);
-         response.setGroupAppointment(appointment);
-		 entityManager.persist(response.getGroupAppointment());
-      }
-      return response;*/
    }
       
 }
