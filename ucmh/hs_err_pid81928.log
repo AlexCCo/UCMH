@@ -1,0 +1,21 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0x00007f860806ed15, pid=81928, tid=81944
+#
+# JRE version: OpenJDK Runtime Environment (13.0.2+8) (build 13.0.2+8)
+# Java VM: OpenJDK 64-Bit Server VM (13.0.2+8, mixed mode, tiered, compressed oops, g1 gc, linux-amd64)
+# Problematic frame:
+# C  [libjimage.so+0x2d15]
+#
+# Core dump will be written. Default location: Core dumps may be processed with "/usr/lib/systemd/systemd-coredump %P %u %g %s %t %c %h" (or dumping to /home/hectarra/git/UCMH/ucmh/core.81928)
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.java.com/bugreport/crash.jsp
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -agentlib:jdwp=transport=dt_socket,suspend=y,address=localhost:43971 -javaagent:/home/hectarra/.eclipse/org.eclipse.platform_4.15.0_155965261_linux_gtk_x86_64/configuration/org.eclipse.osgi/219/0/.cp/lib/javaagent-shaded.jar -Dfile.encoding=UTF-8 es.fdi.ucm.ucmh.UcmhApplication
+
+Host: 
