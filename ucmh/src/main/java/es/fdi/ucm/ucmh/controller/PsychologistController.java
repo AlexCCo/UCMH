@@ -1,17 +1,24 @@
 package es.fdi.ucm.ucmh.controller;
 
 import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,8 +33,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import es.fdi.ucm.ucmh.model.User;
+import es.fdi.ucm.ucmh.model.repositories.GroupAppointmentRepository;
 import es.fdi.ucm.ucmh.model.repositories.UserRepository;
 import es.fdi.ucm.ucmh.controller.UserController;
+import es.fdi.ucm.ucmh.model.GroupAppointment;
+import es.fdi.ucm.ucmh.model.GroupAppointmentJsonRespone;
 import es.fdi.ucm.ucmh.model.Message;
 
 
@@ -38,10 +48,14 @@ public class PsychologistController {
 	@Autowired
 	EntityManager entityManager;
 	
+	@Autowired
 	UserRepository userRepository;
 	
-//	@Autowired
-//	private SimpMessagingTemplate messagingTemplate;
+	@Autowired
+	GroupAppointmentRepository groupappointmentRepository;
+	
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
 	
 	@GetMapping("/psy/{id}")
 	public String getUser(@PathVariable long id, Model model, HttpSession session) {
@@ -117,4 +131,32 @@ public class PsychologistController {
 		//messagingTemplate.convertAndSend("/user/"+u.getFirstName()+"/queue/updates", json);
 		return "{\"result\": \"message sent.\"}";
 	}
+	
+   @PostMapping(value = "/saveGroupAppointment", produces = { MediaType.APPLICATION_JSON_VALUE })
+   @ResponseBody
+   public GroupAppointmentJsonRespone saveEmployee(@ModelAttribute @Valid GroupAppointment group_appointment,
+         BindingResult result) {
+
+      GroupAppointmentJsonRespone respone = new GroupAppointmentJsonRespone();
+      
+      if(result.hasErrors()){
+         
+         //Get error message
+         Map<String, String> errors = result.getFieldErrors().stream()
+               .collect(
+                     Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage)
+                 );
+         
+         respone.setValidated(false);
+         respone.setErrorMessages(errors);
+      }else{
+         // Implement business logic to save employee into database
+         //..
+         respone.setValidated(true);
+         respone.setGroupAppointment(group_appointment); //TODO revisar
+         groupappointmentRepository.saveAndFlush(group_appointment);
+      }
+      return respone;
+   }
+      
 }
