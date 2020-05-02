@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Muli|Oswald&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    
+    <!-- VUESTRO??? -->
     <script src="/webjars/jquery/jquery.min.js"></script>
     <script src="/webjars/sockjs-client/sockjs.min.js"></script>
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
@@ -36,7 +36,6 @@
        <li class="active"><a>Pacientes</a></li>
        <li><a>Cerrar sesión</a></li>
      </ul>
-
 
     <h4 class="center-align">Mis pacientes</h4>
 
@@ -167,6 +166,7 @@
     </table>
   </div> -->
 
+  <!-- VUESTRO-->
   <script src="js/vendor/modernizr-3.8.0.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
   <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
@@ -184,6 +184,21 @@
 
 
   <script type="text/javascript">
+  <!--**********************************************-->
+
+
+
+
+
+  <!--DEL PROFE
+  <th:block th:replace="fragments :: jslibs"></th:block>
+  <script src="js/main.js"></script>
+  -->
+
+
+
+  
+  <script>
   $( ".pacientBTN" ).click(function(e) {
 	  var id = $(this).attr("id");
 	  $.ajax({
@@ -198,12 +213,23 @@
 			  //Es un punto porque es una clase y no un id
 			  $(".savePacient").attr("id", id); 
 			  $(".sendmsg").attr("id", id);
-		  });
+      });
+      
+      
+    //VUESTRO
 	});
   </script>
   
   <script type="text/javascript">
   $( ".savePacient" ).click(function(e) {
+    //*************************
+
+
+
+   /* DEL PROFE
+  });
+   $( ".savePacient" ).click(function(e) {
+    */
 	  var id = $(this).attr("id");
 	  var disorderB = $("#pacientDisorder").val();
 	  var treatmentB = $("#pacientTreatment").val();
@@ -216,8 +242,12 @@
 		  alert("Cambios guardados");
 	  });
   });
+
+
+  
   </script>
     <script type="text/javascript">
+   });
    $( ".sendmsg" ).click(function(e) {
   	var id = $(this).attr("id");
   	$.ajax({

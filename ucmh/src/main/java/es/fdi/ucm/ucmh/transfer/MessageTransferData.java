@@ -1,6 +1,9 @@
 package es.fdi.ucm.ucmh.transfer;
 
 import java.util.LinkedList;
+import java.time.LocalDateTime;
+import es.fdi.ucm.ucmh.model.Message;
+
 
 public class MessageTransferData {
 	private String from;
@@ -8,12 +11,26 @@ public class MessageTransferData {
 	private boolean dirty;
 	private LinkedList<TextWithDate> msg;
 	
+
+	/*********************************UNDER TEST**************************
+	private LocalDateTime date;
+	public MessageTransferData(Message m) {
+		this.from = m.getFrom().getFirstName() + " " + m.getFrom().getLastName();
+		this.to = m.getTo().getFirstName() + " " + m.getTo().getLastName();;
+		this.text = m.getText();
+		this.id = m.getId();
+		this.date = m.getDate();
+	}
+	*/
+
+
 	/**
 	 * @return the from
 	 */
 	public String getFrom() {
 		return from;
 	}
+	
 	/**
 	 * @param from the from to set
 	 */
