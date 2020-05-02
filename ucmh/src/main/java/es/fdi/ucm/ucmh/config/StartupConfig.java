@@ -1,4 +1,4 @@
-package es.fdi.ucm.ucmh;
+package es.fdi.ucm.ucmh.config;
 
 import java.text.SimpleDateFormat;
 

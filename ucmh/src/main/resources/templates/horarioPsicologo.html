@@ -33,25 +33,6 @@
 <script type="text/javascript">
    $(function() {
      //TODO params function
-     //************************************************
-
-
-  // LO DEL PROFE
-  <link href="https://fonts.googleapis.com/css?family=Muli|Oswald&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-
-  <script src="js/vendor/modernizr-3.8.0.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-  <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
-  <script src="js/plugins.js"></script>
-  <script src="js/vendor/materialize.min.js"></script>
-  <script src="js/main.js"></script>
-
-
-<script type="text/javascript">
-   $(function() {
-     //TODO params function
       function insert(res) {
            $("#example").append('<li class="cd-schedule__event">
               <a data-start="13:00" data-end="14:00" data-content="event-abs-circuit" data-event="event-1" href="#0">
@@ -71,7 +52,7 @@
          e.preventDefault();
 		 console.log("Hola");
          //Remove all errors
-         //$('input').next().remove();
+         $('input').next().remove();
 
          $.post({
             url : 'saveGroupAppointment',
@@ -79,7 +60,6 @@
             success : function(res) {
                if(res.validated){
                   //Set response
-// LO VUESTRO
                   console.log("Hola")
                   M.toast({html: 'Cita agregada'})
                   $('#resultContainer pre code').text(JSON.stringify(res.groupAppointment));
@@ -93,29 +73,6 @@
                  $.each(res.errorMessages,function(key,value){
                    $('input[name='+key+']').after('<span class="error">'+value+'</span>');
                  });
-//******************************************
-
-
-
-
-/* LO DEL PROFE
-                  M.toast({html: 'Cita agregada'})
-                  $('#resultContainer pre code').text(JSON.stringify(res.groupAppointment));
-              	  $('#resultContainer').show();
-              	  console.log("Hola2");
-              	  $('<li class="cd-schedule__event"><a data-start="13:00" data-end="14:00" data-content="event-abs-circuit" data-event="event-1" href="#0"><em class="cd-schedule__name">Antonio</em></a></li>').insertAfter("#example");
-                 // insert(res);
-               }else{
-                // Set error messages
-                 M.toast({html: 'error'})
-                 $.each(res.errorMessages,function(key,value){
-                   $('input[name='+key+']').after('<span class="error">'+value+'</span>');
-                 });
-************************/
-
-
-
-
                }
             }
          })
@@ -357,21 +314,8 @@
    </pre>
 </div>
 
-  <!-- LO VUESTRO -->
-  <script src="js/vendor/schedule-util.js"></script>
+  <script src="js/vendor/schedule-util.js"></script> <!-- util functions included in the CodyHouse framework -->
   <script src="js/vendor/schedule-main.js"></script>
-  <!-- ********************************  -->
-
-
-
-  <!-- LO DEL PROFE
-  <script src="js/schedule/schedule-util.js"></script> <!-- util functions included in the CodyHouse framework 
-  <script src="js/schedule/schedule-main.js"></script>
-  -->
-
-
-
-
 
   <!-- Botón estático y modales -->
 
@@ -429,30 +373,11 @@
     </div>
     <div class="modal-footer">
       <a href="" class="modal-close waves-effect waves-red btn-flat red">Cancelar</a>
-      <button type="submit" class="modal-close waves-effect waves-green btn-flat green">Aceptar</a>
+      <button type="submit" class="modal-close waves-effect waves-green btn-flat green">Aceptar</button>
     </div>
   </form>
   </div>
-
-
   
-  <!-- LO DEL PROFE. Esto es nuevo
-  <script src="js/vendor/modernizr-3.8.0.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-  <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
-  <script src="js/plugins.js"></script>
-  <script src="js/vendor/materialize.min.js"></script>
-  <script src="js/vendor/schedule-util.js"></script>
-  <script src="js/vendor/schedule-main.js"></script>
-  <script src="js/main.js"></script>
--->
-
-
-
-
-
-
-
   <script>
   $(document).ready(function(){
       $('.sidenav').sidenav();
@@ -464,13 +389,6 @@
       $('.timepicker').timepicker();
     });
   </script>
-
-  <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
-  <script>
-    window.ga = function () { ga.q.push(arguments) }; ga.q = []; ga.l = +new Date;
-    ga('create', 'UA-XXXXX-Y', 'auto'); ga('set','transport','beacon'); ga('send', 'pageview')
-  </script>
-  <script src="https://www.google-analytics.com/analytics.js" async></script>
 </body>
 
 </html>

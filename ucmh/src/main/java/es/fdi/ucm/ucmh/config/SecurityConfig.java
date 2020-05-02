@@ -1,4 +1,4 @@
-package es.fdi.ucm.ucmh;
+package es.fdi.ucm.ucmh.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +10,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import es.fdi.ucm.ucmh.IwUserDetailsService;
+import es.fdi.ucm.ucmh.LoginSuccessHandler;
 
 /**
  * Security configuration.
