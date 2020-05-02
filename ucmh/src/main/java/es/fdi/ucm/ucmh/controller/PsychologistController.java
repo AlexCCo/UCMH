@@ -40,8 +40,8 @@ public class PsychologistController {
 	
 	UserRepository userRepository;
 	
-	@Autowired
-	private SimpMessagingTemplate messagingTemplate;
+//	@Autowired
+//	private SimpMessagingTemplate messagingTemplate;
 	
 	@GetMapping("/psy/{id}")
 	public String getUser(@PathVariable long id, Model model, HttpSession session) {
@@ -114,7 +114,7 @@ public class PsychologistController {
 		
 		log.info("Sending a message to {} with contents '{}'", id, json);
 
-		messagingTemplate.convertAndSend("/user/"+u.getFirstName()+"/queue/updates", json);
+		//messagingTemplate.convertAndSend("/user/"+u.getFirstName()+"/queue/updates", json);
 		return "{\"result\": \"message sent.\"}";
 	}
 }

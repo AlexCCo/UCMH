@@ -19,6 +19,8 @@
 
 	</head>
 	<body>
+		<!-- reference about the use of data-* https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes -->
+		<span id="user-message-owner" data-user-owner="" th:attr="data-user-owner=${user.firstName}"></span>
 		<nav id="menu">
 			<div class="nav-wrapper">
 				<a href="#" id="logo" class="brand-logo">UCMH</a>
@@ -34,36 +36,27 @@
 		
 		<div class="row">
 			<div class="col s5">
+			
+				<div class="receive-message-header">
+					<div class="users-results">
+						<p>Lista de mensajes recibidos</p>
+					</div>
+				</div>
+				
 				<ul id="users-collection" class="card collection">
 					
 					<!-- The structure of this list will be change, do not create any dependency -->
-					<li class="collection-item avatar" th:each="sender : ${receive_messages}">
+					<li class="collection-item avatar user-info-wrap" th:each="sender : ${receive_messages}">
 						<div class="user-info">
+							<span class="" th:class="!${sender.isDirty()} ? 'new badge dirty-flag-box' : 'dirty-flag-box'"></span>
 		          <img src="/image/ejemplo.jpg" alt="" class="circle">
-		          <p class="title" th:text="|${sender.firstName}, ${sender.lastName}|"></p>
-		          <p>Id: <span class="user-id" th:text="${psy.id}"></span></p>
-		          <p> e-mail: <span th:text="${sender.mail}"></span></p>
-							<p> Tlf: <span th:text="${sender.phoneNumber}"></span></p>
-						</div>
-						<div class="user-delete">
-							<button class="delete-psy waves-effect waves-red-darken-4 red lighten-1 btn-flat">
-								delete
-							</button>
+		          <p class="sender-name" th:text="${sender.from}"></p>
+		          <p class="initial-content" th:text="|${#strings.substring(sender.msg.getLast().text, 0, 15)}...|"></p>
 						</div>
 		       </li>
 		       
 		    	</ul>
-		    	<div class="users-more-results">
-					<button id="less-psychologists" class="waves-effect waves-teal btn-flat">
-						<i class="material-icons">chevron_left</i>
-					</button>
-					<div class="users-results">
-						<p>mostrando <span id="num-elements" th:text="${showNum}">10</span> elementos - pagina <span class="psychologist-page"></span></p>
-					</div>
-					<button id="more-psychologists" class="waves-effect waves-teal btn-flat">
-						<i class="material-icons">chevron_right</i>
-					</button>
-				</div>
+		    	
 			</div>	
 				
 				
@@ -72,8 +65,8 @@
 					<span id="user-name-chat">paco</span>
 				</div>
 				<div class="body-msg">
-					<div class="chat-container">
-					
+					<div id="chat-box" class="chat-container">
+					<!-- 
 						<div class=message-wrap>
 							<div class="message-from">
 								<div class="message-owner">paco</div>
@@ -208,17 +201,19 @@
 								</div>
 							</div>
 						</div>
-						
+						 -->
 					</div>
 				</div>
 				<div class="footer-msg-input">
-					<div class="text-input" contenteditable="true" placeholder="Escribe algo..." spellcheck="false"></div>
+					<div id="text-input" contenteditable="true" placeholder="Escribe algo..." spellcheck="false"></div>
 				</div>
 			</div>
 				
 			
 		</div>
 		
+		<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@5.0.0/bundles/stomp.umd.min.js"></script>
 		
 		<script src="/js/vendor/modernizr-3.8.0.min.js"></script>
 	  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -237,6 +232,24 @@
 		});
 		</script>
 		<style>
+			#user-message-owner{
+				display: none;
+			}
+			
+			.receive-message-header{
+				text-align: center;
+			}
+			
+			#users-collection {
+				height: 742px;
+				overflow: scroll;
+				overflow-x: hidden; 
+			}
+			
+			.user-info-wrap:hover {
+				background-color: rgb(189, 189, 189);
+			}
+			
 			.text-chat {
 				margin-left: 90px !important;
 				padding: 0 0 !important;
@@ -299,15 +312,15 @@
 			  considered the first child (always) with the content of the placeholder attribute's value~
 			  
 			*/
-			.text-input:empty:not(:focus)::before{
+			#text-input:empty:not(:focus)::before{
     		content:attr(placeholder);
 			}
 			
-			.text-input:focus {
+			#text-input:focus {
 				outline: none;
 			}
 			
-			.text-input {
+			#text-input {
 				text-align: left;
 				display: inline-block;
 				width: 65%;

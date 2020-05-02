@@ -4,9 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.lang.Long;
 
-import org.hibernate.annotations.RowId;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.fdi.ucm.ucmh.model.User;
@@ -14,8 +12,13 @@ import es.fdi.ucm.ucmh.model.User;
 @Transactional(readOnly = true)
 public interface UserRepository extends JpaRepository<User, Long> {
 	
-	/*
-	 * All these methods are going to execute something like:
+	/* Some step by step example here:
+	 * https://spring.io/blog/2011/02/10/getting-started-with-spring-data-jpa/
+	 * 
+	 * A place to gain understanding in why @Transactional(readOnly = true) is here:
+	 * https://www.javacodegeeks.com/2016/05/understanding-transactional-annotation-spring.html
+	 * 
+	 * All these methods are going to execute ROUGHLY SPEAKING something like:
 	 * 
 	 * TypeQuery<resultClassType> query = entityManager.createNamedQuery(nameOfTheQuery, resultClassType);
 	 * 

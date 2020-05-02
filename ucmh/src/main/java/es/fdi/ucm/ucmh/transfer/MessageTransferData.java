@@ -1,109 +1,70 @@
 package es.fdi.ucm.ucmh.transfer;
 
-import java.time.LocalDateTime;
+import java.util.LinkedList;
 
-import es.fdi.ucm.ucmh.model.Message;
-
-
-/**
- * This class 
- * */
 public class MessageTransferData {
-
 	private String from;
 	private String to;
-	private String text;
-	private long id;
-	private LocalDateTime date;
+	private boolean dirty;
+	private LinkedList<TextWithDate> msg;
 	
-	
-	public MessageTransferData(Message m) {
-		this.from = m.getFrom().getFirstName() + " " + m.getFrom().getLastName();
-		this.to = m.getTo().getFirstName() + " " + m.getTo().getLastName();;
-		this.text = m.getText();
-		this.id = m.getId();
-		this.date = m.getDate();
-	}
-
-
 	/**
 	 * @return the from
 	 */
 	public String getFrom() {
 		return from;
 	}
-
-
 	/**
 	 * @param from the from to set
 	 */
 	public void setFrom(String from) {
 		this.from = from;
 	}
-
-
 	/**
 	 * @return the to
 	 */
 	public String getTo() {
 		return to;
 	}
-
-
 	/**
 	 * @param to the to to set
 	 */
 	public void setTo(String to) {
 		this.to = to;
 	}
-
-
+		
 	/**
-	 * @return the text
+	 * @return the texts
 	 */
-	public String getText() {
-		return text;
+	public LinkedList<TextWithDate> getMsg() {
+		return msg;
 	}
 
-
 	/**
-	 * @param text the text to set
+	 * @param texts the texts to set
 	 */
-	public void setText(String text) {
-		this.text = text;
-	}
-
-
-	/**
-	 * @return the id
-	 */
-	public long getId() {
-		return id;
-	}
-
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(long id) {
-		this.id = id;
-	}
-
-
-	/**
-	 * @return the date
-	 */
-	public LocalDateTime getDate() {
-		return date;
-	}
-
-
-	/**
-	 * @param date the date to set
-	 */
-	public void setDate(LocalDateTime date) {
-		this.date = date;
+	public void setMsg(LinkedList<TextWithDate> texts) {
+		this.msg = texts;
 	}
 	
+	public void appendText(TextWithDate text) {
+		if(this.msg == null) {
+			this.msg = new LinkedList<TextWithDate>();
+		}
+		
+		this.msg.add(text);
+	}
+	/**
+	 * @return the dirty
+	 */
+	public boolean isDirty() {
+		return dirty;
+	}
+	/**
+	 * @param dirty the dirty to set
+	 */
+	public void setDirty(boolean dirty) {
+		this.dirty = dirty;
+	}
 	
 }

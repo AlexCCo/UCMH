@@ -1,9 +1,6 @@
 package es.fdi.ucm.ucmh.model;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,13 +12,14 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import es.fdi.ucm.ucmh.model.Message;
-import es.fdi.ucm.ucmh.transfer.MessageTransferData;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name="Message.countUnread",
-	query="SELECT COUNT(m) FROM Message m "
-			+ "WHERE m.to.id = :userId")
+	@NamedQuery(name = "Message.getMessageList",
+				query="SELECT m "
+					+ "FROM Message m "
+					+ "WHERE m.to.id = :userId "
+					+ "ORDER BY m.date ASC")
 })
 public class Message {
 	//---------------Atributos-----------------
@@ -29,9 +27,10 @@ public class Message {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
+	@Column(name = "sent_date")
 	private LocalDateTime date;
 	
-	@Column(name="estadoAnimo", nullable=true)
+	@Column(name="estado_animo", nullable=true)
 	private Animosity estadoAnimo;
 	
 	@ManyToOne
@@ -41,30 +40,13 @@ public class Message {
 	private User to;
 	
 	private String text;
-	
-	/**
-	 * Convierte colecciones de mensajes a lista de mensajes
-	 * que cumplen el formato JSON
-	 * 
-	 * @param messages
-	 * Una coleccion representando un conjuntos de mensajes
-	 * @return
-	 * Una lista de MessageTransferData que cumple el formato
-	 * JSON
-	 *  
-	 * @throws JsonProcessingException
-	 * 
-	 * @see MessageTransferData
+	/*
+	 * It will act as a flag, if the message was seen
+	 * the value is true, if not, false
 	 */
-	public static List<MessageTransferData> asMessageTransferDataObjects(Collection<Message> messages) {
-		ArrayList<MessageTransferData> all = new ArrayList<>();
-		
-		for (Message m : messages) {
-			all.add(new MessageTransferData(m));
-		}
-		
-		return all;
-	}
+	@Column(name = "seen")
+	private boolean dirty;
+	
 
 	/**
 	 * @return the id
@@ -148,6 +130,20 @@ public class Message {
 	 */
 	public void setText(String text) {
 		this.text = text;
+	}
+
+	/**
+	 * @return the dirty
+	 */
+	public boolean isDirty() {
+		return dirty;
+	}
+
+	/**
+	 * @param dirty the dirty to set
+	 */
+	public void setDirty(boolean dirty) {
+		this.dirty = dirty;
 	}
 	
 	//------------------------------------------
