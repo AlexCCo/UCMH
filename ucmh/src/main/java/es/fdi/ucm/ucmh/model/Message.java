@@ -12,8 +12,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import es.fdi.ucm.ucmh.model.Message;
-<<<<<<< HEAD
 
+/*
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "Message.getMessageList",
@@ -41,8 +41,6 @@ import es.fdi.ucm.ucmh.transfer.MessageTransferData;
 			+ "WHERE m.to.id = :userId")
 */
 
->>>>>>> empty-branch
-})
 public class Message {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
