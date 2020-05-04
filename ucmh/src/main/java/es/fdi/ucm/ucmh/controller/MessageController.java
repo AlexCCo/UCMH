@@ -23,13 +23,12 @@ import es.fdi.ucm.ucmh.model.User;
 import es.fdi.ucm.ucmh.model.repositories.MessageRepository;
 import es.fdi.ucm.ucmh.transfer.MessageTransferData;
 import es.fdi.ucm.ucmh.transfer.TextWithDate;
-import es.fdi.ucm.ucmh.utilities.CheckUserUtils;
 
 import es.fdi.ucm.ucmh.model.UserType;
 
 @Controller
 public class MessageController{
-	private static final Logger LOG = LogManager.getLogger(MessageController.class);
+	private static final Logger log = LogManager.getLogger(MessageController.class);
 	
 	@Autowired
 	private EntityManager entityManager;
@@ -122,17 +121,12 @@ public class MessageController{
 	public String getMessagesTemplate(@PathVariable Long userId, @PathVariable String userType,
 								   Model model, HttpSession session) {
 		
-		System.out.println(System.lineSeparator() + "GET request made by: " + userId + " type: " + userType);
-		if(!CheckUserUtils.checkAllPaths(userType)) {
-			System.out.println(System.lineSeparator() + "GET request made by: " + userId + " REJECTED! bad path");
-			return "404";
-		}
+		log.info("GET request made by: {}, type: {}", userId, userType);
 		
-		User u = CheckUserUtils.checkAndRetrieveUserBy(userId, entityManager, userType.toUpperCase());
+		User u = entityManager.find(User.class, userId);
 		
-		if(u == null) {
-			System.out.println(System.lineSeparator() + "GET request made by: " + userId + " REJECTED! bad user type."
-					+ " It must be: USER, PSY or ADMIN");
+		if(u == null ) {
+			log.debug("GET request made by: {} REJECTED!", userId);
 			return "404";
 		}
 		

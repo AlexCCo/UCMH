@@ -18,4 +18,5 @@ public enum UserType {
 		for (String p : validPaths) if (p.equals(path)) return true;
 		return false;
 	}
+	
 }

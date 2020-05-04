@@ -1,4 +1,4 @@
-package es.fdi.ucm.ucmh;
+package es.fdi.ucm.ucmh.config.spring;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.messaging.MessageSecurityMetadataSourceRegistry;

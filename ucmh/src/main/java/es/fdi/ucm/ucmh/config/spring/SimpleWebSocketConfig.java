@@ -1,4 +1,4 @@
-package es.fdi.ucm.ucmh.config;
+package es.fdi.ucm.ucmh.config.spring;
 
 
 import java.util.List;

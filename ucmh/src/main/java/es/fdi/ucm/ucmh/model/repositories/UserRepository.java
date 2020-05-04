@@ -9,6 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import es.fdi.ucm.ucmh.model.User;
 
+/**
+ * Do not use, it will be deleted soon
+ * */
 @Transactional(readOnly = true)
 public interface UserRepository extends JpaRepository<User, Long> {
 	

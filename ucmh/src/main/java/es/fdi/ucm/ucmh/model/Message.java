@@ -12,16 +12,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import es.fdi.ucm.ucmh.model.Message;
-<<<<<<< HEAD
-
-@Entity
-@NamedQueries({
-	@NamedQuery(name = "Message.getMessageList",
-				query="SELECT m "
-					+ "FROM Message m "
-					+ "WHERE m.to.id = :userId "
-					+ "ORDER BY m.date ASC")
-=======
 
 @Entity
 @NamedQueries({
@@ -41,7 +31,6 @@ import es.fdi.ucm.ucmh.transfer.MessageTransferData;
 			+ "WHERE m.to.id = :userId")
 */
 
->>>>>>> empty-branch
 })
 public class Message {
 	@Id

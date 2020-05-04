@@ -99,37 +99,6 @@ INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number
 VALUES (113, 'PAT', 'Irene', 'Gomez','inemez@bmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '2013521333', 14,'Loquísimo', 'Pastillas super fuertes');
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id,disorder, treatment) 
 VALUES (114, 'PAT', 'Irene', 'Gonzalez','regon@bmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '2013521777', 14,'Loquísimo', 'Pastillas super fuertes');
---insert default users
-INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id, disorder, treatment) 
-VALUES (100, 'USER', 'Paco', 'Es Batman','pacoelmagias@elmundomagico.es', 'Paco', '2017568459', 11, 'Loquísimo', 'Pastillas super fuertes');
-INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number,psychologist_id,disorder, treatment) 
-VALUES (101, 'USER', 'Paca', 'Es Robin','robin@jnotmail.es', 'Paco', '2013568454', 13,'Loquísimo', 'Pastillas super fuertes');
-INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id, disorder, treatment) 
-VALUES (102, 'USER', 'Poca', 'Cosa','poca-cosa@hotmail.es', 'Paco', '2013568458', 11, 'Depresión', 'Fiesta en la piscina');
-INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id,disorder, treatment) 
-VALUES (103, 'USER', 'Pica', 'Carta','carta-pica@kmail.es', 'Paco', '2013568443', 20,'Loquísimo', 'Pastillas super fuertes');
-INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id,disorder, treatment) 
-VALUES (104, 'USER', 'Clara', 'Col','claracol@danacol.es', 'Paco', '2013568438', 21,'Loquísimo', 'Pastillas super fuertes');
-INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id,disorder, treatment) 
-VALUES (105, 'USER', 'Claro', 'Clarito','noclaro@yahomail.es', 'Paco', '2013568460', 12,'Loquísimo', 'Pastillas super fuertes');
-INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id,disorder, treatment) 
-VALUES (106, 'USER', 'Cloro', 'Alcohol','novodka@ru-mail.es', 'Paco', '2013568461', 12,'Loquísimo', 'Pastillas super fuertes');
-INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id,disorder, treatment) 
-VALUES (107, 'USER', 'Clora', 'Bato','batidora@braun.es', 'Paco', '2013568462', 15,'Loquísimo', 'Pastillas super fuertes');
-INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id,disorder, treatment) 
-VALUES (108, 'USER', 'Sara', 'Perez','perez-sara@corporate.es', 'Paco', '2013553459', 16,'Loquísimo', 'Pastillas super fuertes');
-INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id,disorder, treatment) 
-VALUES (109, 'USER', 'Sari', 'Ta','sari-ta@wmail.es', 'Paco', '2013566759', 19,'Loquísimo', 'Pastillas super fuertes');
-INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id,disorder, treatment) 
-VALUES (110, 'USER', 'Sora', 'Sora','sora2@pmail.es', 'Paco', '2013569059', 17,'Loquísimo', 'Pastillas super fuertes');
-INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id,disorder, treatment) 
-VALUES (111, 'USER', 'Saro', 'Sal','sarosal@bmail.es', 'Paco', '2013521459', 14,'Loquísimo', 'Pastillas super fuertes');
-INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id,disorder, treatment) 
-VALUES (112, 'USER', 'Irene', 'ramirez','iremi@bmail.es', 'Paco', '2016661459', 14,'Loquísimo', 'Pastillas super fuertes');
-INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id,disorder, treatment) 
-VALUES (113, 'USER', 'Irene', 'Gomez','inemez@bmail.es', 'Paco', '2013521333', 14,'Loquísimo', 'Pastillas super fuertes');
-INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id,disorder, treatment) 
-VALUES (114, 'USER', 'Irene', 'Gonzalez','regon@bmail.es', 'Paco', '2013521777', 14,'Loquísimo', 'Pastillas super fuertes');
 --insert default messages
 INSERT INTO message (id, sent_date, estado_animo, text, from_id, to_id, seen)
 VALUES (1, TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), null, 'The quick brown fox jumps over the lazy dog', 10, 18, false);

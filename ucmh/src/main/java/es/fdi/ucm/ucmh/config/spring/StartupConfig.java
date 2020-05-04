@@ -1,4 +1,4 @@
-package es.fdi.ucm.ucmh;
+package es.fdi.ucm.ucmh.config.spring;
 
 import java.text.SimpleDateFormat;
 
@@ -31,8 +31,9 @@ public class StartupConfig {
 	@EventListener(ContextRefreshedEvent.class)
 	public void contextRefreshedEvent() {
 		String debugProperty = env.getProperty("es.ucm.fdi.debug");
-		context.setAttribute("debug", debugProperty != null 
-				&& Boolean.parseBoolean(debugProperty.toLowerCase()));
+		
+		context.setAttribute("debug", debugProperty != null && Boolean.parseBoolean(debugProperty.toLowerCase()));
+		
 		log.info("Setting global debug property to {}", 
 				context.getAttribute("debug"));
 		
@@ -40,5 +41,6 @@ public class StartupConfig {
 		// and https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html
 		context.setAttribute("dateFormatter", 
 				new SimpleDateFormat("YYYY-MM-DD'T'HH:mm:ss.sssZ"));
+		
 	}
 }

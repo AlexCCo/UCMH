@@ -2,6 +2,7 @@ package es.fdi.ucm.ucmh.model;
 
 import java.util.Collection;
 
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EntityResult;
 import javax.persistence.FieldResult;
@@ -20,7 +21,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SqlResultSetMapping;
 
-import es.fdi.ucm.ucmh.utilities.CheckUserUtils;
+import es.fdi.ucm.ucmh.config.jpa.UserTypeConverter;
 
 @Entity
 @NamedQueries({
@@ -66,6 +67,7 @@ public class User {
 	private String phoneNumber;
 
 	@Enumerated(EnumType.STRING)
+	@Convert(converter = UserTypeConverter.class)
 	private UserType type;
 
 	//user
