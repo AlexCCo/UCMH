@@ -13,14 +13,17 @@ import javax.persistence.NamedQuery;
 
 import es.fdi.ucm.ucmh.model.Message;
 
+
 @Entity
+
 @NamedQueries({
 	@NamedQuery(name = "Message.getMessageList",
 				query="SELECT m "
 					+ "FROM Message m "
 					+ "WHERE m.to.id = :userId "
 					+ "ORDER BY m.date ASC")
-					
+	})
+
 /************************UNDER TEST**********************
 import es.fdi.ucm.ucmh.transfer.MessageTransferData;
 
@@ -30,8 +33,6 @@ import es.fdi.ucm.ucmh.transfer.MessageTransferData;
 	query="SELECT COUNT(m) FROM Message m "
 			+ "WHERE m.to.id = :userId")
 */
-
-})
 public class Message {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

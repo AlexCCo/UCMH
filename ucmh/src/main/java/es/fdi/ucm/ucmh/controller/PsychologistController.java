@@ -1,11 +1,9 @@
 package es.fdi.ucm.ucmh.controller;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -33,14 +30,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import es.fdi.ucm.ucmh.model.GroupAppointment;
+import es.fdi.ucm.ucmh.model.GroupAppointmentJsonRespone;
+import es.fdi.ucm.ucmh.model.Message;
 //			ESTO ES LO VUESTRO
 import es.fdi.ucm.ucmh.model.User;
 import es.fdi.ucm.ucmh.model.repositories.GroupAppointmentRepository;
 import es.fdi.ucm.ucmh.model.repositories.UserRepository;
-import es.fdi.ucm.ucmh.controller.UserController;
-import es.fdi.ucm.ucmh.model.GroupAppointment;
-import es.fdi.ucm.ucmh.model.GroupAppointmentJsonRespone;
-import es.fdi.ucm.ucmh.model.Message;
 
 
 @Controller
@@ -77,6 +73,26 @@ public class PsychologistController {
 	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
 	
+	@Autowired // this makes httpSession always available in each method
+	private HttpSession session;
+	
+	private User userFromSession() {
+		return (User)session.getAttribute("u");
+	}
+	
+	private User refreshUser(User u) {
+		return entityManager.find(User.class, u.getId());
+	}
+	
+	@GetMapping("")
+	public String getUser(Model model) {
+		User psy = refreshUser(userFromSession());
+		model.addAttribute("pacientes", entityManager.createNamedQuery(
+			"User.findPatientsOf", User.class).setParameter("psychologistId", psy.getId())
+			.getResultList());
+		return "misPacientes";
+	}
+	
 	@GetMapping("/psy/{id}")
 	public String getUser(@PathVariable long id, Model model, HttpSession session) {
 		User psy = entityManager.find(User.class, id);
@@ -91,30 +107,6 @@ public class PsychologistController {
 			return "404";
 		else
 			return "misPacientes";
-	/********************************************************/
-
-
-	/* ESTO ES LO QUE EL PROFE TIENE
-	private SimpMessagingTemplate messagingTemplate;
-		
-	@Autowired // this makes httpSession always available in each method
-	private HttpSession session;
-
-	private User userFromSession() {
-		return (User)session.getAttribute("u");
-	}
-
-	private User refreshUser(User u) {
-		return entityManager.find(User.class, u.getId());
-	}
-
-	@GetMapping("")
-	public String getUser(Model model) {
-		User psy = refreshUser(userFromSession());
-		model.addAttribute("pacientes", entityManager.createNamedQuery(
-			"User.findPatientsOf", User.class).setParameter("psychologistId", psy.getId())
-			.getResultList());
-		return "misPacientes";*/
 	}
 	
 	@PostMapping(path="/modify/{id}", produces = "application/json")
@@ -180,22 +172,11 @@ public class PsychologistController {
 	
    @PostMapping(value = "/saveGroupAppointment", produces = { MediaType.APPLICATION_JSON_VALUE })
    @ResponseBody
-   
-	// LO VUESTRO
+   @Transactional
 	public GroupAppointmentJsonRespone saveEmployee(@ModelAttribute @Valid GroupAppointment group_appointment,
          BindingResult result) {
 
 	  GroupAppointmentJsonRespone respone = new GroupAppointmentJsonRespone();
-	  /*************************************** */
-
-
-   /* LO DEL PROFE
-	@Transactional
-   public GroupAppointmentResponse saveEmployee(@ModelAttribute @Valid GroupAppointment appointment,
-         BindingResult result) {
-
-	  GroupAppointmentResponse response = new GroupAppointmentResponse();
-	  /********************************************/
       
       if(result.hasErrors()){
          
@@ -205,7 +186,6 @@ public class PsychologistController {
                      Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage)
                  );
          
-		 //            LO VUESTRO
 		 respone.setValidated(false);
          respone.setErrorMessages(errors);
       }else{
@@ -213,21 +193,8 @@ public class PsychologistController {
          //..
          respone.setValidated(true);
          respone.setGroupAppointment(group_appointment); //TODO revisar
-         groupappointmentRepository.saveAndFlush(group_appointment);
-      }
+         entityManager.persist(respone.getGroupAppointment());      }
 	  return respone;
-	  /***************************************/
-
-
-	  	/* LO DEL PROFE
-		 response.setValidated(false);
-         response.setErrorMessages(errors);
-      }else{
-         response.setValidated(true);
-         response.setGroupAppointment(appointment);
-		 entityManager.persist(response.getGroupAppointment());
-      }
-      return response;*/
    }
       
 }
