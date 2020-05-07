@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.lang.Long;
+import java.security.Principal;
+
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -66,6 +69,14 @@ public class AdminController {
 	private LinkedList<User> lastListPat;
 	//------------------------------------------------------
 	
+	private static class PageCache {
+		private long firstId;
+		private long lastId;
+		private List<User> last;
+		private void requestMore() {}
+		private void requestLess() {}
+	}
+
 	
 	@Autowired
 	private EntityManager entityManager;
@@ -184,8 +195,25 @@ public class AdminController {
 		//PROB-1:model.addAttribute("admin", userFromSession());
 		return "admin";
 	}
+
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
 	
-	
+	public static class DemoMessage {
+		public String msg;
+	}
+
+	@PostMapping("/msg/{id}")
+	@ResponseBody
+	public String sendMsg(@PathVariable long id, @RequestBody DemoMessage message) {
+
+		User u = entityManager.find(User.class, id);
+		messagingTemplate.convertAndSend("/user/"+u.getMail()+"/queue/updates", "{ \"text\": \"" + message.msg + "\"}");
+
+		return "ok";
+	}
+
+
 	/**
 	 * This method will show the next or previous SHOW_MAX_USERS users needed by the admin
 	 * 
@@ -280,20 +308,10 @@ public class AdminController {
 			}
 		}	
 		
-		//i couldn't make it work, that's why i use the syso 
-		log.debug("Values of lastPatUser and lastPsyUser: (" + lastPatUser + ", " + lastPsyUser + ")");
-		System.out.println("Values of lastPatUser and lastPsyUser: (" + lastPatUser + ", " + lastPsyUser + ")");
+		log.debug("Values of lastPatUser and lastPsyUser: ({}, {})", lastPatUser, lastPsyUser);
 
-		/* We are doing all of these weird process just to make sure hibernate does less
-		 * queries to the database. This is because the object User has
-		 * db's attributes that are foreign key of other tables and to obtain
-		 * those values it needs to do more than one query.
-		 * 
-		 * Another reason to do this is because the JSON string format has more information
-		 * than in reality it's needs*/
-		
 		for(User u : queryRequest) {
-			sendData.add(new UserTransferData(u)); // old logic moved into UserTransferDAta: much more readable
+			sendData.add(new UserTransferData(u)); 
 		}
 		
 		return sendData;
@@ -425,28 +443,8 @@ public class AdminController {
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code = HttpStatus.ACCEPTED)
-	public @ResponseBody JSONTransferMessage registerUser(@PathVariable Long adminId, @RequestBody String userInfo) {
-		//log info
-		log.info("Register user request made by admin: {}", adminId);
-		log.info("Trying to register {}", userInfo);
-		
-		User admin = entityManager.find(User.class, adminId);
-		
-		if(admin == null) {
-			//log info or warning
-			System.out.println("Request rejected, user with id: " + adminId + " tried to register a new user!");
-			return new JSONTransferMessage("Error");
-		}		
-		
-		/*
-		 * The userInfo String must be manually parse because an inconvenience in the native
-		 * parsing of Spring.
-		 * The problem is that the incoming's body message will be
-		 * parse and Hibernate will try to query that information and instantiate and object,
-		 * but for obvious reasons it will return an empty result.
-		 * 
-		 * I implemented a manual parsing using Jackson library
-		 * */
+	public @ResponseBody JSONTransferMessage registerUser(@RequestBody String userInfo) {
+		log.info("Register user request made by admin: {}, registering {}", userFromSession().getId(), userInfo);
 		
 		/*
 		 * ObjectMapper gives you support to transform from JSON to Objects and from Objects to
