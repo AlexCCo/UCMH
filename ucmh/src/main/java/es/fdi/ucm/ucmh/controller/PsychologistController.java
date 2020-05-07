@@ -18,11 +18,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -35,8 +35,7 @@ import es.fdi.ucm.ucmh.model.GroupAppointment;
 import es.fdi.ucm.ucmh.model.GroupAppointmentJsonRespone;
 import es.fdi.ucm.ucmh.model.Message;
 import es.fdi.ucm.ucmh.model.User;
-import es.fdi.ucm.ucmh.model.repositories.GroupAppointmentRepository;
-import es.fdi.ucm.ucmh.model.repositories.UserRepository;
+import es.fdi.ucm.ucmh.transfer.UserTransferData;
 
 /********************************************/
 //@Controller
@@ -61,15 +60,6 @@ public class PsychologistController {
 	EntityManager entityManager;
 	
 	@Autowired
-
-
-    //		ESTO ES LO VUESTRO
-	UserRepository userRepository;
-	
-	@Autowired
-	GroupAppointmentRepository groupappointmentRepository;
-	
-	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
 	
 	@Autowired // this makes httpSession always available in each method
@@ -92,43 +82,32 @@ public class PsychologistController {
 		return "misPacientes";
 	}
 	
-	@GetMapping("/psy/{id}")
-	public String getUser(@PathVariable long id, Model model, HttpSession session) {
-		User psy = entityManager.find(User.class, id);
-		model.addAttribute("psychologist", psy);
-		
-		model.addAttribute("pacientes", entityManager.createQuery(
-				"SELECT u FROM User u WHERE u.psychologist.id LIKE :id")
-				.setParameter("id", id)
-				.getResultList());
-		
-		if(psy == null)
-			return "404";
-		else
-			return "misPacientes";
+	@GetMapping("/horarioPsicologo")
+	public String goToHorario()
+	{
+		return "horarioPsicologo";
 	}
 	
-	@PostMapping(path="/modify/{id}", produces = "application/json")
+	@PostMapping(path="/modify/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Transactional
 	@ResponseBody
-	public User modifyUser(@ModelAttribute User user, @RequestParam(required=false) String disorder,
-			@RequestParam(required=false) String treatment, Model model, @PathVariable("id") long id)
+	public UserTransferData modifyUser(@ModelAttribute User user, @RequestParam(required=false) String disorder,
+			@RequestParam(required=false) String treatment,@PathVariable("id") long id)
 	{
 		User target = entityManager.find(User.class, id);
 		target.setDisorder(disorder);
 		target.setTreatment(treatment);
-		model.addAttribute("user", target);
-		return target;
+		entityManager.merge(target);
+		return new UserTransferData(target);
 	}
 	
-	@GetMapping(path="/pacient/{id}", produces = "application/json")
+	@GetMapping(path="/pacient/{id}", produces = { MediaType.APPLICATION_JSON_VALUE }/*, consumes = { MediaType.APPLICATION_JSON_VALUE }*/)
 	@Transactional
 	@ResponseBody
-	public User getPacient(@PathVariable long id, Model model)
+	public UserTransferData getPacient(@PathVariable long id/*, @RequestBody MessageTransfer cosa*/)
 	{
 		User pacient = entityManager.find(User.class, id);
-		model.addAttribute("user", pacient);
-		return pacient;
+		return new UserTransferData(pacient);
 	}
 	
 	@PostMapping("/{id}/msg")
