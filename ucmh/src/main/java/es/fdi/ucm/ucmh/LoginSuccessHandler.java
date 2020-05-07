@@ -45,11 +45,13 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     @Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
+    	
 	    String mail = ((org.springframework.security.core.userdetails.User)
 				authentication.getPrincipal()).getUsername();
 	    
 	    // add a 'u' session variable, accessible from thymeleaf via ${session.u}
 	    log.info("Storing user info for {} in session {}", mail, session.getId());
+	    
 		User u = entityManager.createNamedQuery("User.byMail", User.class)
 		        .setParameter("mail", mail)
 		        .getSingleResult();		

@@ -48,18 +48,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 * as a first rule. Note that this may break an application that expects to have
 	 * login information available.
 	 */
+    @Override
 	protected void configure(HttpSecurity http) throws Exception {
 	    http
 	        .authorizeRequests()
-	        	.antMatchers("**").permitAll();
-//	            .antMatchers("/css/**", "/js/**", "/img/**", "/", "/error").permitAll()
-//	            .antMatchers("/admin/**").hasRole("ADMIN")
-//	            .antMatchers("/psy/**").hasRole("PSY")
-//	            .anyRequest().authenticated()
-//	            .and()
-//			.formLogin()
-//				.loginPage("/login")
-//				.permitAll().successHandler(loginSuccessHandler); // <-- called when login Ok; can redirect
+	        	.antMatchers("**").permitAll()
+	            .antMatchers("/css/**", "/js/**", "/img/**", "/", "/error").permitAll()
+	            .antMatchers("/admin/**").hasRole("ADMIN")
+	            .antMatchers("/psy/**").hasRole("PSY")
+	            .anyRequest().authenticated()
+	            .and()
+			.formLogin()
+				.loginPage("/login")
+				.permitAll().successHandler(loginSuccessHandler)
+				.and()
+			.logout()
+				.permitAll(); // <-- called when login Ok; can redirect
 	}
 	
 	/**

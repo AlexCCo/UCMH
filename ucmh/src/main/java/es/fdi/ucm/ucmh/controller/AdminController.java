@@ -6,7 +6,6 @@ import java.util.NoSuchElementException;
 import java.lang.Long;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpSession;
 
@@ -15,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import org.springframework.stereotype.Controller;
@@ -76,32 +76,9 @@ public class AdminController {
 	@Autowired // this makes httpSession always available in each method
 	//PROB-1:possible problem when two different ADMINs enter at the same time
 	private HttpSession session;
-	
-//	/**
-//	 * It will insert a new user generating a new id for it into the database.<br>
-//	 * This operation will be atomic because it may risk a race condition while
-//	 * generating the new id.
-//	 * 
-//	 * @param theNewUser The user to insert. If it already has an id, that id will
-//	 * be discarded.
-//	 * 
-//	 * @return
-//	 * <b>true</b> if the operation was successful.<br>
-//	 * <b>false</b> otherwise
-//	 * */
-//	private synchronized boolean insertNewUser(User theNewUser) {
-//		if(!theNewUser.getType().equals(CheckUserUtils.USER_TYPE)
-//				&& !theNewUser.getType().equals(CheckUserUtils.PSYCHOLOGIST_TYPE)) {
-//			return false;
-//		}
-//		
-//		System.out.println(System.lineSeparator() + theNewUser.toString());
-//		
-//		userRepository.saveAndFlush(theNewUser);
-//		
-//		return true;
-//	}	
 
+	
+	
 	private User userFromSession() {
 		return (User)session.getAttribute("u");
 	}
@@ -153,6 +130,7 @@ public class AdminController {
 	 * @return It returns a string that indicates to the Spring's ViewResolvers what
 	 * view (in this case HTML page) we want to render and send to our client
 	 * */
+	//localhost:8080/admind/
 	@GetMapping(value = "/{adminId}")
 	public String getAdminPage(@PathVariable Long adminId, Model model) {
 		log.debug("Getting admin page");
