@@ -35,7 +35,7 @@ public class IwUserDetailsService implements UserDetailsService {
 			ArrayList<SimpleGrantedAuthority> roles = new ArrayList<>();
 			roles.add(new SimpleGrantedAuthority("ROLE_USER"));
 			roles.add(new SimpleGrantedAuthority("ROLE_" + u.getType()));
-
+			
 			return new org.springframework.security.core.userdetails.User(
 	        		u.getMail(), u.getPassword(), roles); 
 	    } catch (Exception e) {

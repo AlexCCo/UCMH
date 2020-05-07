@@ -4,21 +4,9 @@
 		<title>Index to templates</title>
 	</head>
 	<body>
-		<ul>
-		<!-- the text selector here doesn't work and i don't know why -->
-			<li>Welcome <span th:text="#{index.welcome}">debugger</span></li>
-			<li style='list-style-type: none;'><b>See user templates</b></li>
-			<li><a href="ajustesPaciente" th:href="@{user/114/ajustes}">ajustesPaciente</a></li>
-			<li><a href="misCitas" th:href="@{user/114/pagina-principal}">misCitas</a></li>
-			<li><a href="estadisticasPaciente" th:href="@{user/114/estadisticas}">estadisticasPaciente</a></li>
-
-
 
 
 			
-	<!--
-		DEL PROFE, hay que investigar el uso de spring security y logins
-	<body>
 		<h1>Elige tu personaje</h1>
 		<div th:if="${application.debug}">
 			<form th:action="@{/login}" method="post">

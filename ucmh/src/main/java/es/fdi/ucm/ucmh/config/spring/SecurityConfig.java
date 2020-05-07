@@ -51,15 +51,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 	    http
 	        .authorizeRequests()
-	        	.antMatchers("**").permitAll();
-//	            .antMatchers("/css/**", "/js/**", "/img/**", "/", "/error").permitAll()
-//	            .antMatchers("/admin/**").hasRole("ADMIN")
-//	            .antMatchers("/psy/**").hasRole("PSY")
-//	            .anyRequest().authenticated()
-//	            .and()
-//			.formLogin()
-//				.loginPage("/login")
-//				.permitAll().successHandler(loginSuccessHandler); // <-- called when login Ok; can redirect
+	            .antMatchers("/css/**", "/js/**", "/img/**", "/", "/error").permitAll()
+	            .antMatchers("/admin/**").hasRole("ADMIN")
+	            .antMatchers("/psy/**").hasRole("PSY")
+	            .anyRequest().authenticated()
+	            .and()
+			.formLogin()
+				.permitAll().successHandler(loginSuccessHandler); // <-- called when login Ok; can redirect
 	}
 	
 	/**
@@ -68,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 * This allows you to write, in any part of Spring-managed code, 
 	 * `@Autowired PasswordEncoder passwordEncoder`, and have it initialized
 	 * with the result of this method. 
-	 */
+	 */ 
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
 		// by default in Spring Security 5, a wrapped new BCryptPasswordEncoder();
