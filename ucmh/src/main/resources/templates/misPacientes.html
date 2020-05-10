@@ -25,8 +25,8 @@
         <a href="#" id="logo" class="brand-logo">UCMH</a>
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a href="horarioPsicologo">Mi horario</a></li>
-            <li class="active"> <a> Pacientes de <span th:text ="${psychologist.firstName}"> Pepe </span> </a></li>
+            <li><a th:href="@{horarioPsicologo}">Mi horario</a></li>
+            <li class="active"> <a> Pacientes de <span th:text ="${session.u.firstName}"> Pepe </span> </a></li>
             <a class="waves-effect waves-light btn">Cerrar sesión</a>
         </ul>
       </div>
@@ -52,7 +52,7 @@
         <td></td>
         <td>
 	        <li class="collection-item avatar">
-	          <img src="image/ejemplo_opt.jpg" alt="" class="circle">
+	          <img src="/image/ejemplo_opt.jpg" alt="" class="circle">
 	          <span class = "title" th:text="${u.firstName}"> Title </span>
 	          <span class = "title" th:text="${u.lastName}"> Title </span>
 	          <p>
@@ -80,7 +80,7 @@
           <span class="card-title" id="pacientName"></span>
             <div class ="row valign-wrapper">
               <div class="col s4">
-                <img src="image/ejemplo.jpg" alt="" class="responsive-img">
+                <img src="/image/ejemplo.jpg" alt="" class="responsive-img">
               </div>
               <div class="col s8">
               <form action="#" method="post">
@@ -116,127 +116,61 @@
         </div>
       </div>
     </div>
-
-    <!-- Menú desplegable mobile-->
-
-   <!--
-
-    <div>
-    <table id = "Pacientes">
-        <caption id="PacientesMaria Antonia">MIS PACIENTES</caption>
-        <tr>
-            <th>FOTO</th>
-            <th>NOMBRE</th>
-        </tr>
-        <tr>
-          <td class = "ProfilePictures"><img src = "img/Profile.png"></img></td>
-          <td class = "ProfileNames"><p>Felipe de Borbón</p><i class="material-icons">attachment</i></td>
-      </tr>
-      <tr>
-        <td class = "ProfilePictures"><img src = "img/Profile.png"></img></td>
-        <td class = "ProfileNames"><p>Quentin Tarantino</p> <i class="material-icons">attachment</i></td>
-    </tr>
-    <tr>
-      <td class = "ProfilePictures"><img src = "img/Profile.png"></img></td>
-      <td class = "ProfileNames"><p>Bad Gyal</p><i class="material-icons">attachment</i></td>
-  </tr>
-    </table>
-
-    <table id = "Detalles">
-      <caption id="PacientesMaria Antonia">DETALLES</caption>
-      <tr>
-      <td>
-        <p>Nombre: Bad Gyal</p>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <p>Notas generales: vkmrvmrm</p>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <p>Estadística Media: Regulero</p>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <img src = "img/Profile.png"></img>
-      </td>
-    </tr>
-    </table>
-  </div> -->
-
-  <!-- VUESTRO-->
-  <script src="js/vendor/modernizr-3.8.0.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-  <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
-  <script src="js/plugins.js"></script>
-  <script src="js/vendor/materialize.min.js"></script>
-
-  <script src="js/main.js"></script>
-
   <script>
   //$(document).ready(function(){
     //  $('.sidenav').sidenav();
  // });
   </script>
-
-
-
-  <script type="text/javascript">
-  <!--**********************************************-->
-
-
-
-
-
-  <!--DEL PROFE
-  <th:block th:replace="fragments :: jslibs"></th:block>
-  <script src="js/main.js"></script>
-  -->
-
-
-
   
-  <script>
+  <script src="/js/vendor/modernizr-3.8.0.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script>window.jQuery || document.write('<script src="/js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
+  <script src="/js/plugins.js"></script>
+  <script src="/js/vendor/materialize.min.js"></script>
+  <script type="text/javascript">
+		const config = {
+			socketUrl: "[[${session.ws}?:'']]",	// vacío indica falso
+			rootUrl: "[[${session.ws}?@{/}:'']]",
+			csrf: {
+				name: "[[${_csrf.parameterName}]]",
+				value: "[[${_csrf.token}]]"
+			},
+			admin: [[${session.u != null && session.u.hasRole('ADMIN')}?true:false]],
+			userId: [[${session.u != null}?${session.u.id}:-1]]
+		};
+	</script>
+  <script type="text/javascript">
   $( ".pacientBTN" ).click(function(e) {
 	  var id = $(this).attr("id");
-	  $.ajax({
+	  $.ajax({		    
 		  method: "GET",
-		  url: "/pacient/" + id,
+		  url: `${window.location.origin}/psy/pacient/${id}`,
 		  data: {}
 		})
 		  .done(function( msg ) {
 			  $("#pacientName").text(msg.firstName + " " + msg.lastName);
 			  $("#pacientDisorder").val(msg.disorder);
 			  $("#pacientTreatment").val(msg.treatment);
-			  //Es un punto porque es una clase y no un id
 			  $(".savePacient").attr("id", id); 
 			  $(".sendmsg").attr("id", id);
+			  console.log(msg);
       });
-      
-      
-    //VUESTRO
 	});
   </script>
-  
+    <!--DEL PROFE
+  <th:block th:replace="fragments :: jslibs"></th:block>
+  <script src="js/main.js"></script>
+  -->
   <script type="text/javascript">
   $( ".savePacient" ).click(function(e) {
-    //*************************
-
-
-
-   /* DEL PROFE
-  });
-   $( ".savePacient" ).click(function(e) {
-    */
 	  var id = $(this).attr("id");
 	  var disorderB = $("#pacientDisorder").val();
 	  var treatmentB = $("#pacientTreatment").val();
+	  console.log("click");
 	  $.ajax({
+		  headers: {'X-CSRF-TOKEN' : config.csrf.value},
 		  method: "POST",
-		  url: "/modify/" + id,
+		  url: `${window.location.origin}/psy/modify/${id}`,
 		  data: {disorder : disorderB, treatment : treatmentB}
 	  })
 	  .done(function( msg ) {
@@ -244,11 +178,9 @@
 	  });
   });
 
-
   
   </script>
     <script type="text/javascript">
-   });
    $( ".sendmsg" ).click(function(e) {
   	var id = $(this).attr("id");
   	$.ajax({

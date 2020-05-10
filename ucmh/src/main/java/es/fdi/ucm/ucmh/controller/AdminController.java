@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import org.springframework.stereotype.Controller;
@@ -111,6 +112,7 @@ public class AdminController {
 	 * @return It returns a string that indicates to the Spring's ViewResolvers what
 	 * view (in this case HTML page) we want to render and send to our client
 	 * */
+	@Secured(value = "ROLE_ADMIN")
 	@GetMapping(value = "/")
 	public String getAdminPage(Model model) {
 		log.debug("Getting admin page");

@@ -52,14 +52,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 	    http
 	        .authorizeRequests()
-	        	.antMatchers("**").permitAll()
+	        	//.antMatchers("**").permitAll()
 	            .antMatchers("/css/**", "/js/**", "/img/**", "/", "/error").permitAll()
 	            .antMatchers("/admin/**").hasRole("ADMIN")
 	            .antMatchers("/psy/**").hasRole("PSY")
 	            .anyRequest().authenticated()
 	            .and()
 			.formLogin()
-				.loginPage("/login")
 				.permitAll().successHandler(loginSuccessHandler); // <-- called when login Ok; can redirect
 	}
 	

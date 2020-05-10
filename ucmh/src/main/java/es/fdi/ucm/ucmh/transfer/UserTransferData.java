@@ -14,8 +14,11 @@ public class UserTransferData {
 	public String password;			 // only used when registering a new user
 	public String type;
 	
+	private String disorder;
+	private String treatment;
+	
 	public UserTransferData(long id, String firstName, String lastName, 
-			String mail, String phoneNumber, String psychologistName, String type) {
+			String mail, String phoneNumber, String psychologistName, String type, String disorder, String treatment) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -23,6 +26,8 @@ public class UserTransferData {
 		this.phoneNumber = phoneNumber;
 		this.psychologistName = psychologistName;
 		this.type = type;
+		this.disorder = disorder;
+		this.treatment = treatment;
 	}
 	
 	public UserTransferData(User u) {
@@ -33,6 +38,8 @@ public class UserTransferData {
 		this.phoneNumber = u.getPhoneNumber();
 		this.type = "" + u.getType();
 		this.psychologistId = -1;
+		this.disorder = u.getDisorder();
+		this.treatment = u.getTreatment();
 		if (u.getPsychologist() != null) {
 			this.psychologistName = 
 				u.getPsychologist().getFirstName() + ", " + 
@@ -146,5 +153,21 @@ public class UserTransferData {
 	public String toString() {
 		return "UserTransferData [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", mail=" + mail
 				+ ", phoneNumber=" + phoneNumber + ", psychologistName=" + psychologistName + ", type=" + type + "]";
+	}
+
+	public String getDisorder() {
+		return disorder;
+	}
+
+	public void setDisorder(String disorder) {
+		this.disorder = disorder;
+	}
+
+	public String getTreatment() {
+		return treatment;
+	}
+
+	public void setTreatment(String treatment) {
+		this.treatment = treatment;
 	}
 }
