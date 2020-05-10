@@ -20,8 +20,8 @@ import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
  * 
  * The web socket support build on top of JSR 356, a java websocket API
  * */
-@Configuration
-@EnableWebSocketMessageBroker
+//@Configuration
+//@EnableWebSocketMessageBroker
 public class SimpleBrokerWebSocketConfig implements WebSocketMessageBrokerConfigurer{
 
 	@Override

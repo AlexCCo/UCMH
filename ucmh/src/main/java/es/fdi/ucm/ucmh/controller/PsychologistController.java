@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,16 +34,14 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import es.fdi.ucm.ucmh.model.GroupAppointment;
 import es.fdi.ucm.ucmh.model.GroupAppointmentJsonRespone;
 import es.fdi.ucm.ucmh.model.Message;
-//			ESTO ES LO VUESTRO
 import es.fdi.ucm.ucmh.model.User;
 import es.fdi.ucm.ucmh.model.repositories.GroupAppointmentRepository;
 import es.fdi.ucm.ucmh.model.repositories.UserRepository;
 
-
-@Controller
-public class PsychologistController {
-	private static final Logger log = LogManager.getLogger(UserController.class);
 /********************************************/
+//@Controller
+//public class PsychologistController {
+//	private static final Logger log = LogManager.getLogger(UserController.class);
 
 
 //			ESTO ES LO QUE EL PROFE TIENE
@@ -52,12 +51,12 @@ import es.fdi.ucm.ucmh.model.GroupAppointmentResponse;
 import es.fdi.ucm.ucmh.model.Message;
 import es.fdi.ucm.ucmh.model.User;
 
+//************************************ */	
 
 @Controller
 @RequestMapping("/psy")
 public class PsychologistController {
 	private static final Logger log = LogManager.getLogger(PsychologistController.class);
-//************************************ */	
 	@Autowired
 	EntityManager entityManager;
 	

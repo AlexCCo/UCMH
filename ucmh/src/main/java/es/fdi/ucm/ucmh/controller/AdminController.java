@@ -2,11 +2,11 @@ package es.fdi.ucm.ucmh.controller;
 
 import java.util.List;
 import java.util.LinkedList;
-import java.util.NoSuchElementException;
 import java.lang.Long;
 
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.LogManager;
@@ -14,7 +14,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import org.springframework.stereotype.Controller;
@@ -32,8 +31,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import es.fdi.ucm.ucmh.controller.Auxiliary.PageCache;
 import es.fdi.ucm.ucmh.model.User;
-import es.fdi.ucm.ucmh.model.repositories.UserQueryStringNames;
 import es.fdi.ucm.ucmh.model.repositories.UserRepository;
 import es.fdi.ucm.ucmh.transfer.JSONTransferMessage;
 import es.fdi.ucm.ucmh.transfer.UserTransferData;
@@ -49,24 +48,8 @@ public class AdminController {
 	 * This is the total number of users an admin can query at a time
 	 * */
 	private static final int SHOW_MAX_USERS = 10;
-	
-	private final long FIRST_PAT_ID = 100l;
-	private final long FIRST_PSY_ID = 10l;
-	
-	/*-----------------------------------------------------
-	 * PROB-R:
-	 * There would be more petitions for more admins so
-	 * this variable will have race conditions when it is updated
-	 * Research the use of Scopes in Spring
-	 */
-	private long lastPatUser;
-	private long lastPsyUser;
-	
-	private LinkedList<User> lastListPsy;
-	private LinkedList<User> lastListPat;
-	//------------------------------------------------------
-	
-	
+	private static final String SESSION_ATTRIBUTE = "PageCache";
+			
 	@Autowired
 	private EntityManager entityManager;
 	
@@ -87,35 +70,33 @@ public class AdminController {
 		return entityManager.find(User.class, u.getId());
 	}
 	
-	/**
-	 * This method will query a list of users to the embedded DB in a range of: <br>
-	 * <pre>
-	 *      lastUser <= x < lastUser+showUsers => if queryType == true
-	 *	 	
-	 *      lastUser-showUsers <= x < lastUser => otherwise
-	 * </pre>
-	 * @param userType An UserType enum value representing the user type we want to query
-	 * @param lastUser The id of the user to take as a lower(or upper) bound
-	 * @param queryType Boolean indicating what type of query are you aiming for 
-	 * @return A list of users
-	 * */
-	private LinkedList<User> getListUsers(UserType userType, long lastUserId, boolean queryType){
-		String queryStringName = queryType ? UserQueryStringNames.GET_LIST_MORE : UserQueryStringNames.GET_LIST_LESS;
-		
-		TypedQuery<User> query = entityManager.createNamedQuery(queryStringName, User.class);
-		
-		query.setParameter("showUsers", SHOW_MAX_USERS);
-		query.setParameter("userType", userType);
-		query.setParameter("lastUser", lastUserId);
-		
-		LinkedList<User> result = new LinkedList<User>();
-		
-		for(User u: query.getResultList()) {
-			result.add(u);
-		}
-		
-		return result;
+	private void storeInAdminSession(PageCache lastQuery) {
+		session.setAttribute(SESSION_ATTRIBUTE, lastQuery);
 	}
+	
+	private PageCache retrieveAdminPageCache() {
+		return (PageCache) session.getAttribute(SESSION_ATTRIBUTE);
+	}
+	
+	
+	/**
+	 * It will insert a new user generating a new id for it into the database.<br>
+	 * This operation will be atomic because it may risk a race condition while
+	 * generating the new id.
+	 * 
+	 * @param theNewUser The user to insert. If it already has an id, that id will
+	 * be discarded.
+	 * 
+	 * @return
+	 * <b>true</b> if the operation was successful.<br>
+	 * <b>false</b> otherwise
+	 * */
+	private synchronized boolean insertNewUser(User theNewUser) {
+		
+		
+		return false;
+	}	
+	
 	
 	/**
 	 * It will retrieve the initial state of the admin page.
@@ -130,40 +111,23 @@ public class AdminController {
 	 * @return It returns a string that indicates to the Spring's ViewResolvers what
 	 * view (in this case HTML page) we want to render and send to our client
 	 * */
-	//localhost:8080/admind/
-	@GetMapping(value = "/{adminId}")
-	public String getAdminPage(@PathVariable Long adminId, Model model) {
+	@GetMapping(value = "/")
+	public String getAdminPage(Model model) {
 		log.debug("Getting admin page");
 		
-		User admin = entityManager.find(User.class, adminId);
-		
-		if(admin == null) {
-			//FIX-1: throw an unique exception to handle the HTTP code response
-			return "404";
-		}
-		
-		lastPatUser = FIRST_PAT_ID;
-		lastPsyUser = FIRST_PSY_ID;
-		
-		
-		
-		lastListPat = getListUsers(UserType.PAT, lastPatUser, true);
-		lastListPsy = getListUsers(UserType.PSY, lastPsyUser, true);
-		
-		
-		lastPatUser = lastListPat.getLast().getId() + 1;
-		lastPsyUser = lastListPsy.getLast().getId() + 1;
-		
-		model.addAttribute("patients_list", lastListPat);
-		model.addAttribute("psychologist_list", lastListPsy);
+		User admin = userFromSession();
+		PageCache userQueryList = new PageCache(SHOW_MAX_USERS);
+
+		model.addAttribute("patients_list", userQueryList.getListPATMore(entityManager));
+		model.addAttribute("psychologist_list", userQueryList.getListPSYMore(entityManager));
 		model.addAttribute("admin", admin);
 		model.addAttribute("showNum", SHOW_MAX_USERS);
 		
-		//PROB-1:model.addAttribute("admin", userFromSession());
+		storeInAdminSession(userQueryList);
+		
 		return "admin";
 	}
-	
-	
+
 	/**
 	 * This method will show the next or previous SHOW_MAX_USERS users needed by the admin
 	 * 
@@ -176,102 +140,37 @@ public class AdminController {
 	 * 
 	 * @see SHOW_MAX_USERS
 	 * */
-	@RequestMapping(value = "/{adminId}/users-list-{type}-{queryType}",
+	@RequestMapping(value = "/users-list-{type}-{queryType}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody List<UserTransferData> getListUser(@PathVariable Long adminId, @PathVariable String type,
+	public @ResponseBody List<UserTransferData> getListUser(@PathVariable String type,
 												@PathVariable String queryType) {
 		
 		List<UserTransferData> sendData = new LinkedList<UserTransferData>();
-		User admin = entityManager.find(User.class, adminId);
-		
-		if(admin == null) {
-			//log info or warning
-			System.out.println("Request rejected, user with id: " + adminId + " tried to query a whole list of users");
-			return sendData;
-		}
-		
 		LinkedList<User> queryRequest = new LinkedList<User>();
+		User admin = userFromSession(); 
+		PageCache userListCache = retrieveAdminPageCache();
 		
 		type = type.toUpperCase();		
 		
 		//it could be an info log too
-		log.debug("AJAX request with user type: " + type + ". Made by admin: " + adminId);
-		System.out.println("AJAX request with user type: " + type + ". Made by admin: " + adminId);
-		
-		try {
-			if(type.equals("PAT") && queryType.equals("more")) {
-				queryRequest = getListUsers(UserType.valueOf(type), lastPatUser, true);
-				
-				if(!queryRequest.isEmpty()) {
-					lastPatUser =  queryRequest.size() < SHOW_MAX_USERS ? lastPatUser : queryRequest.getLast().getId() + 1;
-					lastListPat = queryRequest;
-				}
-				else {
-					queryRequest = lastListPat;
-				}
-			}
-			else if (type.equals("PAT") && queryType.equals("less")) {
-				lastPatUser = lastListPat.getFirst().getId();
-				queryRequest = getListUsers(UserType.valueOf(type), lastPatUser, false);
-				
-				if(queryRequest.isEmpty()) {
-					lastPatUser = lastListPat.getLast().getId() + 1;
-					queryRequest = lastListPat;
-				}
-				else {
-					lastListPat = queryRequest;
-				}
-			}
-			else if(type.equals("PSY") && queryType.equals("more")) {
-				queryRequest = getListUsers(UserType.valueOf(type), lastPsyUser, true);
-				if(!queryRequest.isEmpty()) {
-					lastPsyUser = queryRequest.size() < SHOW_MAX_USERS ? lastPsyUser : queryRequest.getLast().getId() + 1;
-					lastListPsy = queryRequest;
-				}
-				else {
-					queryRequest = lastListPsy;
-				}
-			}
-			else if (type.equals("PSY") && queryType.equals("less")) {
-				lastPsyUser = lastListPsy.getFirst().getId();
-				queryRequest = getListUsers(UserType.valueOf(type), lastPsyUser, false);
-				
-				if(queryRequest.isEmpty()) {
-					lastPsyUser = lastListPsy.getLast().getId() + 1;
-					queryRequest = lastListPsy;
-				}
-				else {
-					lastListPsy = queryRequest;
-				}
-			}
-		} catch(NoSuchElementException ex) {
-			System.out.println(System.lineSeparator() + "Execption caugth!!");
-			if(type.equals("USER")) {
-				queryRequest = lastListPat;
-			}
-			else if(type.equals("PSY")) {
-				queryRequest = lastListPsy;
-			}
-			else {
-				return sendData;
-			}
+		log.info("AJAX request with user type: {}. Made by admin: {}", type, admin.getId());
+	
+		if(type.equals("PAT") && queryType.equals("more")) {
+			queryRequest = userListCache.getListPATMore(entityManager);
+		}
+		else if (type.equals("PAT") && queryType.equals("less")) {
+			queryRequest = userListCache.getListPATLess(entityManager);
+		}
+		else if(type.equals("PSY") && queryType.equals("more")) {
+			queryRequest = userListCache.getListPSYMore(entityManager);
+		}
+		else if (type.equals("PSY") && queryType.equals("less")) {
+			queryRequest = userListCache.getListPSYLess(entityManager);
 		}	
-		
-		//i couldn't make it work, that's why i use the syso 
-		log.debug("Values of lastPatUser and lastPsyUser: (" + lastPatUser + ", " + lastPsyUser + ")");
-		System.out.println("Values of lastPatUser and lastPsyUser: (" + lastPatUser + ", " + lastPsyUser + ")");
 
-		/* We are doing all of these weird process just to make sure hibernate does less
-		 * queries to the database. This is because the object User has
-		 * db's attributes that are foreign key of other tables and to obtain
-		 * those values it needs to do more than one query.
-		 * 
-		 * Another reason to do this is because the JSON string format has more information
-		 * than in reality it's needs*/
-		
 		for(User u : queryRequest) {
-			sendData.add(new UserTransferData(u)); // old logic moved into UserTransferDAta: much more readable
+			sendData.add(new UserTransferData(u)); 
 		}
 		
 		return sendData;
@@ -284,7 +183,7 @@ public class AdminController {
 	 * <b>NOTE:</b> The first two parameters are given from what is called a <i>"query 
 	 * string parameters"</i>. That means that to obtain those values the URL must 
 	 * follow this pattern:<br>
-	 * \/admin/{adminId}/get-browser-result?name=somevalue&surname=somevalue
+	 * \/admin//get-browser-result?name=somevalue&surname=somevalue
 	 * 
 	 * 
 	 * @param userName The name of the user or users to retrieve
@@ -293,25 +192,19 @@ public class AdminController {
 	 * 
 	 * @return It will return a list in JSON format of the results.
 	 * */
-	@RequestMapping(value = "/{adminId}/get-browser-result",
+	@RequestMapping(value = "/get-browser-result",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody List<UserTransferData> getUsersByName(@RequestParam(required = true, name = "name") String userName,
-															   @RequestParam(required = true, name = "surname") String lastName,
-															   @PathVariable Long adminId) {
+															   @RequestParam(required = true, name = "surname") String lastName) {
+		User admin = userFromSession();
 		
 		log.info("Requesting user (1st) {} (last) {}", userName, lastName);
-		System.out.println(System.lineSeparator() + "browser request made by admin: " + adminId + " to obtain"
-				+ " the user with name: " + userName + " and last name: " + lastName);
+		log.info("browser request made by admin: {} to obtain the user with name: {}"
+				+ " and last name: {}", admin.getId(), userName, lastName);
+
 		List<UserTransferData> sendResult = new LinkedList<UserTransferData>();
 		
-		User admin = entityManager.find(User.class, adminId);
-		
-		if(admin == null || (userName.isEmpty() && lastName.isEmpty())) {
-			//log info or warning
-			System.out.println("Request rejected, user with id: " + adminId + " tried to query some users");
-			return sendResult;
-		}
 		
 		if(userName.isEmpty()) {
 			userName = "%";
@@ -343,18 +236,22 @@ public class AdminController {
 	 * 	"result":"OK" if everything went well or "Error" if don't 
 	 * }
 	 * */
-	@PostMapping(value = "/{adminId}/user-delete-{userId}",
+	@PostMapping(value = "/user-delete-{userId}",
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody JSONTransferMessage deleteSingleUser(@PathVariable Long adminId, @PathVariable Long userId) {
-		//log info
-		log.info("delete user: " + userId + " request made by admin: " + adminId);
+	public @ResponseBody JSONTransferMessage deleteSingleUser(@PathVariable Long userId) {
+		User admin = userFromSession();
 		
-		User admin = entityManager.find(User.class, adminId);
+		log.info("delete user: {} request made by admin: {}", userId, admin.getId());
+
 		User u = entityManager.find(User.class, userId);
 		
-		if(admin == null || u == null || u.getType() == UserType.ADMIN) {
-			//log info or warning
-			log.info("Request rejected, user with id: " + adminId + " tried to delete an user");
+		if(u == null) {
+			log.debug("Request rejected, admin with id: {} tried to delete user that does not exist", admin.getId());
+			return new JSONTransferMessage("Error");
+		}
+		
+		if(u.getType() == UserType.ADMIN) {
+			log.debug("Request rejected, admin with id: {} tried to delete another admin", admin.getId(), userId);
 			return new JSONTransferMessage("Error");
 		}
 			
@@ -399,32 +296,12 @@ public class AdminController {
 	 * }
 	 * </pre>
 	 * */
-	@PostMapping(value = "/{adminId}/register-user",
+	@PostMapping(value = "/register-user",
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code = HttpStatus.ACCEPTED)
-	public @ResponseBody JSONTransferMessage registerUser(@PathVariable Long adminId, @RequestBody String userInfo) {
-		//log info
-		log.info("Register user request made by admin: {}", adminId);
-		log.info("Trying to register {}", userInfo);
-		
-		User admin = entityManager.find(User.class, adminId);
-		
-		if(admin == null) {
-			//log info or warning
-			System.out.println("Request rejected, user with id: " + adminId + " tried to register a new user!");
-			return new JSONTransferMessage("Error");
-		}		
-		
-		/*
-		 * The userInfo String must be manually parse because an inconvenience in the native
-		 * parsing of Spring.
-		 * The problem is that the incoming's body message will be
-		 * parse and Hibernate will try to query that information and instantiate and object,
-		 * but for obvious reasons it will return an empty result.
-		 * 
-		 * I implemented a manual parsing using Jackson library
-		 * */
+	public @ResponseBody JSONTransferMessage registerUser(@RequestBody String userInfo) {
+		log.info("Register user request made by admin: {}, registering {}", userFromSession().getId(), userInfo);
 		
 		/*
 		 * ObjectMapper gives you support to transform from JSON to Objects and from Objects to
@@ -437,21 +314,21 @@ public class AdminController {
 			theNewUser = mapper.readValue(userInfo, User.class);
 		} catch (JsonProcessingException e) {
 			//log debug
-			System.out.println(System.lineSeparator() + "Some error ocurred while trying to parse JSON input!");
+			log.warn("Some error ocurred while trying to parse JSON input!");
 			e.printStackTrace();
 			return new JSONTransferMessage("Error");
 		}
 		
 		if(theNewUser == null) {
 			//log debug
-			System.out.println(System.lineSeparator() + "Possible error not detected before!");
+			log.warn("Possible error not detected before!");
 			return new JSONTransferMessage("Error");
 		}		
 		
-		System.out.println(System.lineSeparator() + theNewUser.toString());
-		boolean result = true;
+		log.debug("Debugging new created object: {}", theNewUser.toString());
+		boolean result = insertNewUser(theNewUser);
 		
-		System.out.println(result ? "Ok" : "Error");
+		log.debug(result ? "Ok" : "Error");
 		
 	/*
 	********************************UNDER TESTING************************************
@@ -477,4 +354,23 @@ public class AdminController {
 	*/
 		return new JSONTransferMessage(result ? "Ok" : "Error");
 	}
+	
+
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
+	
+	public static class DemoMessage {
+		public String msg;
+	}
+
+	@PostMapping("/msg/{id}")
+	@ResponseBody
+	public String sendMsg(@PathVariable long id, @RequestBody DemoMessage message) {
+
+		User u = entityManager.find(User.class, id);
+		messagingTemplate.convertAndSend("/user/"+u.getMail()+"/queue/updates", "{ \"text\": \"" + message.msg + "\"}");
+
+		return "ok";
+	}
+
 }
