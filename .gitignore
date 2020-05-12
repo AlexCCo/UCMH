@@ -2,3 +2,4 @@
 ucmh/.metadata/
 ucmh/target/
 **/hs_err*.log
+**/ucmh/bin/

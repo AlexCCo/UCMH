@@ -1,4 +1,4 @@
-package es.fdi.ucm.ucmh.controller.Auxiliary;
+package es.fdi.ucm.ucmh.controller.auxiliary;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

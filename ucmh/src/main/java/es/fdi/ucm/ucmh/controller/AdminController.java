@@ -36,8 +36,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import es.fdi.ucm.ucmh.controller.Auxiliary.PagePATCache;
-import es.fdi.ucm.ucmh.controller.Auxiliary.PagePSYCache;
+import es.fdi.ucm.ucmh.controller.auxiliary.PagePATCache;
+import es.fdi.ucm.ucmh.controller.auxiliary.PagePSYCache;
 import es.fdi.ucm.ucmh.model.Message;
 import es.fdi.ucm.ucmh.model.User;
 import es.fdi.ucm.ucmh.model.repositories.UserQueryStringNames;
