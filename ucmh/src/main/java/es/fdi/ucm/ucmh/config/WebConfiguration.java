@@ -1,4 +1,4 @@
-package es.fdi.ucm.ucmh.config.spring;
+package es.fdi.ucm.ucmh.config;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

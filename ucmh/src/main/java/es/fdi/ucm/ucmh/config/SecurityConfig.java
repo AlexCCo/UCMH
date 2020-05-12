@@ -1,4 +1,4 @@
-package es.fdi.ucm.ucmh.config.spring;
+package es.fdi.ucm.ucmh.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

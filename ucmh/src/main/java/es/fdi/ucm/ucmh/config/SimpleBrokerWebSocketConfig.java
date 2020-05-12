@@ -1,4 +1,4 @@
-package es.fdi.ucm.ucmh.config.spring;
+package es.fdi.ucm.ucmh.config;
 
 import java.security.Principal;
 import java.util.Map;

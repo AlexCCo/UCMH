@@ -7,7 +7,10 @@ import java.lang.Long;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,9 +36,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import es.fdi.ucm.ucmh.controller.Auxiliary.PageCache;
+import es.fdi.ucm.ucmh.controller.Auxiliary.PagePATCache;
+import es.fdi.ucm.ucmh.controller.Auxiliary.PagePSYCache;
+import es.fdi.ucm.ucmh.model.Message;
 import es.fdi.ucm.ucmh.model.User;
-import es.fdi.ucm.ucmh.model.repositories.UserRepository;
+import es.fdi.ucm.ucmh.model.repositories.UserQueryStringNames;
 import es.fdi.ucm.ucmh.transfer.JSONTransferMessage;
 import es.fdi.ucm.ucmh.transfer.UserTransferData;
 import es.fdi.ucm.ucmh.model.UserType;
@@ -49,16 +55,13 @@ public class AdminController {
 	 * This is the total number of users an admin can query at a time
 	 * */
 	private static final int SHOW_MAX_USERS = 10;
-	private static final String SESSION_ATTRIBUTE = "PageCache";
+	private static final String SESSION_ATTRIBUTE_PAT = "PageCachePAT";
+	private static final String SESSION_ATTRIBUTE_PSY = "PageCachePSY";
 			
 	@Autowired
 	private EntityManager entityManager;
-	
-	@Autowired
-	private UserRepository userRepository;
-	
+		
 	@Autowired // this makes httpSession always available in each method
-	//PROB-1:possible problem when two different ADMINs enter at the same time
 	private HttpSession session;
 
 	
@@ -70,20 +73,48 @@ public class AdminController {
 	private User refreshUser(User u) {
 		return entityManager.find(User.class, u.getId());
 	}
-	
-	private void storeInAdminSession(PageCache lastQuery) {
-		session.setAttribute(SESSION_ATTRIBUTE, lastQuery);
-	}
-	
-	private PageCache retrieveAdminPageCache() {
-		return (PageCache) session.getAttribute(SESSION_ATTRIBUTE);
-	}
-	
+		
 	
 	/**
+	 * This method will query a list of users that match the first name
+	 * @param userFirstName A String representing the user's first name
+	 * @param lastName A String representing the user's last name
+	 * @return A list of users
+	 * */
+	private List<User> getUserByName(String userName, String lastName) {
+		TypedQuery<User> query = entityManager.createNamedQuery(UserQueryStringNames.GET_USER_BY_NAME, User.class);
+		
+		query.setParameter("userFirstName", userName);
+		query.setParameter("userLastName", lastName);
+		
+		return query.getResultList();
+	}
+	
+
+	
+	private List<Message> getMessageList(long id) {
+		TypedQuery<Message> query = entityManager.createNamedQuery(UserQueryStringNames.GET_MESSAGES_LIST, Message.class);
+		
+		query.setParameter("senderId", id);
+		
+		return query.getResultList();
+	}
+	
+	/**
+	 * This query will retrieve a list of patients of the given psychologist
+	 * @param psychologistId The id of psychologist to obtain patients of
+	 * @return A list of patients
+	 * */
+	private List<User> findPatientsOf(long psychologistId) {
+		TypedQuery<User> query = entityManager.createNamedQuery(UserQueryStringNames.GET_PATIENTS_OF, User.class);
+		
+		query.setParameter("psychologistId", psychologistId);
+		
+		return query.getResultList();
+	}
+		
+	/**
 	 * It will insert a new user generating a new id for it into the database.<br>
-	 * This operation will be atomic because it may risk a race condition while
-	 * generating the new id.
 	 * 
 	 * @param theNewUser The user to insert. If it already has an id, that id will
 	 * be discarded.
@@ -92,10 +123,19 @@ public class AdminController {
 	 * <b>true</b> if the operation was successful.<br>
 	 * <b>false</b> otherwise
 	 * */
-	private synchronized boolean insertNewUser(User theNewUser) {
+	@Transactional
+	private boolean insertNewUser(User theNewUser) {
 		
-		
-		return false;
+		try {
+			String encodedPassword = String.format("{bcrypt}%s",encoder.encode(theNewUser.getPassword()));
+			theNewUser.setPassword(encodedPassword);
+			entityManager.persist(theNewUser);
+			entityManager.flush();
+			entityManager.clear();
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
 	}	
 	
 	
@@ -118,14 +158,16 @@ public class AdminController {
 		log.debug("Getting admin page");
 		
 		User admin = userFromSession();
-		PageCache userQueryList = new PageCache(SHOW_MAX_USERS);
-
-		model.addAttribute("patients_list", userQueryList.getListPATMore(entityManager));
-		model.addAttribute("psychologist_list", userQueryList.getListPSYMore(entityManager));
+		PagePSYCache psychologistQueryList = new PagePSYCache(SHOW_MAX_USERS);
+		PagePATCache patientQueryList = new PagePATCache(SHOW_MAX_USERS);
+		
+		model.addAttribute("patients_list", patientQueryList.getListMore(entityManager));
+		model.addAttribute("psychologist_list", psychologistQueryList.getListMore(entityManager));
 		model.addAttribute("admin", admin);
 		model.addAttribute("showNum", SHOW_MAX_USERS);
 		
-		storeInAdminSession(userQueryList);
+		session.setAttribute(SESSION_ATTRIBUTE_PAT, patientQueryList);
+		session.setAttribute(SESSION_ATTRIBUTE_PSY, psychologistQueryList);
 		
 		return "admin";
 	}
@@ -142,6 +184,7 @@ public class AdminController {
 	 * 
 	 * @see SHOW_MAX_USERS
 	 * */
+	@Secured(value = "ROLE_ADMIN")
 	@RequestMapping(value = "/users-list-{type}-{queryType}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
@@ -149,30 +192,32 @@ public class AdminController {
 												@PathVariable String queryType) {
 		
 		List<UserTransferData> sendData = new LinkedList<UserTransferData>();
-		LinkedList<User> queryRequest = new LinkedList<User>();
 		User admin = userFromSession(); 
-		PageCache userListCache = retrieveAdminPageCache();
-		
+
 		type = type.toUpperCase();		
 		
 		//it could be an info log too
 		log.info("AJAX request with user type: {}. Made by admin: {}", type, admin.getId());
 	
-		if(type.equals("PAT") && queryType.equals("more")) {
-			queryRequest = userListCache.getListPATMore(entityManager);
+		if(type.equals("PAT")) {
+			PagePATCache userListCache = (PagePATCache) session.getAttribute(SESSION_ATTRIBUTE_PAT);
+			
+			if(queryType.equals("more")) {
+				sendData = userListCache.getListMore(entityManager);
+			}
+			else if(queryType.equals("less")) {
+				sendData = userListCache.getListLess(entityManager);
+			}
 		}
-		else if (type.equals("PAT") && queryType.equals("less")) {
-			queryRequest = userListCache.getListPATLess(entityManager);
-		}
-		else if(type.equals("PSY") && queryType.equals("more")) {
-			queryRequest = userListCache.getListPSYMore(entityManager);
-		}
-		else if (type.equals("PSY") && queryType.equals("less")) {
-			queryRequest = userListCache.getListPSYLess(entityManager);
-		}	
-
-		for(User u : queryRequest) {
-			sendData.add(new UserTransferData(u)); 
+		else if(type.equals("PSY")) {
+			PagePSYCache userListCache = (PagePSYCache) session.getAttribute(SESSION_ATTRIBUTE_PSY);
+			
+			if(queryType.equals("more")) {
+				sendData = userListCache.getListMore(entityManager);
+			}
+			else if (type.equals("PSY") && queryType.equals("less")) {
+				sendData = userListCache.getListLess(entityManager);
+			}	
 		}
 		
 		return sendData;
@@ -194,6 +239,7 @@ public class AdminController {
 	 * 
 	 * @return It will return a list in JSON format of the results.
 	 * */
+	@Secured(value = "ROLE_ADMIN")
 	@RequestMapping(value = "/get-browser-result",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
@@ -211,12 +257,12 @@ public class AdminController {
 		if(userName.isEmpty()) {
 			userName = "%";
 		}
-		else if(lastName.isEmpty()){
+		
+		if(lastName.isEmpty()){
 			lastName = "%";
 		}
-		
-		//PROB-2: set parameters from named query
-		for(User u : userRepository.getUserByName(userName, lastName)) {
+		//PROB-2: Validate userName and lastName
+		for(User u : getUserByName("%" + userName + "%", "%" + lastName + "%")) {
 			sendResult.add(new UserTransferData(u));
 		}
 		
@@ -238,8 +284,10 @@ public class AdminController {
 	 * 	"result":"OK" if everything went well or "Error" if don't 
 	 * }
 	 * */
+	@Secured(value = "ROLE_ADMIN")
 	@PostMapping(value = "/user-delete-{userId}",
 			produces = MediaType.APPLICATION_JSON_VALUE)
+	@Transactional
 	public @ResponseBody JSONTransferMessage deleteSingleUser(@PathVariable Long userId) {
 		User admin = userFromSession();
 		
@@ -252,11 +300,14 @@ public class AdminController {
 			return new JSONTransferMessage("Error");
 		}
 		
-		if(u.getType() == UserType.ADMIN) {
+		TypedQuery<Long> totalAdmins = entityManager.createNamedQuery(UserQueryStringNames.GET_ADMIN_TOTAL_NUMBER, Long.class);
+		
+		
+		if(u.getType() == UserType.ADMIN && totalAdmins.getSingleResult() <= 1) {
 			log.debug("Request rejected, admin with id: {} tried to delete another admin", admin.getId(), userId);
 			return new JSONTransferMessage("Error");
 		}
-			
+					
 		/*
 		 * JPA doesn't have any support to create, via annotations, something like this
 		 * CREATE TABLE USER {
@@ -269,21 +320,50 @@ public class AdminController {
 		 * "psychologistId" to null when the row it is referenced is deleted
 		 * */
 		if(u.getType() == UserType.PSY) {
-			//log debug
 			log.debug("Obtaining all patients of user: " + u.getId());
-			//PROB-3: same as PROB-2
-			LinkedList<User> patientsOf = userRepository.findPatientsOf(u);
+			List<User> patientsOf = findPatientsOf(u.getId());
 			
 			for(User patient : patientsOf) {
 				patient.setPsychologist(null);
+				entityManager.persist(patient);
 			}
 		}
 		
-		userRepository.deleteById(userId);
+		
+		//we will delete all messages sent and received by User u because if we don't
+		//it will leave an inconsistent DataBase
+		List<Message> userMessages = getMessageList(u.getId());
+
+		User userMsg;
+		for(Message msg : userMessages) {
+			if(msg.getTo().getId() == u.getId()) {
+				userMsg = entityManager.find(User.class, msg.getFrom().getId());
+				userMsg.deleteMessageSent(msg);
+			}
+			else {
+				userMsg = entityManager.find(User.class, msg.getTo().getId());
+				userMsg.deleteMessageReceived(msg);
+			}
+
+			msg.setFrom(null);
+			msg.setTo(null);
+			msg.setEstadoAnimo(null);
+			
+			entityManager.persist(msg);
+			entityManager.persist(userMsg);
+		}
+				
+		
+		for(Message msg : userMessages) {
+			entityManager.remove(msg);
+		}
+		
+		entityManager.remove(u);
+		entityManager.clear();
 		return new JSONTransferMessage("OK");
 	}
 	
-	
+
 	/**
 	 * It will try to register a new user into the DB. The new user info must be given in JSON format,<br>
 	 * example of the JSON format:<br>
@@ -298,62 +378,19 @@ public class AdminController {
 	 * }
 	 * </pre>
 	 * */
+	@Secured(value = "ROLE_ADMIN")
 	@PostMapping(value = "/register-user",
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code = HttpStatus.ACCEPTED)
-	public @ResponseBody JSONTransferMessage registerUser(@RequestBody String userInfo) {
+	@Transactional
+	public @ResponseBody JSONTransferMessage registerUser(@Valid @RequestBody User userInfo) {
 		log.info("Register user request made by admin: {}, registering {}", userFromSession().getId(), userInfo);
-		
-		/*
-		 * ObjectMapper gives you support to transform from JSON to Objects and from Objects to
-		 * JSON. It can be created with the help of a factory object too.
-		 * */
-		ObjectMapper mapper = new ObjectMapper();
-		User theNewUser = null;
-		
-		try {
-			theNewUser = mapper.readValue(userInfo, User.class);
-		} catch (JsonProcessingException e) {
-			//log debug
-			log.warn("Some error ocurred while trying to parse JSON input!");
-			e.printStackTrace();
-			return new JSONTransferMessage("Error");
-		}
-		
-		if(theNewUser == null) {
-			//log debug
-			log.warn("Possible error not detected before!");
-			return new JSONTransferMessage("Error");
-		}		
-		
-		log.debug("Debugging new created object: {}", theNewUser.toString());
-		boolean result = insertNewUser(theNewUser);
+		log.debug("Debugging obtained object: {}", userInfo.toString());
+		boolean result = insertNewUser(userInfo);
 		
 		log.debug(result ? "Ok" : "Error");
 		
-	/*
-	********************************UNDER TESTING************************************
-
-	@Transactional
-	public @ResponseBody JSONTransferMessage registerUser(@RequestBody UserTransferData userInfo) {
-		//log info
-		log.info("Trying to register {}", userInfo);
-		User u = new User();
-		u.setFirstName(userInfo.firstName);
-		u.setLastName(userInfo.lastName);
-		u.setMail(userInfo.mail);
-		u.setPhoneNumber(userInfo.phoneNumber);
-		u.setType(userInfo.type);
-		u.setPsychologist(null);
-		u.setType(UserType.valueOf(userInfo.type));
-		u.setPassword(encoder.encode(userInfo.password));
-
-		// validate fields here!
-		boolean result = true;
-
-	}
-	*/
 		return new JSONTransferMessage(result ? "Ok" : "Error");
 	}
 	

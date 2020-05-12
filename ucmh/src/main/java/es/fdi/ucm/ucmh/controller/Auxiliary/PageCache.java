@@ -3,6 +3,7 @@ package es.fdi.ucm.ucmh.controller.Auxiliary;
 import java.util.LinkedList;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.logging.log4j.LogManager;
@@ -10,18 +11,15 @@ import org.apache.logging.log4j.Logger;
 
 import es.fdi.ucm.ucmh.model.User;
 import es.fdi.ucm.ucmh.model.UserType;
-import es.fdi.ucm.ucmh.model.repositories.UserQueryStringNames;
+import es.fdi.ucm.ucmh.transfer.UserTransferData;
 
 /**
  * Auxiliary class to help implement admin logic
  * */
-public class PageCache {
-	private static Logger log = LogManager.getLogger(PageCache.class);
-	private final int SHOW_MAX_USERS;
-	private long lastPatId;
-	private long lastPsyId;
-	private LinkedList<User> lastListPat;
-	private LinkedList<User> lastListPsy;
+public abstract class PageCache {
+	protected final int SHOW_MAX_USERS;
+	protected long lastUserId;
+	protected LinkedList<UserTransferData> lastListUser;
 	
 	/**
 	 * It will create a new PageCache object needed by AdminController
@@ -31,10 +29,8 @@ public class PageCache {
 	 * */
 	public PageCache(int userShowConstant) {
 		SHOW_MAX_USERS = userShowConstant;
-		lastListPat = new LinkedList<User>();
-		lastListPsy = new LinkedList<User>();
-		lastPatId = 0;
-		lastPsyId = 0;
+		lastListUser = new LinkedList<UserTransferData>();
+		lastUserId = 0;
 	}
 	
 	/**
@@ -45,43 +41,7 @@ public class PageCache {
 	 * @param entityManager The jpa EntityManager responsible of the corresponding database 
 	 * @return A list of users
 	 * */
-	public LinkedList<User> getListPATMore(EntityManager entityManager){
-		LinkedList<User> queryRequest = queryList(UserType.PAT, entityManager, lastPatId, UserQueryStringNames.GET_LIST_MORE);
-		
-		if(!queryRequest.isEmpty()) {
-			lastPatId =  queryRequest.size() < SHOW_MAX_USERS ? lastPatId : queryRequest.getLast().getId() + 1;
-			lastListPat = queryRequest;
-			
-			log.debug("Values of lastPatUser and lastPsyUser: ({}, {})", lastPatId, lastPsyId);
-			return queryRequest;
-		}
-		
-		log.debug("Values of lastPatUser and lastPsyUser: ({}, {})", lastPatId, lastPsyId);
-		return lastListPat;
-	}
-	
-	/**
-	 * This method will query a list of psychologist to the embedded DB in a range of: <br>
-	 * <pre>
-	 *      lastUser <= x < lastUser+showUsers
-	 * </pre>
-	 * @param entityManager
-	 * @return A list of users
-	 * */
-	public LinkedList<User> getListPSYMore(EntityManager entityManager){
-		LinkedList<User> queryRequest = queryList(UserType.PSY, entityManager, lastPsyId, UserQueryStringNames.GET_LIST_MORE);
-		
-		if(!queryRequest.isEmpty()) {
-			lastPsyId =  queryRequest.size() < SHOW_MAX_USERS ? lastPsyId : queryRequest.getLast().getId() + 1;
-			lastListPsy = queryRequest;
-			
-			log.debug("Values of lastPatUser and lastPsyUser: ({}, {})", lastPatId, lastPsyId);
-			return queryRequest;
-		}
-		
-		log.debug("Values of lastPatUser and lastPsyUser: ({}, {})", lastPatId, lastPsyId);
-		return lastListPsy;
-	}
+	public abstract LinkedList<UserTransferData> getListMore(EntityManager entityManager);
 	
 	/**
 	 * This method will query a list of patients to the embedded DB in a range of: <br>
@@ -91,46 +51,7 @@ public class PageCache {
 	 * @param entityManager
 	 * @return A list of users
 	 * */
-	public LinkedList<User> getListPATLess(EntityManager entityManager){
-		lastPatId = lastListPat.getFirst().getId();
-		LinkedList<User> queryRequest = queryList(UserType.PAT, entityManager, lastPatId, UserQueryStringNames.GET_LIST_LESS);
-		
-		if(queryRequest.isEmpty()) {
-			lastPatId = lastListPat.getLast().getId() + 1;
-			log.debug("Values of lastPatUser and lastPsyUser: ({}, {})", lastPatId, lastPsyId);
-			return lastListPat;
-		}
-		
-		lastListPat = queryRequest;
-		
-		log.debug("Values of lastPatUser and lastPsyUser: ({}, {})", lastPatId, lastPsyId);
-		return queryRequest;
-	}
-	
-	
-	/**
-	 * This method will query a list of patients to the embedded DB in a range of: <br>
-	 * <pre>
-	 * 			lastUser-showUsers <= x < lastUser
-	 * </pre>
-	 * @param entityManager
-	 * @return A list of users
-	 * */
-	public LinkedList<User> getListPSYLess(EntityManager entityManager){
-		lastPsyId = lastListPsy.getFirst().getId();
-		LinkedList<User> queryRequest = queryList(UserType.PSY, entityManager, lastPsyId, UserQueryStringNames.GET_LIST_LESS);
-		
-		if(queryRequest.isEmpty()) {
-			lastPsyId = lastListPsy.getLast().getId() + 1;
-			log.debug("Values of lastPatUser and lastPsyUser: ({}, {})", lastPatId, lastPsyId);
-			return lastListPsy;
-		}
-		
-		lastListPsy = queryRequest;
-		
-		log.debug("Values of lastPatUser and lastPsyUser: ({}, {})", lastPatId, lastPsyId);
-		return queryRequest;
-	}
+	public abstract LinkedList<UserTransferData> getListLess(EntityManager entityManager);
 	
 	
 	/**
@@ -147,7 +68,7 @@ public class PageCache {
 	 * @see es.fdi.ucm.ucmh.model.repositories.UserQueryStringNames
 	 * @see es.fdi.ucm.ucmh.model.User
 	 * */
-	private LinkedList<User> queryList(UserType userType, EntityManager entityManager, long lastUserId, String queryStringName){
+	protected LinkedList<User> queryList(UserType userType, EntityManager entityManager, long lastUserId, String queryStringName){
 		TypedQuery<User> query = entityManager.createNamedQuery(queryStringName, User.class);
 		
 		query.setParameter("showUsers", SHOW_MAX_USERS);
@@ -163,4 +84,63 @@ public class PageCache {
 		return result;
 	}
 	
+	/**
+	 * It will query the database our list of users.<br>
+	 * 
+	 * @param userType Type of user to be queried
+	 * @param entityManager The corresponding Entity Manage of the database
+	 * @param lastUserId Id of the user from which we will obtain the next or previous users
+	 * @param queryStringName This <b>MUST</b> be a query SQL string
+	 * 
+	 * <b>NOTE:</b> To understand queryStringName parameter look <i>See also</i> section.
+	 * 
+	 * @see es.fdi.ucm.ucmh.model.repositories.UserQueryStringNames
+	 * @see es.fdi.ucm.ucmh.model.User
+	 * */
+	protected LinkedList<User> queryNativeList(UserType userType, EntityManager entityManager, long lastUserId, String queryStringName){
+		Query nativeQuery = entityManager.createNativeQuery(queryStringName, User.class);
+		
+		nativeQuery.setParameter("showUsers", SHOW_MAX_USERS);
+		nativeQuery.setParameter("userType", userType.name());
+		nativeQuery.setParameter("lastUser", lastUserId);
+		
+		LinkedList<User> result = new LinkedList<User>();
+		
+		for(Object u: nativeQuery.getResultList()) {
+			result.add((User)u);
+		}
+		
+		return result;
+	}
+	
+	protected LinkedList<UserTransferData> processQueryMore(LinkedList<User> queryRequest){
+		if(queryRequest.isEmpty()) {
+			return lastListUser;
+		}
+		lastUserId =  queryRequest.size() < SHOW_MAX_USERS ? lastUserId : queryRequest.getLast().getId() + 1;
+
+		return updateAndcomputeTransferList(queryRequest);
+	}
+	
+	protected LinkedList<UserTransferData> processQueryLess(LinkedList<User> queryRequest){
+
+		if(queryRequest.isEmpty()) {
+			lastUserId = lastListUser.getLast().getId() + 1;
+			return lastListUser;
+		}
+		
+		return updateAndcomputeTransferList(queryRequest);
+	}
+	
+	
+	private LinkedList<UserTransferData> updateAndcomputeTransferList(LinkedList<User> queryRequest){
+		LinkedList<UserTransferData> result = new LinkedList<UserTransferData>();
+		
+		for(User u : queryRequest) {
+			result.add(new UserTransferData(u));
+		}
+		lastListUser = result;
+		
+		return result;
+	}
 }

@@ -18,7 +18,13 @@ public class UserQueryStringNames {
 	 * 
 	 * <b>NOTE:</b> showUser is a constant needed by the query
 	 * */
-	public static final String GET_LIST_LESS = "Uset.getUserListLessThan";
+	public static final String GET_LIST_LESS = "SELECT * "
+											 + "FROM (SELECT * " 
+									         + "FROM User " 
+									         + "WHERE id < :lastUser AND type = :userType " 
+									         + "ORDER BY id DESC) " 
+									         + "WHERE ROWNUM <= :showUsers "
+									         + "ORDER BY id ASC";
 	/**
 	 * String representing a <b>named</b> query to obtain a list of users
 	 * who are patients of a given psychologist.
@@ -31,4 +37,11 @@ public class UserQueryStringNames {
 	 * <b>NOTE:</b> Mails can be treated as a user name
 	 * */
 	public static final String GET_USER_BY_MAIL = "User.byMail";
+	
+	public static final String GET_USER_BY_NAME = "User.getUserByName";
+	
+	public static final String GET_MESSAGES_LIST = "User.getAllMessagesOf";
+	
+	public static final String GET_ADMIN_TOTAL_NUMBER = "User.getAdminsTotalNumber";
+
 }

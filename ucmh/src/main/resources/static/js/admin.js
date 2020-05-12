@@ -9,12 +9,11 @@ const user_methods = {
 };
 
 const error_map_msg = {
-		"id": "Debe ser un numero",
-		"name": "El campo acepta solo letras",
-		"surname": "El campo acepta solo letras",
+		"firstName": "El campo acepta solo letras",
+		"lastName": "El campo acepta solo letras",
 		"mail": "Introduce un email valido, ejemplo: algunmail@gmail.com",
-		"phone": "Tiene que tener nueve numeros",
-		"pass": "Minimo 8 numeros y letras"
+		"phoneNumber": "Tiene que tener nueve numeros",
+		"password": "Minimo 8 numeros y letras"
 };
 
 
@@ -42,6 +41,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	let accept_register_btn = document.getElementsByClassName("accept-user");
 	
 	let reject_user_btn = document.getElementsByClassName("reject-user");
+	
+	let register_psy_to_pat = document.getElementsByClassName("register-psy-to-pat");
+	
+	for(const btn of register_psy_to_pat){
+		btn.addEventListener("click", (e) => {
+			register_to_patient();
+		});
+	}
 	
 	for(const rjt_btn of reject_user_btn){
 		rjt_btn.addEventListener("click", (e) => {
@@ -125,6 +132,14 @@ function get_users(userType, userMethod){
 
 		if(userType === user_types.PATIENT){
 			let buttons = html_collection.getElementsByClassName("delete-pat");
+			let register_buttons = html_collection.getElementsByClassName("register-psy-to-pat");
+			
+
+			for(let btn of register_buttons){
+				btn.addEventListener("click", (e) => {
+					register_to_patient();
+				})
+			}
 			
 			for(let btn of buttons){
 				btn.addEventListener("click", (e) => {
@@ -206,7 +221,9 @@ function renderHTMLUsers(json_object, userType){
 		
 		button_string = "<div class=\"user-delete\">";
 		button_string +="<button class=\"delete-pat waves-effect waves-red-darken-4 red lighten-1 btn-flat\">";
-		button_string +="delete</button></div></li>";
+		button_string +="delete</button>";
+		button_string += "<button class=\"register-psy-to-pat waves-effect waves-blue-darken-4 blue lighten-2 btn-flat\">";
+		button_string +="register psychologist</button></div></li>";
 	}
 	else if(userType === user_types.PSYCHOLOGIST){
 		create_list += "<p>Id: <span class=\"user-id\">" + json_object.id + "</span></p>";
@@ -240,9 +257,7 @@ function delete_btn_handler(userType, btn_listened){
 	 * may lead to security risks in our web application
 	 * */
 	requestData.open('POST', uri);
-	/* UNDER TEST
 	requestData.setRequestHeader("X-CSRF-TOKEN", config.csrf.value);
-	*/
 	
 	//tell what to do once the data is loaded
 	requestData.onload = function() {
@@ -281,16 +296,23 @@ function get_users_by_name(){
 		
 		let buttons_pat = browser_collection.getElementsByClassName("delete-pat");
 		let buttons_psy = browser_collection.getElementsByClassName("delete-psy");
+		let buttons_pat_register_psy = browser_collection.getElementsByClassName("register-psy-to-pat");
+		
+		for(let btn of buttons_pat_register_psy){
+			btn.addEventListener("click", (e) => {
+				register_to_patient();
+			})
+		}
 		
 		for(let btn of buttons_pat){
 			btn.addEventListener("click", (e) => {
-				delete_btn_handler(user_types.PATIENT, btn)
+				delete_btn_handler(user_types.PATIENT, btn);
 			})
 		}
 		
 		for(let btn of buttons_psy){
 			btn.addEventListener("click", (e) => {
-				delete_btn_handler(user_types.PSYCHOLOGIST, btn)
+				delete_btn_handler(user_types.PSYCHOLOGIST, btn);
 			})
 		}
 	}
@@ -357,9 +379,8 @@ function accept_handler(btn_id){
 		requestData.onload = function() {
 			console.log("message was sent");
 		};
-		/* UNDER TEST
+		
 		requestData.setRequestHeader("X-CSRF-TOKEN", config.csrf.value);
-		*/
 		requestData.setRequestHeader("Content-Type", "application/json");
 		//send the request
 		requestData.send(msg);
@@ -377,7 +398,7 @@ function accept_handler(btn_id){
  * @param clear_input A boolean telling to clear the input text or not 
  * */
 function clean_error_msg(userType, clear_input){
-	let input_elements = ["name",  "surname", "mail", "phone", "pass"];
+	let input_elements = ["firstName",  "lastName", "mail", "phoneNumber", "password"];
 	
 	for(const elem of input_elements){
 		let error = document.getElementById(`error-${elem}-${userType}`);
@@ -389,5 +410,8 @@ function clean_error_msg(userType, clear_input){
 	}
 }
 
+function register_to_patient(){
+	console.log("add psychologist to patient");
+}
 
 

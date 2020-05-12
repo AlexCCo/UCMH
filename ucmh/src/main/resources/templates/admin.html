@@ -111,6 +111,9 @@
 										<button class="delete-pat waves-effect waves-red-darken-4 red lighten-1 btn-flat">
 											delete
 										</button>
+										<button class="register-psy-to-pat waves-effect waves-blue-darken-4 blue lighten-2 btn-flat">
+											register psychologist
+										</button>
 									</div>
 				        </li>
 								
@@ -158,27 +161,27 @@
 				<h4>Registrar psicologo</h4>
 		  <p>Introduce los datos del psicologo:</p>
 
-		  <p class="error-msg-psy" id="error-name-psy"></p>
+		  <p class="error-msg-psy" id="error-firstName-psy"></p>
       	<label for="name-input">Nombre:</label>
-		  <input name="name-input" type="text" id="firstName-input-psy" pattern="([a-z]+)">
+		  <input name="name-input" type="text" id="firstName-input-psy" pattern="[a-zA-Z ]+">
 
-		  <p class="error-msg-psy" id="error-surname-psy"></p>
+		  <p class="error-msg-psy" id="error-lastName-psy"></p>
       	<label for="last-name-input">Apellido:</label>
-		  <input name="last-name-input" type="text" id="lastName-input-psy" pattern="([a-z]+)">
+		  <input name="last-name-input" type="text" id="lastName-input-psy" pattern="[a-zA-Z ]+">
 
 		  <p class="error-msg-psy" id="error-mail-psy"></p>
       	<label for="mail-input">e-mail:</label>
 		  <input name="mail-input" type="email" id="mail-input-psy">
 
-		  <p class="error-msg-psy" id="error-phone-psy"></p>
+		  <p class="error-msg-psy" id="error-phoneNumber-psy"></p>
       	<label for="phone-input">Tlf:</label>
-		  <input name="phone-input" type="tel" id="phoneNumber-input-psy" pattern="([0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9])">
+		  <input name="phone-input" type="tel" id="phoneNumber-input-psy" pattern="[0-9]{9}">
 
-		  <p class="error-msg-psy" id="error-pass-psy"></p>
+		  <p class="error-msg-psy" id="error-password-psy"></p>
       	<label for="pass-input">password:</label>
-      	<input name="pass-input" type="text" pattern="([a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]([a-zA-Z0-9]*))" id="password-input-psy">
+      	<input name="pass-input" type="text" pattern="[a-zA-Z0-9]{8}[a-zA-Z0-9]*" id="password-input-psy">
 			
-				<input name="type-input" type="text" value="psy" class="type-input-psy" id="type-input-psy">
+				<input name="type-input" type="text" value="PSY" class="type-input-psy" id="type-input-psy">
 			</div>
 			<div class="modal-footer">
 				<p class="result-register">Result text</p>
@@ -192,27 +195,27 @@
 				<h4>Registrar paciente</h4>
       	<p>Introduce los datos del paciente:</p>
       	
-      	<p class="error-msg-pat" id="error-name-pat"></p>
+      	<p class="error-msg-pat" id="error-firstName-pat"></p>
       	<label for="name-input">Nombre:</label>
-      	<input name="name-input" type="text" id="firstName-input-pat" pattern="([a-z]+)">
+      	<input name="name-input" type="text" id="firstName-input-pat" pattern="[a-zA-Z ]+">
       	
-      	<p class="error-msg-pat" id="error-surname-pat"></p>
+      	<p class="error-msg-pat" id="error-lastName-pat"></p>
       	<label for="last-name-input">Apellido:</label>
-      	<input name="last-name-input" type="text" id="lastName-input-pat">
+      	<input name="last-name-input" type="text" id="lastName-input-pat" pattern="[a-zA-Z ]+">
       	
       	<p class="error-msg-pat" id="error-mail-pat"></p>
       	<label for="mail-input">e-mail:</label>
       	<input name="mail-input" type="email" id="mail-input-pat">
       	
-      	<p class="error-msg-pat" id="error-phone-pat"></p>
+      	<p class="error-msg-pat" id="error-phoneNumber-pat"></p>
       	<label for="phone-input">Tlf:</label>
-      	<input name="phone-input" type="tel" pattern="[0-9]{9}" id="phoneNumber-input-pat">
+      	<input name="phone-input" type="tel" pattern="([0-9]){9}" id="phoneNumber-input-pat">
       	
-      	<p class="error-msg-pat" id="error-pass-pat"></p>
+      	<p class="error-msg-pat" id="error-password-pat"></p>
       	<label for="pass-input">password:</label>
-      	<input name="pass-input" type="text" pattern="[a-zA-Z0-9]{5}[a-zA-Z0-9]*)" id="password-input-pat">
+      	<input name="pass-input" type="text" pattern="[a-zA-Z0-9]{8}[a-zA-Z0-9]*" id="password-input-pat">
       	
-      	<input name="type-input" type="text" value="user" class="type-input-pat" id="type-input-pat">
+      	<input name="type-input" type="text" value="PAT" class="type-input-pat" id="type-input-pat">
 			</div>
 			<div class="modal-footer">
 				<p class="result-register">Result text</p>

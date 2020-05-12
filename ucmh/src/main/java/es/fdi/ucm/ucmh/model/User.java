@@ -1,11 +1,7 @@
 package es.fdi.ucm.ucmh.model;
 
 import java.util.Collection;
-
-import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.EntityResult;
-import javax.persistence.FieldResult;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -14,14 +10,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedNativeQueries;
-import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.SqlResultSetMapping;
-
-import es.fdi.ucm.ucmh.config.jpa.UserTypeConverter;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Entity
 @NamedQueries({
@@ -39,35 +35,41 @@ import es.fdi.ucm.ucmh.config.jpa.UserTypeConverter;
 						+ "FROM User u "
 						+ "WHERE u.firstName LIKE :userFirstName AND u.lastName LIKE :userLastName AND u.type != 'ADMIN'"),
 	@NamedQuery(name="User.byMail",
-				query="SELECT u FROM User u "
+				query="SELECT u "
+						+ "FROM User u "
 						+ "WHERE u.mail = :mail"),
+	@NamedQuery(name="User.getAllMessagesOf",
+				query="SELECT m "
+						+ "FROM Message m "
+						+ "WHERE m.from.id = :senderId OR m.to.id = :senderId"),
+	@NamedQuery(name="User.getAdminsTotalNumber",
+				query="SELECT COUNT(*) "
+						+ "FROM User u "
+						+ "WHERE u.type = 'ADMIN'")
 })
 
-@NamedNativeQueries({
-	@NamedNativeQuery( name = "User.getUserListLessThan", 
-					   query = "SELECT * "
-				    		+ "FROM (SELECT * " 
-				    		         + "FROM User " 
-				    		         + "WHERE id < :lastUser AND type = :userType " 
-				    		         + "ORDER BY id DESC) " 
-				    		+ "WHERE ROWNUM <= :showUsers "
-				    		+ "ORDER BY id ASC", 
-				       resultClass = User.class)
-})
 public class User {
 	//------------Atributos---------------------
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-
+	
+	@NotNull
+	@NotEmpty
+	@Size(min = 0, max = 128)
 	private String firstName;
+	@NotNull
+	@NotEmpty
+	@Size(min = 0, max = 128)
 	private String lastName;
+	@Email
 	private String mail;
+	@Size(min = 0, max = 128)
 	private String password;
+	@Pattern(regexp = "[0-9]+")
 	private String phoneNumber;
 
 	@Enumerated(EnumType.STRING)
-	@Convert(converter = UserTypeConverter.class)
 	private UserType type;
 
 	//user
@@ -230,6 +232,12 @@ public class User {
 	public void setDisorder(String disorder) {
 		this.disorder = disorder;
 	}
-
 	
+	public void deleteMessageReceived(Message m) {
+		receivedMessage.remove(m);
+	}
+
+	public void deleteMessageSent(Message msg) {
+		messageSent.remove(msg);
+	}
 }
