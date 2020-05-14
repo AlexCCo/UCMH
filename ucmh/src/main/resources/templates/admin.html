@@ -1,19 +1,13 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<title>Admin</title>
 
-		<!--	UNDER TEST -->
 		<th:block th:replace="fragments/head :: header"></th:block>
-		<!-- -->
+		
 		<link rel="stylesheet" href="/css/admin.css">
-		<link rel="stylesheet" href="/css/main.css">
-		<link rel="stylesheet" href="/css/normalize.css">
-		<link rel="stylesheet" href="/css/materialize.css">
-		<link rel="stylesheet" href="/css/my-theme.css">
 		
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Muli|Oswald&display=swap" rel="stylesheet">
@@ -22,26 +16,16 @@
 
 	</head>
 	<body>
-		<nav id="menu">
-			<div class="nav-wrapper">
-				<a href="#" id="logo" class="brand-logo">UCMH</a>
-				<a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-				<ul id="nav-mobile" class="right hide-on-med-and-down">
-					<li><a href="#psy-modal" class="waves-effect waves-light btn modal-trigger">Registrar psicologo</a></li>
-					<li><a href="#pat-modal" class="waves-effect waves-light btn modal-trigger">Registrar paciente</a></li>
-					<li><a href="#pat-modal" th:href="@{/admin/{id}/messages(id = ${admin.id})}" class="waves-effect waves-light btn modal-trigger">Mensajes recibidos</a></li>
-					<li><a href="#modal" class="waves-effect waves-light btn modal-trigger">Cerrar sesión</a></li>
-				</ul>
-			</div>
-		</nav>
-
+		<th:block th:replace="fragments/nav :: nav"></th:block>
+		
 		<!-- Menú desplegable mobile-->
 
 		<ul class="sidenav" id="mobile-demo">
 			<li><a>Cerrar sesión</a></li>
 		</ul>
 
-		<h4 class="center-align">Panel de administración de <span th:text="${session.u.firstName+' '+session.u.lastName}"></span></h4>
+		<h4 class="center-align">Panel de administración de <span th:text="${session.u.firstName+' '+session.u.lastName}"></span>
+		<span id="msg-alert">Tienes un nuevo mensaje! </span></h4>
 
 		<div class="row">
 			<div class="col s6">
@@ -228,31 +212,9 @@
 			<input id="msg" name="msg">
 			<button id="sendmsg" type="submit">Enviar</button>
 		</form>
-		
-<script>
-		document.addEventListener("DOMContentLoaded", () => {
-			let b = document.getElementById("sendmsg");
-			b.onclick = (e) => {
-				e.preventDefault();
-				console.log(b, b.parentNode)
-				go(b.parentNode.action, 'POST', {msg: 
-						document.getElementById("msg").value})
-					.then(d => console.log("happy", d))
-					.catch(e => console.log("sad", e))
-			}
-		});
-</script>		
 
-		<script src="/js/vendor/modernizr-3.8.0.min.js"></script>
-	  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-	  <script>window.jQuery || document.write('<script src="/js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
-	  <script src="/js/plugins.js"></script>
-	  <script src="/js/vendor/materialize.min.js"></script>
 	  <script src="/js/admin.js"></script>
-		<!-- UNDER TEST
 		<th:block th:replace="fragments/footer :: jslibs"></th:block>
-		<script src="/js/admin.js"></script>
-		-->
 
 		<script>
 		$(document).ready(function(){

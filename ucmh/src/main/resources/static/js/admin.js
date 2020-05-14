@@ -1,3 +1,6 @@
+/**
+ * Code made by Alejandro Cancelo Correia as well as admin.html and admin.css
+ * */
 const user_types = {
 	PSYCHOLOGIST: "PSY",
 	PATIENT: "PAT"
@@ -20,12 +23,44 @@ const error_map_msg = {
 const requestPrefix = config.rootUrl + "admin/";
 
 var requestData = new XMLHttpRequest();
-var patien_collection = document.getElementById("patient-collection");
-var psychologist_collection = document.getElementById("psychologist-collection");
-var browser_collection = document.getElementById("browser-collection");
+var patien_collection;
+var psychologist_collection;
+var browser_collection;
+var new_incoming_messages;
+
 
 document.addEventListener("DOMContentLoaded", (event) => {
 	console.log("Dom loaded!");
+	
+	patien_collection = document.getElementById("patient-collection");
+	psychologist_collection = document.getElementById("psychologist-collection");
+	browser_collection = document.getElementById("browser-collection");
+	new_incoming_messages = document.getElementById("msg-alert");
+	
+	console.log(ws);
+	ws.receive = function (text) {
+		console.log("received message")
+		
+		if(new_incoming_messages.getAttribute("data-new-messages") == null){
+			new_incoming_messages.setAttribute("data-new-messages", "");
+			
+			new_incoming_messages.style.visibility = "visible";
+		}
+	};
+	
+	let send_button = document.getElementById("sendmsg");
+	
+	send_button.addEventListener("click", (e) => {
+		let now = new Date();
+		e.preventDefault();
+		console.log(send_button, send_button.parentNode)
+		go(send_button.parentNode.action, 'POST', 
+				{msg: document.getElementById("msg").value,
+				 time: `${now.getUTCFullYear()}-${now.getUTCMonth()+1}-${now.getUTCDate()}-${now.getUTCHours()}-${now.getUTCMinutes()}-${now.getUTCSeconds()}`
+		   })
+			.then(d => console.log("happy", d))
+			.catch(e => console.log("sad", e))
+	});
 	
 	//all of these are buttons
 	let less_patiens = document.getElementById("less-patiens");

@@ -43,5 +43,7 @@ public class UserQueryStringNames {
 	public static final String GET_MESSAGES_LIST = "User.getAllMessagesOf";
 	
 	public static final String GET_ADMIN_TOTAL_NUMBER = "User.getAdminsTotalNumber";
+	
+	public static final String GET_MY_MESSAGES = "User.getMyMessagesList";
 
 }

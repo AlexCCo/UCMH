@@ -3412,3 +3412,23 @@ INSERT INTO message (id, sent_date, estado_animo, text, from_id, to_id, seen)
 VALUES (1655, TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), null, 'The quick brown fox jumps over the lazy dog', 113, 107, false);
 INSERT INTO message (id, sent_date, estado_animo, text, from_id, to_id, seen)
 VALUES (1656, TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), null, 'The quick brown fox jumps over the lazy dog', 113, 101, false);
+INSERT INTO message (id, sent_date, estado_animo, text, from_id, to_id, seen)
+VALUES (1657, TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), null, 'The quick brown fox jumps over the lazy dog', 113, 1, false);
+INSERT INTO message (id, sent_date, estado_animo, text, from_id, to_id, seen)
+VALUES (1658, TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), null, 'The quick brown fox jumps over the lazy dog', 113, 1, false);
+INSERT INTO message (id, sent_date, estado_animo, text, from_id, to_id, seen)
+VALUES (1659, TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), null, 'The quick brown fox jumps over the lazy dog', 113, 1, false);
+INSERT INTO message (id, sent_date, estado_animo, text, from_id, to_id, seen)
+VALUES (1660, TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), null, 'The quick brown fox jumps over the lazy dog', 113, 1, false);
+INSERT INTO message (id, sent_date, estado_animo, text, from_id, to_id, seen)
+VALUES (1661, TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), null, 'The quick brown fox jumps over the lazy dog', 33, 1, false);
+INSERT INTO message (id, sent_date, estado_animo, text, from_id, to_id, seen)
+VALUES (1662, TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), null, 'The quick brown fox jumps over the lazy dog', 33, 1, false);
+INSERT INTO message (id, sent_date, estado_animo, text, from_id, to_id, seen)
+VALUES (1663, TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), null, 'The quick brown fox jumps over the lazy dog', 40, 1, false);
+INSERT INTO message (id, sent_date, estado_animo, text, from_id, to_id, seen)
+VALUES (1664, TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), null, 'The quick brown fox jumps over the lazy dog', 12, 1, false);
+INSERT INTO message (id, sent_date, estado_animo, text, from_id, to_id, seen)
+VALUES (1665, TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), null, 'The quick brown fox jumps over the lazy dog', 12, 1, false);
+INSERT INTO message (id, sent_date, estado_animo, text, from_id, to_id, seen)
+VALUES (1666, TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), null, 'The quick brown fox jumps over the lazy dog', 16, 1, false);

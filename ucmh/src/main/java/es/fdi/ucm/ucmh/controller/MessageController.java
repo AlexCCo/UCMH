@@ -1,3 +1,6 @@
+/**
+ * Code mae entirely by Alejandro Cancelo Correia
+ * */
 package es.fdi.ucm.ucmh.controller;
 
 import java.util.Comparator;
@@ -10,8 +13,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,8 +24,6 @@ import es.fdi.ucm.ucmh.model.User;
 import es.fdi.ucm.ucmh.model.repositories.MessageRepository;
 import es.fdi.ucm.ucmh.transfer.MessageTransferData;
 import es.fdi.ucm.ucmh.transfer.TextWithDate;
-
-import es.fdi.ucm.ucmh.model.UserType;
 
 @Controller
 public class MessageController{

@@ -45,3 +45,15 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors
 input[class^="type-input-"] {
 	display: none;
 }
+
+#msg-alert {
+  font-weight: normal;
+  font-size: 1.2rem;
+  position: absolute;
+  right: 10rem;
+  color: white;
+  background-color: #5d43d1;
+  padding: 0 20px;
+  border-radius: 50px;
+  visibility: hidden;
+}

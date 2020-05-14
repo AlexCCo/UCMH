@@ -1,3 +1,6 @@
+/**
+ * Code made entirely by Alejandro Cancelo Correia as well as message.css and message.html
+ * */
 
 /**
  * this will store the last HTMLLIElement representing the last users (left side of
@@ -86,7 +89,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	input_text.addEventListener("keydown", function(key){
 		//enter key
 		if(key.keyCode === 13 || key.keyCode === 14){
-			send_message(chat_box.chat_name.innerText, input_text.innerText);
+			let now = new Date();
+			go("", 'POST', {msg:	input_text.innerText,
+				time: `${now.getUTCFullYear()}-${now.getUTCMonth()+1}-${now.getUTCDate()}-${now.getUTCHours()}-${now.getUTCMinutes()}-${now.getUTCSeconds()}`
+				});
+			//send_message(chat_box.chat_name.innerText, input_text.innerText);
 		}
 	});
 	
@@ -97,6 +104,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
 			input_text.innerHTML = "";
 		}
 	});
+	
+	let erasable = document.getElementsByClassName("erasable");
+	
+	for(let erasable_item of erasable){
+		console.log(erasable_item);
+		erasable_item.style.display = "none";
+	}
+	
+	ws.receive = function (text) {
+		console.log("received message executed in message.js")
+		console.log(text);
+	};
 });
 
 function obtain_messages(origin_element) {

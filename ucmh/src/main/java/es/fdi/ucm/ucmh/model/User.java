@@ -1,3 +1,8 @@
+/**
+ * Queries and constraints Annotations made by Alejandro Cancelo Correia
+ * Rest of class was made by the group of UCMH
+ * */
+
 package es.fdi.ucm.ucmh.model;
 
 import java.util.Collection;
@@ -38,6 +43,10 @@ import javax.validation.constraints.Size;
 				query="SELECT u "
 						+ "FROM User u "
 						+ "WHERE u.mail = :mail"),
+	@NamedQuery(name="User.getMyMessagesList",
+				query="SELECT m "
+						+ "FROM Message m "
+						+ "WHERE m.to.id = :senderId"),
 	@NamedQuery(name="User.getAllMessagesOf",
 				query="SELECT m "
 						+ "FROM Message m "

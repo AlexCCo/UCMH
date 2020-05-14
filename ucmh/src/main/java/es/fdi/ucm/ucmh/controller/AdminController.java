@@ -1,12 +1,19 @@
+/**
+ * Controller made entirely by Alejandro Cancelo Correia
+ * */
 package es.fdi.ucm.ucmh.controller;
 
 import java.util.List;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.lang.Long;
+import java.time.LocalDateTime;
 
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
@@ -22,7 +29,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,15 +39,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import es.fdi.ucm.ucmh.controller.auxiliary.MessageHelper;
 import es.fdi.ucm.ucmh.controller.auxiliary.PagePATCache;
 import es.fdi.ucm.ucmh.controller.auxiliary.PagePSYCache;
 import es.fdi.ucm.ucmh.model.Message;
 import es.fdi.ucm.ucmh.model.User;
 import es.fdi.ucm.ucmh.model.repositories.UserQueryStringNames;
 import es.fdi.ucm.ucmh.transfer.JSONTransferMessage;
+import es.fdi.ucm.ucmh.transfer.MessageTransferData;
+import es.fdi.ucm.ucmh.transfer.TextWithDate;
 import es.fdi.ucm.ucmh.transfer.UserTransferData;
 import es.fdi.ucm.ucmh.model.UserType;
 
@@ -112,7 +118,7 @@ public class AdminController {
 		
 		return query.getResultList();
 	}
-		
+
 	/**
 	 * It will insert a new user generating a new id for it into the database.<br>
 	 * 
@@ -120,22 +126,30 @@ public class AdminController {
 	 * be discarded.
 	 * 
 	 * @return
-	 * <b>true</b> if the operation was successful.<br>
-	 * <b>false</b> otherwise
+	 * It will return a confirmation or error message
 	 * */
 	@Transactional
-	private boolean insertNewUser(User theNewUser) {
+	private String insertNewUser(User theNewUser) {
+		TypedQuery<User> query = entityManager.createNamedQuery(UserQueryStringNames.GET_USER_BY_MAIL, User.class);
+		String encodedPassword = String.format("{bcrypt}%s",encoder.encode(theNewUser.getPassword()));
+		
+		theNewUser.setPassword(encodedPassword);
 		
 		try {
-			String encodedPassword = String.format("{bcrypt}%s",encoder.encode(theNewUser.getPassword()));
-			theNewUser.setPassword(encodedPassword);
+			query.getSingleResult();
+		} catch (NoResultException e) {}
+		  catch (Exception e) {
+			return "Error: mail already exists!";
+		}
+		
+		try {
 			entityManager.persist(theNewUser);
 			entityManager.flush();
 			entityManager.clear();
 		} catch (Exception e) {
-			return false;
+			return "Error: something went wrong!";
 		}
-		return true;
+		return "User added!";
 	}	
 	
 	
@@ -387,29 +401,95 @@ public class AdminController {
 	public @ResponseBody JSONTransferMessage registerUser(@Valid @RequestBody User userInfo) {
 		log.info("Register user request made by admin: {}, registering {}", userFromSession().getId(), userInfo);
 		log.debug("Debugging obtained object: {}", userInfo.toString());
-		boolean result = insertNewUser(userInfo);
+		String result = insertNewUser(userInfo);
 		
-		log.debug(result ? "Ok" : "Error");
-		
-		return new JSONTransferMessage(result ? "Ok" : "Error");
+		return new JSONTransferMessage(result);
 	}
 	
 
 	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
 	
-	public static class DemoMessage {
+	private static class DemoMessage {
 		public String msg;
+		public String time;
 	}
 
-	@PostMapping("/msg/{id}")
+	@PostMapping(value = "/msg/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE},
+			produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
+	@Transactional
 	public String sendMsg(@PathVariable long id, @RequestBody DemoMessage message) {
 
 		User u = entityManager.find(User.class, id);
-		messagingTemplate.convertAndSend("/user/"+u.getMail()+"/queue/updates", "{ \"text\": \"" + message.msg + "\"}");
+		
+		if(u == null) {
+			return "Error";
+		}
+		User sender = userFromSession();
+		String[] obtainedTime = message.time.split("-");
+		int[] intTime = new int[obtainedTime.length];
+		
+		log.debug("message.msg: {} \\\\ message.time: {}", message.msg, message.time);
+		
+		Message body = new Message();
+		//obtainedTime.length will always be 6
+		for(int i = 0; i < obtainedTime.length; i++) {
+			intTime[i] = Integer.valueOf(obtainedTime[i]);
+		}
+		
+		LocalDateTime receivedTime = LocalDateTime.of(intTime[0], intTime[1], intTime[2], intTime[3], intTime[4], intTime[5]); 
+		
+		body.setFrom(sender);
+		body.setTo(u);
+		body.setText(message.msg);
+		body.setDate(receivedTime);
+		body.setDirty(false);
+		body.setEstadoAnimo(null);
+		
+		try {
+			entityManager.persist(body);
+			entityManager.flush();
+			entityManager.clear();
+		}catch (Exception e) {
+			return "Error";
+		}
+		
+		String destination = String.format("/user/%s/queue/updates", u.getMail());
+		String textToSent = String.format("{\"text\": \"%s\"}", message.msg);
+		messagingTemplate.convertAndSend(destination, textToSent);
 
 		return "ok";
+	}
+	
+	/**
+	 * It will retrieve the basic template where you can see your incoming messages and chat with
+	 * anyone you want in real time
+	 * 
+	 * @param model A model given by Spring MVC. It is use to store information needed
+	 * by the template engine to render the corresponding view, in this case, our HTML
+	 * page
+	 * @return 
+	 * It returns a string that indicates to the Spring's ViewResolvers what
+	 * view (in this case HTML page) we want to render and send to our client
+	 * */
+	@Secured(value = "ROLE_ADMIN")
+	@GetMapping(value = "/messages")
+	public String getMessagesTemplate(Model model) {
+		
+		User u = userFromSession();
+		
+		log.info("GET request made by: {}", u.getId());
+		model.addAttribute("user", u);
+		
+		TypedQuery<Message> query = entityManager.createNamedQuery(UserQueryStringNames.GET_MY_MESSAGES, Message.class);		
+		
+		query.setParameter("senderId", u.getId());
+		
+		LinkedList<MessageTransferData> userGroupedMsg = MessageHelper.groupMessage(query.getResultList());
+		
+		model.addAttribute("receive_messages", userGroupedMsg);
+		return "mensajesReEn";
 	}
 
 }

@@ -6,40 +6,39 @@
 	<title>Nav fragment - rest intentionally left empty</title>
 </head>
 <body>
-	<nav th:fragment="nav">
-		<a class="logo" href="" th:href="@{/}"></a>
-		<span class="sitename">Plantilla de IW</span>
 
-		<div class="logx" th:if="${session.u}">
-			<a id="received" th:href="@{/message/}" th:text="${session.unread} ? '📬': '📪'">📫</a>			
-			<a th:if="${session.u.hasRole('ADMIN')}" th:href="@{/admin/}">administrar</a>
-			<form th:action="@{/logout}" method="post">
-				<button type="submit">logout</button>
-			</form>
-			<a th:href="@{/user/{id}(id=${session.u.id})}">
-				<img class="userthumb" th:src="@{/user/{id}/photo(id=${session.u.id})}">
-				<span th:text="${session.u.username}">Pepe</span></a>						
+
+
+	<nav th:fragment="nav" id="menu">
+		<div class="nav-wrapper">
+			<a href="#" id="logo" class="brand-logo">UCMH</a>
+			<a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+			<ul id="nav-mobile" class="right hide-on-med-and-down nav-buttons" th:if="${session.u}">
+				<li class="erasable" th:if="${session.u.hasRole('ADMIN')}" ><a href="#psy-modal" class="waves-effect waves-light btn modal-trigger">Registrar psicologo</a></li>
+				<li class="erasable" th:if="${session.u.hasRole('ADMIN')}" ><a href="#pat-modal" class="waves-effect waves-light btn modal-trigger">Registrar paciente</a></li>
+				<!--/*Insert your user options here*/-->
+				
+				<!--/*******************************/-->
+				<li th:switch="${session.u.type.getPath()}">
+					<a th:case="'admin'" th:href="@{/admin/messages}" class="waves-effect waves-light btn modal-trigger">Mensajes recibidos</a>
+					<a th:case="'psy'" th:href="@{/psy/messages}" class="waves-effect waves-light btn modal-trigger">Mensajes recibidos</a>
+					<a th:case="'pat'" th:href="@{/user/messages}" class="waves-effect waves-light btn modal-trigger">Mensajes recibidos</a>
+				</li>
+				
+				<li>
+					<form th:action="@{/logout}" method="post">
+						<button id="log-out-button" type="submit" class="waves-effect waves-light btn modal-trigger"
+										style="margin-top: -2px;margin-left: 15px;margin-right: 15px;" >
+							Cerrar sesión
+						</button>
+					</form>
+				</li>
+			</ul>
 		</div>
-		<div class="logx" th:unless="${session.u}">
-			<a th:href="@{/login}" href="/login">login</a>
-			<!--/*
-				Esto es un comentario "thymeleaf" - no se verá en el HTML
-				El bloque de "debug" sólo está activado si application.properties tiene debug a "true"
-				(ver StartupConfig.java para ver cómo se lee el atributo y se pone en ${application.debug})
-			*/-->
-			<div class="debug" th:if="${application.debug}">
-				<form th:action="@{/login}" method="post">
-					<input type="hidden" name="username" value="a">
-					<input type="hidden" name="password" value="aa">
-					<button type="submit">a</button>
-  				</form>				
-				<form th:action="@{/login}" method="post">
-					<input type="hidden" name="username" value="b">
-					<input type="hidden" name="password" value="aa">
-					<button type="submit">b</button>
-  				</form>
-  			</div>
-		</div>		
 	</nav>
+	
+	
+	
+	
 </body>
 </html>

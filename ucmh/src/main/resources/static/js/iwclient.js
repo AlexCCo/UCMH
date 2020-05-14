@@ -67,14 +67,7 @@ function go(url, method, data = {}) {
       params.headers["X-CSRF-TOKEN"] = config.csrf.value; 
   }  
   console.log("sending", url, params)
-  return fetch(url, params)
-  	.then(response => {
-	    if (response.ok) {
-	        return response.json(); // esto lo recibes con then(d => ...)
-	    } else {
-	    	throw response.text();  // esto lo recibes con catch(d => ...)
-	    }
-  	})
+  return fetch(url, params);
 }
 
 /**
@@ -85,9 +78,5 @@ document.addEventListener("DOMContentLoaded", () => {
 		let subs = config.admin ? 
 				["/topic/admin", "/user/queue/updates"] : ["/user/queue/updates"]
 		ws.initialize(config.socketUrl, subs);
-	}
-	
-	// add your after-page-loaded JS code here; or even better, call 
-	// 	 document.addEventListener("DOMContentLoaded", () => { /* your-code-here */ });
-	//   (assuming you do not care about order-of-execution, all such handlers will be called correctly)
+	}	
 });
