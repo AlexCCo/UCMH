@@ -1,6 +1,5 @@
 package es.fdi.ucm.ucmh.transfer;
 
-import java.util.LinkedList;
 import java.time.LocalDateTime;
 import es.fdi.ucm.ucmh.model.Message;
 
@@ -8,21 +7,17 @@ import es.fdi.ucm.ucmh.model.Message;
 public class MessageTransferData {
 	private String from;
 	private String to;
-	private boolean dirty;
-	private LinkedList<TextWithDate> msg;
-	
-
-	/*********************************UNDER TEST**************************
 	private LocalDateTime date;
+	private String text;
+	
+	public MessageTransferData() {}
+	
 	public MessageTransferData(Message m) {
-		this.from = m.getFrom().getFirstName() + " " + m.getFrom().getLastName();
-		this.to = m.getTo().getFirstName() + " " + m.getTo().getLastName();;
-		this.text = m.getText();
-		this.id = m.getId();
+		this.from = m.getFrom().getMail();
+		this.to = m.getTo().getMail();
 		this.date = m.getDate();
+		this.text = m.getText();
 	}
-	*/
-
 
 	/**
 	 * @return the from
@@ -51,37 +46,31 @@ public class MessageTransferData {
 	}
 		
 	/**
-	 * @return the texts
+	 * @return the date
 	 */
-	public LinkedList<TextWithDate> getMsg() {
-		return msg;
+	public LocalDateTime getDate() {
+		return date;
 	}
 
 	/**
-	 * @param texts the texts to set
+	 * @param date the date to set
 	 */
-	public void setMsg(LinkedList<TextWithDate> texts) {
-		this.msg = texts;
+	public void setDate(LocalDateTime date) {
+		this.date = date;
 	}
-	
-	public void appendText(TextWithDate text) {
-		if(this.msg == null) {
-			this.msg = new LinkedList<TextWithDate>();
-		}
-		
-		this.msg.add(text);
-	}
+
 	/**
-	 * @return the dirty
+	 * @return the text
 	 */
-	public boolean isDirty() {
-		return dirty;
+	public String getText() {
+		return text;
 	}
+
 	/**
-	 * @param dirty the dirty to set
+	 * @param text the text to set
 	 */
-	public void setDirty(boolean dirty) {
-		this.dirty = dirty;
+	public void setText(String text) {
+		this.text = text;
 	}
 	
 }

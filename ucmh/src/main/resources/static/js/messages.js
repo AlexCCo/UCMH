@@ -8,9 +8,17 @@
  * It is needed for not creating a new WebSocket for the current chat * 
  * */
 var last_user_clicked;
-var connection;
-var stompClient;
 var page_owner;
+var current_conversation;
+var requestData = new XMLHttpRequest();
+var messages_list={
+		mails_map: new Map(),
+		html_holder: ""
+	}
+
+/**
+ * An object representing the chat screen positioned on the left side of the screen
+ * */
 var chat_box = {
 		chat_name: null,
 		chat_screen: null,
@@ -37,12 +45,16 @@ var chat_box = {
 		}
 };
 
+/**
+ * Here we will initialize all variables we need and create all correct listeners
+ * */
 document.addEventListener("DOMContentLoaded", (event) => {
 	page_owner = document.getElementById("user-message-owner").getAttribute("data-user-owner");
 	
 	chat_box.chat_screen = document.getElementById("chat-box");
 	chat_box.chat_name = document.getElementById("user-name-chat");
 	
+	//client messages
 	let my_message_collection = chat_box.chat_screen.getElementsByClassName("message-to");
 	
 	//Messages from the client are put to the right
@@ -52,36 +64,21 @@ document.addEventListener("DOMContentLoaded", (event) => {
 												margin-left: auto;`;
 	}
 	
-	let sender_msg_box = document.getElementsByClassName("user-info-wrap");
+	//list of users who sent a message to us
+	let sender_msg_box = document.getElementById("users-collection");
 	
-	for(let box of sender_msg_box){
+	messages_list.html_holder = sender_msg_box;
+	
+	for(let box of sender_msg_box.children){
+		//add to a map of emails
+		messages_list.mails_map.set(box.getElementsByClassName("sender-mail")[0].innerText, box);
+		
+		//add listeners
 		box.addEventListener("click", function(event){
-			console.log(box.getAttribute("data-element-clicked"));
-			/*
-			 * i could store the last messages in localStorage or sessionStorage, research it
-			 * https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
-			 * https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage
-			 */
-			if(box.getAttribute("data-element-clicked") == null){
-				
-				if(last_user_clicked != null){
-					//set to false
-					last_user_clicked.toggleAttribute("data-element-clicked");
-					//close current websocket
-					stompClient.deactivate();
-				}
-				//clean chat an change chat name
-				chat_box.clear_screen();
-				chat_box.change_name(box.getElementsByClassName("sender-name")[0].innerText);
-				
-				//set dirty flag to true
-				box.toggleAttribute("data-element-clicked");
-				last_user_clicked = box;
-				//request a new websocket session
-				obtain_messages(box);
-			}
-		});
+				process_box_clicking(event, box);
+			});
 	}
+	
 	
 	let input_text = document.getElementById("text-input");
 	
@@ -89,22 +86,34 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	input_text.addEventListener("keydown", function(key){
 		//enter key
 		if(key.keyCode === 13 || key.keyCode === 14){
+			
+			if(last_user_clicked == null){
+				return
+			}
+			
 			let now = new Date();
-			go("", 'POST', {msg:	input_text.innerText,
-				time: `${now.getUTCFullYear()}-${now.getUTCMonth()+1}-${now.getUTCDate()}-${now.getUTCHours()}-${now.getUTCMinutes()}-${now.getUTCSeconds()}`
+			let last_user_id = last_user_clicked.getElementsByClassName("sender-mail")[0];
+			
+			console.log("sending message...")
+			//send a web socket message
+			go(`${config.uri}${last_user_id.innerText}`, 'POST', 
+				{msg: input_text.innerText,
+				 time: `${now.getUTCFullYear()}-${now.getUTCMonth()+1}-${now.getUTCDate()}-${now.getUTCHours()}-${now.getUTCMinutes()}`
 				});
-			//send_message(chat_box.chat_name.innerText, input_text.innerText);
+			//update chat
+			chat_box.add_message(render_send_HTML_message(input_text.innerText));
 		}
 	});
 	
-	//clear input
+	//clear input once we sent our text
 	input_text.addEventListener("keyup", function(key){
 		//enter key
-		if(key.keyCode === 13 || key.keyCode === 13){
+		if(key.keyCode === 13 || key.keyCode === 14){
 			input_text.innerHTML = "";
 		}
 	});
 	
+	//we will treat the receive event for ws
 	let erasable = document.getElementsByClassName("erasable");
 	
 	for(let erasable_item of erasable){
@@ -113,142 +122,68 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	}
 	
 	ws.receive = function (text) {
-		console.log("received message executed in message.js")
-		console.log(text);
+		
+		if(last_user_clicked != null){
+			let last_user_mail = last_user_clicked.getElementsByClassName("sender-mail")[0].innerText;
+			
+			if(last_user_mail === text.from){
+				console.log("New message received");
+				console.log("Update chat box...")
+				receive_message(chat_box.chat_name.innerText, text.text);
+				//we are already talking to that user, we don't need to update the left list
+				return;
+			}
+		}
+		
+		//we know for sure that the last_user_click won't have
+		//anything to do with the owner of this message
+		
+		let obtain_listed = messages_list.mails_map.get(text.from);
+		//a new user is writing to us
+		if(obtain_listed === undefined){
+			messages_list.mails_map.set(text.from, true);
+			add_user_to_messages_list(text.name, text.from);
+			console.log("New message received");
+			return;
+		}else{
+			//badge with a "new!" string representing we have new messages
+			let new_badge = obtain_listed.getElementsByClassName("dirty-flag-box")[0];
+			//clear new badge
+			new_badge.className = `new badge dirty-flag-box`;
+			obtain_listed.getElementsByClassName("initial-content")[0].innerText = "Tienes un nuevo mensaje";
+			console.log("New message received");
+		}
 	};
 });
 
 function obtain_messages(origin_element) {
-	let sender_name = origin_element.getElementsByClassName("sender-name")[0];
-	let new_badge = origin_element.getElementsByClassName("dirty-flag-box")[0];
-	let broker_uri;
+	let sender_mail = origin_element.getElementsByClassName("sender-mail")[0].innerText;
+	let uri = `${config.uri}recv/?requestedUserMail=${sender_mail}`;
 	
-	if(window.location.protocol === "http:"){
-		broker_uri = `ws://${document.location.host}/ws-get/`;
+	console.log("Requesting message list...");
+	requestData.open('GET', uri);
+	requestData.onload = function (){
+		for(let item of JSON.parse(requestData.response)){
+			if(item.from === config.mail){
+				chat_box.add_message(render_send_HTML_message(item.text))
+			}else{
+				receive_message(chat_box.chat_name.innerText, item.text);
+			}
+		}
 	}
-	else if(window.location.protocol === "https:"){
-		broker_uri = `wss://${document.location.host}/ws-get/`;
-	}
-
-	/*
-	 * this will create a connection using STOMP as a subprotocol
-	 * reference: 
-	 * https://stomp-js.github.io/api-docs/latest/classes/Stomp.html
-	 * https://stomp-js.github.io/guide/stompjs/using-stompjs-v5.html
-	 * https://stomp-js.github.io/guide/stompjs/rx-stomp/ng2-stompjs/using-stomp-with-sockjs.html
-	 * */
-    stompClient = new StompJs.Client({
-        brokerURL: broker_uri,
-        connectHeaders: {
-          login: page_owner,
-          passcode: "password"
-        },
-        debug: function (str) {
-          console.log(str);
-        },
-        reconnectDelay: 5000,
-        heartbeatIncoming: 4000,
-        heartbeatOutgoing: 4000
-      });
-    
-    // Fallback code
-    if (typeof WebSocket !== 'function') {
-    	// For SockJS you need to set a factory that creates a new SockJS instance
-        // to be used for each (re)connect	
-		/*
-		 * this will create the websocket and try to connect to the uri endpoint
-		 * only if it is supported, if its not supported, SockJS will try to 
-		 * emulate that behavior
-		 * reference:
-		 * https://github.com/sockjs/sockjs-client
-		 * */
-    	client.webSocketFactory = function () {
-    		// Note that the URL is different from the WebSocket URL 
-    		return new SockJS(broker_uri);
-    	};
-    }
-    
-    //when the connection is active, this function will be called
-    stompClient.onConnect = function(frame){
-    	//All the subscribes must be done in here
-    	console.log(`Stomp onConnect: ${frame}`);
-    	
-    	/*
-    	 * we tell the broker we want to listen every message sent to the given
-    	 * particular end-point. When a message comes, the callback will be triggered
-    	 * */
-    	stompClient.subscribe("/user/queue/private", function(message){
-    		console.log(`Message receive by the broker: ${message}`);
-    		receive_message(chat_box.chat_name.innerText, message);
-    	});
-    	
-    }
-    
-    stompClient.onStompError = function (frame) {
-        // Will be invoked in case of error encountered at Broker
-        // Bad login/passcode typically will cause an error
-        // Complaint brokers will set `message` header with a brief message. Body may contain details.
-        // Compliant brokers will terminate the connection after any error
-        console.log(`Broker reported error: ${frame.headers['message']}`);
-        console.log(`Additional details: ${frame.body}`);
-      };
-      
-    
-    stompClient.onDisconnect = function(frame){
-    	console.log(`Stomp onDisconnect: ${frame}`);
-    }
-    
-    //it will start the connection with the broker, if the connection breaks it will try it again
-    stompClient.activate();
-    
-    //initialize_websocket();
-	//clear new badge
-	new_badge.className = "dirty-flag-box";
+	
+	requestData.send();
 }
 
-function initialize_websocket(){
-
-    //we tell what to do when the websocket_connection change to OPEN
-	connection.onopen = function(){
-	/*
-	readyState values:
-	0	CONNECTING	Socket has been created. The connection is not yet open.
-    1	OPEN	The connection is open and ready to communicate.
-    2	CLOSING	The connection is in the process of closing.
-    3	CLOSED	The connection is closed or couldn't be opened.
-	*/
-		console.log(`WebSocket state: ${connection.readyState}`);
-	}
-	
-    //we tell what to do when the websocket_connection change to CLOSED
-	connection.onclose = function(){
-		console.log(`WebSocket state: ${connection.readyState}`);
-		console.log("Connection closed");
-	}
-    
-    /*
-    we don't know what kind of errors might occurs, maybe the connection was
-    halted for some reason like the server went down or maybe the client
-    Internet went down so we can't keep with the connection, what we 
-    know is whatever error occurs, it will trigger an error event which
-    will be handled by this property
-    */
-	connection.onerror = function(event){
-		console.log("Some error occurred in websocket_connection");
-		console.log("Error event:");
-		console.log(event);
-	}
-	
-	/*
-	when the server sends a message, it will trigger a MessageEvent which
-	will be handled by this property
-	*/
-	connection.onmessage = function(message){
-		console.log(`The server sent: ${message.data}`);
-		receive_message("paco", message.data);
-	}
-}
-
+/**
+ * It will create the sender message that will be displayed inside the chat box.<br>
+ * The sender in this case is the current user of the application.
+ * 
+ * @param message_text A string containing the text sent by the user
+ * 
+ * @returns A well constructed string with all the necessary HTML to display 
+ * the given message
+ * */
 function render_send_HTML_message(message_text){
 	let html_string = `<div class="message-wrap" style="text-align: end; padding-right: 7px; margin-left: auto;">
 							<div class="message-to">
@@ -261,6 +196,15 @@ function render_send_HTML_message(message_text){
 	return html_string;
 }
 
+/**
+ * It will create the sender message that will be displayed inside the chat box
+ * 
+ * @param message_text A string containing the text sent by the user you are
+ * talking to
+ * 
+ * @returns A well constructed string with all the necessary HTML to display 
+ * the given message
+ * */
 function render_received_HTML_message(owner, message_text){
 	let html_string = `<div class="message-wrap">
 							<div class="message-from">
@@ -273,19 +217,56 @@ function render_received_HTML_message(owner, message_text){
 	return html_string;
 }
 
-function send_message(to_person, text){
-	console.log(`sending message: ${text}`);
-	//send to the websocket
-	stompClient.publish({
-		destination: `/user/${to_person}/queue/private`, 
-		headers: {},
-		body: text
-	});
-	//update chat
-	chat_box.add_message(render_send_HTML_message(text));
-}
-
+/**
+ * It will receive a message and display it into the chat box
+ * */
 function receive_message(from_person, message_text){
 	//update chat
 	chat_box.add_message(render_received_HTML_message(from_person, message_text));
+}
+
+function add_user_to_messages_list(sender_name, sender_mail){
+	let outer_div = document.createElement("li");
+	outer_div.className = "user-info-wrap collection-item avatar";
+	
+	//<img src="/image/ejemplo.jpg" alt="" class="circle">
+	let html_string = `<div class="user-info">
+						<span class="new badge dirty-flag-box"></span>
+				       	<p>Nombre: <span class="sender-name">${sender_name}</span></p>
+				       	<p>Mail: <span class="sender-mail">${sender_mail}</span></p>
+				       	<p class="initial-content">Tienes un nuevo mensaje</p>
+				       </div>`;
+	
+	outer_div.innerHTML = html_string;
+	outer_div.addEventListener("click", function(event){
+		process_box_clicking(event, outer_div);
+	});
+	messages_list.html_holder.prepend(outer_div);
+	
+}
+
+function process_box_clicking(event, box){
+	console.log(box.getAttribute("data-element-clicked"));
+	//data-* here is an attribute controlling if the current element was clicked previously
+	if(box.getAttribute("data-element-clicked") == null){
+		//badge with a "new!" string representing we have new messages
+		let new_badge = box.getElementsByClassName("dirty-flag-box")[0];
+		//clear new badge
+		new_badge.className = "dirty-flag-box";
+		
+		if(last_user_clicked != null){
+			//set last clicked element to false
+			last_user_clicked.toggleAttribute("data-element-clicked");
+		}
+		
+		//clean chat an change chat name
+		chat_box.clear_screen();
+		chat_box.change_name(box.getElementsByClassName("sender-name")[0].innerText);
+		
+		//set dirty flag to true
+		box.toggleAttribute("data-element-clicked");
+		last_user_clicked = box;
+		//request message list to the server
+		obtain_messages(box);
+	}
 }

@@ -10,14 +10,16 @@
 	<link rel="stylesheet" href="/css/materialize.css">
 	<link rel="stylesheet" href="/css/my-theme.css">
 	
-	<script type="text/javascript">
+	<script type="text/javascript" >
 		const config = {
 			socketUrl: "[[${session.ws}?:'']]",	// vacío indica falso
 			rootUrl: "[[${session.ws}?@{/}:'']]",
+			uri: "[[${session.msgURI}]]",
 			csrf: {
 				name: "[[${_csrf.parameterName}]]",
 				value: "[[${_csrf.token}]]"
 			},
+			mail: "[[${session.userMail}]]",
 			admin: [[${session.u != null && session.u.hasRole('ADMIN')}?true:false]],
 			userId: [[${session.u != null}?${session.u.id}:-1]],
 		};

@@ -1,5 +1,7 @@
 package es.fdi.ucm.ucmh.model.repositories;
 
+import es.fdi.ucm.ucmh.controller.auxiliary.MessageQueryObject;
+
 public class UserQueryStringNames {
 	/**
 	 * String representing a <b>named</b> query to obtain a list of users.<br>
@@ -38,12 +40,40 @@ public class UserQueryStringNames {
 	 * */
 	public static final String GET_USER_BY_MAIL = "User.byMail";
 	
+	/**
+	 * String representing a <b>named</b> query to retrieve a list of users
+	 * according to their first and last names
+	 * */
 	public static final String GET_USER_BY_NAME = "User.getUserByName";
 	
-	public static final String GET_MESSAGES_LIST = "User.getAllMessagesOf";
-	
+	/**
+	 * String representing a <b>named</b> query to retrieve the number of admins
+	 * inside our application
+	 * */
 	public static final String GET_ADMIN_TOTAL_NUMBER = "User.getAdminsTotalNumber";
 	
-	public static final String GET_MY_MESSAGES = "User.getMyMessagesList";
-
+	/**
+	 * String representing a <b>named</b> query to retrieve a list of all the messages
+	 * coming to and sent from a particular user
+	 * 
+	 * @see Message
+	 * */
+	public static final String GET_MESSAGES_LIST = "Message.getAllMessagesOf";
+	
+	/**
+	 * String representing a <b>named</b> query to retrieve a list of messages coming to
+	 * a particular user and counting the number of unseen messages for each sender
+	 * 
+	 * @see MessageQueryObject
+	 * @see Message
+	 * */
+	public static final String GET_SENDER_OF_MESSAGE_LIST = "Message.getMessageSenderList";
+	
+	/**
+	 * String representing a <b>named</b> query to retrieve a list of messages sent
+	 * from an specific user 
+	 * */
+	public static final String GET_MESSAGE_FROM = "Message.getMessageFrom";
+	
+	public static final String UPDATE_SEEN_MESSAGE = "Message.updateSeenMessageStatus";
 }

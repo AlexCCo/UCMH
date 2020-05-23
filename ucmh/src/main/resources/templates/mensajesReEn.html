@@ -36,12 +36,13 @@
 				<ul id="users-collection" class="card collection">
 					
 					<!-- The structure of this list will be change, do not create any dependency -->
-					<li class="collection-item avatar user-info-wrap" th:each="sender : ${receive_messages}">
+					<li class="user-info-wrap collection-item avatar" th:each="sender : ${receive_messages}">
 						<div class="user-info">
-							<span class="" th:class="!${sender.isDirty()} ? 'new badge dirty-flag-box' : 'dirty-flag-box'"></span>
-		          <img src="/image/ejemplo.jpg" alt="" class="circle">
-		          <p class="sender-name" th:text="${sender.from}"></p>
-		          <p class="initial-content" th:text="|${#strings.substring(sender.msg.getLast().text, 0, 15)}...|"></p>
+							<span class="" th:class="${sender.number}>0 ? 'new badge dirty-flag-box' : 'dirty-flag-box'"></span>
+		          <!--/* <img src="/image/ejemplo.jpg" alt="" class="circle"> */-->
+		          <p>Nombre: <span class="sender-name" th:text="|${sender.user.firstName} ${sender.user.lastName}|"></span></p>
+		          <p>Mail: <span class="sender-mail" th:text="${sender.user.mail}"></span></p>
+		          <p class="initial-content" th:text="${sender.number}>0 ? 'Tienes un nuevo mensaje' : 'Has leido todos los mensajes'"></p>
 						</div>
 		       </li>
 		       
@@ -52,7 +53,7 @@
 				
 			<div class="col s6 text-chat card-panel">
 				<div class="header-msg-info">
-					<span id="user-name-chat">paco</span>
+					<span id="user-name-chat">Click in some chat to start talking</span>
 				</div>
 				<div class="body-msg">
 					<div id="chat-box" class="chat-container">

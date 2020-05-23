@@ -3,27 +3,38 @@
  * */
 package es.fdi.ucm.ucmh.controller;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.fdi.ucm.ucmh.controller.MessageController;
+import es.fdi.ucm.ucmh.controller.auxiliary.MessageQueryObject;
 import es.fdi.ucm.ucmh.model.Message;
 import es.fdi.ucm.ucmh.model.User;
-import es.fdi.ucm.ucmh.model.repositories.MessageRepository;
+import es.fdi.ucm.ucmh.model.repositories.UserQueryStringNames;
 import es.fdi.ucm.ucmh.transfer.MessageTransferData;
-import es.fdi.ucm.ucmh.transfer.TextWithDate;
+
 
 @Controller
 public class MessageController{
@@ -33,108 +44,220 @@ public class MessageController{
 	private EntityManager entityManager;
 	
 	@Autowired
-	private MessageRepository messageRepository;
+	private HttpSession session;
 	
-	/**
-	 * This method will group all messages from the same user into one object wrapper called
-	 * <i>MessageTransferData</i>.
-	 * 
-	 * @param messageList A list of individual messages written by some other users. <br>
-	 * Keep in mind that the same user could send more than one message, the Data Base will
-	 * treat this kind of situation as two different messages.
-	 * @return 
-	 * It will return an ordered by name list of grouped messages
-	 * 
-	 * @see MessageTransferData
-	 * */
-	private LinkedList<MessageTransferData> groupMessage(LinkedList<Message> messageList){
-		HashMap<User, MessageTransferData> mapList = new HashMap<User, MessageTransferData>();
-		LinkedList<MessageTransferData> senderList = new LinkedList<MessageTransferData>();
-		
-		/*
-		 * we extract the messages from messageList and collapse the ones written by the same
-		 * user into one wrapper object called MessageTransferData. 
-		 * The hash map is to follow the tracks of already checked users
-		 * */
-		for(Message msg : messageList) {
-			MessageTransferData msgList = mapList.get(msg.getFrom());
-			
-			if(msgList == null) {
-				msgList = new MessageTransferData();
-				
-				//set sender name
-				msgList.setFrom(String.format("%s, %s", msg.getFrom().getFirstName(), msg.getFrom().getLastName()));
-				//set recipient name
-				msgList.setTo(String.format("%s, %s", msg.getTo().getFirstName(), msg.getTo().getLastName()));
-				msgList.setDirty(msg.isDirty());
-			}
-			
-			//if there is at least one unseen message, all the structure will be set as unseen
-			if(!msg.isDirty()) {
-				msgList.setDirty(false);
-			}
-			
-			msgList.appendText(new TextWithDate(msg.getText(), msg.getDate()));
-			
-			mapList.put(msg.getFrom(), msgList);
-		}		
-		
-		for(MessageTransferData msg : mapList.values()) {
-			senderList.add(msg);
-		}
-		
-		senderList.sort(new Comparator<MessageTransferData>(){
-
-			@Override
-			public int compare(MessageTransferData arg0, MessageTransferData arg1) {
-				return arg0.getFrom().compareTo(arg1.getFrom());
-			}
-			
-		});
-		
-		return senderList;
+	private User userFromSession() {
+		return (User)session.getAttribute("u");
 	}
-	
 	
 	/**
 	 * It will retrieve the basic template where you can see your incoming messages and chat with
 	 * anyone you want in real time
 	 * 
-	 * @param userId The id of the user who try to obtain it's messages. That user can be
-	 * ADMIN, USER and PSY
-	 * @param userType The root path where all users must come from. Because we have
-	 * administrators, patientes and psychologist, the allowed values must be one of the
-	 * follows: <br>
-	 * "\/admin/"<br>
-	 * "\/psy/" or<br>
-	 * "\/user/"
 	 * @param model A model given by Spring MVC. It is use to store information needed
 	 * by the template engine to render the corresponding view, in this case, our HTML
 	 * page
-	 * @param session
 	 * @return 
 	 * It returns a string that indicates to the Spring's ViewResolvers what
 	 * view (in this case HTML page) we want to render and send to our client
 	 * */
-	@GetMapping(value = "/{userType}/{userId}/messages")
-	public String getMessagesTemplate(@PathVariable Long userId, @PathVariable String userType,
-								   Model model, HttpSession session) {
+	@Secured(value = "ROLE_ADMIN")
+	@GetMapping(value = "/admin/messages")
+	public String getAdminMessagesTemplate(Model model) {
 		
-		log.info("GET request made by: {}, type: {}", userId, userType);
+		session.setAttribute("msgURI", "/admin/msg/");
 		
-		User u = entityManager.find(User.class, userId);
+		return processPetition(model);
+	}
+	
+	/**
+	 * It will retrieve the basic template where you can see your incoming messages and chat with
+	 * anyone you want in real time
+	 * 
+	 * @param model A model given by Spring MVC. It is use to store information needed
+	 * by the template engine to render the corresponding view, in this case, our HTML
+	 * page
+	 * @return 
+	 * It returns a string that indicates to the Spring's ViewResolvers what
+	 * view (in this case HTML page) we want to render and send to our client
+	 * */
+	@Secured(value = "ROLE_PSY")
+	@GetMapping(value = "/psy/messages")
+	public String getPsyMessagesTemplate(Model model) {
 		
-		if(u == null ) {
-			log.debug("GET request made by: {} REJECTED!", userId);
-			return "404";
+		session.setAttribute("msgURI", "/psy/msg/");
+		
+		return processPetition(model);
+	}
+	
+	private String processPetition(Model model) {
+
+		User u = userFromSession();
+		
+		log.info("GET request made by: {}", u.getId());
+		model.addAttribute("user", u);
+		
+		TypedQuery<MessageQueryObject> query = entityManager.createNamedQuery(UserQueryStringNames.GET_SENDER_OF_MESSAGE_LIST, MessageQueryObject.class);		
+		
+		query.setParameter("senderId", u.getId());
+		
+		for(MessageQueryObject m : query.getResultList()) {
+			log.debug(m.getUser().getId());
 		}
 		
-		LinkedList<Message> userMsg = messageRepository.getMessageList(u.getId());
-		LinkedList<MessageTransferData> userGroupedMsg = groupMessage(userMsg);
+		model.addAttribute("receive_messages", query.getResultList());
 		
-		model.addAttribute("user", u);
-		model.addAttribute("receive_messages", userGroupedMsg);
+		session.setAttribute("userMail", u.getMail());
+		
 		return "mensajesReEn";
 	}
 	
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
+	
+	private static class DemoMessage {
+		public String msg;
+		public String time;
+	}
+	
+	/**
+	 * It will store the message sent into database and forward it to websocket broker for him to
+	 * give it to the correct destination
+	 * 
+	 * @param message A java object representing the sender message
+	 * @param id Id of the user we want to received the message
+	 * */
+	@Secured(value = "ROLE_PSY")
+	@PostMapping(value = "/admin/msg/{userMail}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE},
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	@Transactional
+	public String sendMsgFromAdmin(@PathVariable String userMail, @RequestBody DemoMessage message) {
+		return processMessageSend(userMail, message);
+	}
+	
+	/**
+	 * It will store the message sent into database and forward it to websocket broker for him to
+	 * give it to the correct destination
+	 * 
+	 * @param message A java object representing the sender message
+	 * @param id Id of the user we want to received the message
+	 * */
+	@Secured(value = "ROLE_PSY")
+	@PostMapping(value = "/psy/msg/{userMail}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE},
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	@Transactional
+	public String sendMsgFromPsy(@PathVariable String userMail, @RequestBody DemoMessage message) {
+		return processMessageSend(userMail, message);
+	}
+
+	private String processMessageSend(String userMail, DemoMessage message) {
+		TypedQuery<User> userQuery = entityManager.createNamedQuery(UserQueryStringNames.GET_USER_BY_MAIL, User.class);
+		
+		userQuery.setParameter("mail", userMail);
+		
+		User u;
+		try{
+			u = userQuery.getSingleResult();
+		}catch(Exception e){
+			return null;
+		}
+		
+		
+		User sender = userFromSession();
+		String[] obtainedTime = message.time.split("-");
+		int[] intTime = new int[obtainedTime.length];
+		
+		log.debug("message.msg: {} \\\\ message.time: {}", message.msg, message.time);
+		
+		Message body = new Message();
+		//obtainedTime.length will always be 5
+		for(int i = 0; i < obtainedTime.length; i++) {
+			intTime[i] = Integer.parseInt(obtainedTime[i]);
+		}
+		
+		LocalDateTime receivedTime = LocalDateTime.of(intTime[0], intTime[1], intTime[2], intTime[3], intTime[4]); 
+		
+		body.setFrom(sender);
+		body.setTo(u);
+		body.setText(message.msg);
+		body.setDate(receivedTime);
+		body.setDirty(true);
+		body.setEstadoAnimo(null);
+		
+		try {
+			entityManager.persist(body);
+			entityManager.flush();
+			entityManager.clear();
+		}catch (Exception e) {
+			return "Error";
+		}
+		
+		String destination = String.format("/user/%s/queue/updates", u.getMail());
+		String textToSent = String.format("{\"name\":\"%s,%s\",\"from\":\"%s\",\"text\": \"%s\", \"time\": \"%s\"}",
+												sender.getFirstName(), sender.getLastName(), sender.getMail(),
+												message.msg, message.time);
+		messagingTemplate.convertAndSend(destination, textToSent);
+		return "ok";
+	}
+	
+	/**
+	 * It will retrieve all list of messages between the user that triggers this method
+	 * and the requested user. The returned list will be ordered by dates in ascending
+	 * order.
+	 * 
+	 * @param requestedUserMail A string representing a mail belonged by the user you
+	 * want to query messages from
+	 * 
+	 * @return A list of MessageTransferData containing all the messages between the users
+	 * 
+	 * */
+	@GetMapping(value = "/admin/msg/recv", produces = {MediaType.APPLICATION_JSON_VALUE})
+	@Transactional
+	public @ResponseBody List<MessageTransferData> historyMessageRequestedFor(@RequestParam String requestedUserMail) {
+		return processHistoryRequest(requestedUserMail);
+	}
+
+	private List<MessageTransferData> processHistoryRequest(String requestedUserMail) {
+		User u = userFromSession();
+		
+		log.info("Request obtain message list in a conversation made by admin {}, "
+				+ "user email from the conversation with the admin {}", u.getId(), requestedUserMail);
+		
+		//we employ this method because for some reason, using
+		//"UPDATE Message m SET m.dirty = true WHERE m.from.mail = :sender AND m.to.id = :userId"
+		//triggers a org.h2.jdbc.JdbcSQLSyntaxErrorException:
+		//	Syntax error in SQL statement "UPDATE MESSAGE CROSS[*] JOIN  SET SEEN=1 WHERE MAIL=? AND TO_ID=?"; expected "., AS, SET"
+		TypedQuery<User> userQuery = entityManager.createNamedQuery(UserQueryStringNames.GET_USER_BY_MAIL, User.class);
+		
+		userQuery.setParameter("mail", requestedUserMail);
+		
+		User us = userQuery.getSingleResult();
+		
+		if(us == null) {
+			return null;
+		}
+		
+		TypedQuery<Message> query = entityManager.createNamedQuery(UserQueryStringNames.GET_MESSAGE_FROM, Message.class);
+				
+		query.setParameter("senderMail", requestedUserMail);
+		query.setParameter("userId", u.getId());
+				
+		//we mark all those messages as seen
+		Query updateQuery = entityManager.createNamedQuery(UserQueryStringNames.UPDATE_SEEN_MESSAGE);
+				
+		updateQuery.setParameter("senderId", us.getId());
+		updateQuery.setParameter("userId", u.getId());
+		updateQuery.executeUpdate();
+		
+		
+		List<MessageTransferData> data = new ArrayList<MessageTransferData>();
+		
+		for(Message m : query.getResultList()) {
+			data.add(new MessageTransferData(m));
+		}
+		
+		return data;
+	}
 }

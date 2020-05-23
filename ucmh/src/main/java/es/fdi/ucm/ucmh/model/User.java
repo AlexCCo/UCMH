@@ -43,14 +43,6 @@ import javax.validation.constraints.Size;
 				query="SELECT u "
 						+ "FROM User u "
 						+ "WHERE u.mail = :mail"),
-	@NamedQuery(name="User.getMyMessagesList",
-				query="SELECT m "
-						+ "FROM Message m "
-						+ "WHERE m.to.id = :senderId"),
-	@NamedQuery(name="User.getAllMessagesOf",
-				query="SELECT m "
-						+ "FROM Message m "
-						+ "WHERE m.from.id = :senderId OR m.to.id = :senderId"),
 	@NamedQuery(name="User.getAdminsTotalNumber",
 				query="SELECT COUNT(*) "
 						+ "FROM User u "

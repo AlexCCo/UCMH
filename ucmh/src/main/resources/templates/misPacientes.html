@@ -6,31 +6,20 @@
 
     <title>Mis Pacientes</title>
 
-    <link rel="stylesheet" href="/css/normalize.css">
-    <link rel="stylesheet" href="/css/materialize.css">
-    <link rel="stylesheet" href="/css/my-theme.css">
+		<!-- Change made by Alejandro Cancelo Correia -->
+		<th:block th:replace="fragments/head :: header"></th:block>
+		<!-- ########################################### -->
+
     <link href="https://fonts.googleapis.com/css?family=Muli|Oswald&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <!-- VUESTRO???
-    <script src="/webjars/jquery/jquery.min.js"></script>
-    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
-    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
-    -->
+    
   </head>
   <body>
 
-    <nav id="menu">
-      <div class="nav-wrapper">
-        <a href="#" id="logo" class="brand-logo">UCMH</a>
-        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a th:href="@{horarioPsicologo}">Mi horario</a></li>
-            <li class="active"> <a> Pacientes de <span th:text ="${session.u.firstName}"> Pepe </span> </a></li>
-            <a class="waves-effect waves-light btn">Cerrar sesión</a>
-        </ul>
-      </div>
-    </nav>
+    <!-- Change made by Alejandro Cancelo Correia -->
+		<th:block th:replace="fragments/nav :: nav"></th:block>
+		<!-- ########################################### -->
 
     <ul class="sidenav" id="mobile-demo">
        <li><a href="horarioPsicologo">Mi horario</a></li>
@@ -122,23 +111,10 @@
  // });
   </script>
   
-  <script src="/js/vendor/modernizr-3.8.0.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-  <script>window.jQuery || document.write('<script src="/js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
-  <script src="/js/plugins.js"></script>
-  <script src="/js/vendor/materialize.min.js"></script>
-  <script type="text/javascript">
-		const config = {
-			socketUrl: "[[${session.ws}?:'']]",	// vacío indica falso
-			rootUrl: "[[${session.ws}?@{/}:'']]",
-			csrf: {
-				name: "[[${_csrf.parameterName}]]",
-				value: "[[${_csrf.token}]]"
-			},
-			admin: [[${session.u != null && session.u.hasRole('ADMIN')}?true:false]],
-			userId: [[${session.u != null}?${session.u.id}:-1]]
-		};
-	</script>
+<!-- Change made by Alejandro Cancelo Correia -->
+	<th:block th:replace="fragments/footer :: jslibs"></th:block>
+<!-- ########################################### -->
+
   <script type="text/javascript">
   $( ".pacientBTN" ).click(function(e) {
 	  var id = $(this).attr("id");
@@ -157,10 +133,7 @@
       });
 	});
   </script>
-    <!--DEL PROFE
-  <th:block th:replace="fragments :: jslibs"></th:block>
-  <script src="js/main.js"></script>
-  -->
+    
   <script type="text/javascript">
   $( ".savePacient" ).click(function(e) {
 	  var id = $(this).attr("id");

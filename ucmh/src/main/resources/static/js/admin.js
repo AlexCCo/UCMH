@@ -48,6 +48,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 		}
 	};
 	
+	//this button is for testing purposes
 	let send_button = document.getElementById("sendmsg");
 	
 	send_button.addEventListener("click", (e) => {

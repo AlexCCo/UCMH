@@ -12,84 +12,23 @@
   <!-- Place favicon.ico in the root directory -->
 
   <link rel="stylesheet" href="css/schedule-style.css">
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/materialize.css">
-  <link rel="stylesheet" href="css/my-theme.css">
+  
+  <!-- Change made by Alejandro Cancelo Correia -->
+	<th:block th:replace="fragments/head :: header"></th:block>
+	<!-- ########################################### -->
 
-  <!-- LO VUESTRO-->
   <link href="https://fonts.googleapis.com/css?family=Muli|Oswald&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-
-  <script src="js/vendor/modernizr-3.8.0.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-  <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
-  <script src="js/plugins.js"></script>
-  <script src="js/vendor/materialize.min.js"></script>
-  <script src="js/main.js"></script>
-
-
-<script type="text/javascript">
-   $(function() {
-     //TODO params function
-      function insert(res) {
-           $("#example").append('<li class="cd-schedule__event">
-              <a data-start="13:00" data-end="14:00" data-content="event-abs-circuit" data-event="event-1" href="#0">
-                <em class="cd-schedule__name">Antonio</em>
-              </a>
-            </li>'
-          );
-      }
-  //********************************************
-
-
-
-      /*  Submit form using Ajax */
-      $('button[type=submit]').click(function(e) {
-
-         //Prevent default submission of form
-         e.preventDefault();
-		 console.log("Hola");
-         //Remove all errors
-         $('input').next().remove();
-
-         $.post({
-            url : 'saveGroupAppointment',
-            data : $('form[name=createGroupAppointmentForm]').serialize(),
-            success : function(res) {
-               if(res.validated){
-                  //Set response
-                  console.log("Hola")
-                  M.toast({html: 'Cita agregada'})
-                  $('#resultContainer pre code').text(JSON.stringify(res.groupAppointment));
-              	  $('#resultContainer').show();
-              	  console.log("Hola2");
-              	  $('<li class="cd-schedule__event"><a data-start="13:00" data-end="14:00" data-content="event-abs-circuit" data-event="event-1" href="#0"><em class="cd-schedule__name">Antonio</em></a></li>').insertAfter("#example");
-                 // insert(res);
-               }else{
-                // Set error messages
-                 M.toast({html: 'error'})
-                 $.each(res.errorMessages,function(key,value){
-                   $('input[name='+key+']').after('<span class="error">'+value+'</span>');
-                 });
-               }
-            }
-         })
-      });
-   });
-</script>
 
   <meta name="theme-color" content="#fafafa">
 </head>
 
 <body>
-  <!--[if IE]>
-    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
-  <![endif]-->
-
-  <!-- Add your site or application content here -->
-
+	
+	<!-- Change made by Alejandro Cancelo Correia -->
+	<th:block th:replace="fragments/nav :: nav"></th:block>
+	<!-- ########################################### -->
+	
   <!-- Menú -->
 
   <nav id="menu">
@@ -378,6 +317,10 @@
   </form>
   </div>
   
+  <!-- Change made by Alejandro Cancelo Correia -->
+	<th:block th:replace="fragments/footer :: jslibs"></th:block>
+	<!-- ########################################### -->
+  
   <script>
   $(document).ready(function(){
       $('.sidenav').sidenav();
@@ -389,6 +332,57 @@
       $('.timepicker').timepicker();
     });
   </script>
+  
+<script type="text/javascript">
+   $(function() {
+     //TODO params function
+      function insert(res) {
+           $("#example").append('<li class="cd-schedule__event">
+              <a data-start="13:00" data-end="14:00" data-content="event-abs-circuit" data-event="event-1" href="#0">
+                <em class="cd-schedule__name">Antonio</em>
+              </a>
+            </li>'
+          );
+      }
+  //********************************************
+
+
+
+      /*  Submit form using Ajax */
+      $('button[type=submit]').click(function(e) {
+
+         //Prevent default submission of form
+         e.preventDefault();
+		 console.log("Hola");
+         //Remove all errors
+         $('input').next().remove();
+
+         $.post({
+            url : 'saveGroupAppointment',
+            data : $('form[name=createGroupAppointmentForm]').serialize(),
+            success : function(res) {
+               if(res.validated){
+                  //Set response
+                  console.log("Hola")
+                  M.toast({html: 'Cita agregada'})
+                  $('#resultContainer pre code').text(JSON.stringify(res.groupAppointment));
+              	  $('#resultContainer').show();
+              	  console.log("Hola2");
+              	  $('<li class="cd-schedule__event"><a data-start="13:00" data-end="14:00" data-content="event-abs-circuit" data-event="event-1" href="#0"><em class="cd-schedule__name">Antonio</em></a></li>').insertAfter("#example");
+                 // insert(res);
+               }else{
+                // Set error messages
+                 M.toast({html: 'error'})
+                 $.each(res.errorMessages,function(key,value){
+                   $('input[name='+key+']').after('<span class="error">'+value+'</span>');
+                 });
+               }
+            }
+         })
+      });
+   });
+</script>
+  
 </body>
 
 </html>

@@ -33,41 +33,41 @@ VALUES (22, 'PSY', 'Emma3', 'Brown','brown-emma@hotmail.es', '{bcrypt}$2a$10$xLF
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
 VALUES (23, 'PSY', 'Triss1', 'Gold','triss-gold@gmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '2010562059', null);
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id)
-VALUES (24, 'PSY', 'Emma4', 'Stacy','stacy-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '8883292059', null);
+VALUES (24, 'PSY', 'Emma4', 'Stacy','0stacy-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '8883292059', null);
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
-VALUES (25, 'PSY', 'Emma5', 'Brown','brown-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '9003292059', null);
+VALUES (25, 'PSY', 'Emma5', 'Brown','0brown-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '9003292059', null);
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
-VALUES (26, 'PSY', 'Triss2', 'Gold','triss-gold@gmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '2010562059', null);
+VALUES (26, 'PSY', 'Triss2', 'Gold','0triss-gold@gmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '2010562059', null);
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id)
-VALUES (27, 'PSY', 'Emma6', 'Stacy','stacy-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '8883292059', null);
+VALUES (27, 'PSY', 'Emma6', 'Stacy','1stacy-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '8883292059', null);
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
-VALUES (28, 'PSY', 'Emma7', 'Brown','brown-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '9003292059', null);
+VALUES (28, 'PSY', 'Emma7', 'Brown','1brown-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '9003292059', null);
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
-VALUES (29, 'PSY', 'Triss3', 'Gold','triss-gold@gmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '2010562059', null);
+VALUES (29, 'PSY', 'Triss3', 'Gold','1triss-gold@gmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '2010562059', null);
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id)
-VALUES (30, 'PSY', 'Emma8', 'Stacy','stacy-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '8883292059', null);
+VALUES (30, 'PSY', 'Emma8', 'Stacy','2stacy-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '8883292059', null);
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
-VALUES (31, 'PSY', 'Emma9', 'Brown','brown-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '9003292059', null);
+VALUES (31, 'PSY', 'Emma9', 'Brown','2brown-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '9003292059', null);
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
-VALUES (32, 'PSY', 'Triss4', 'Gold','triss-gold@gmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '2010562059', null);
+VALUES (32, 'PSY', 'Triss4', 'Gold','2triss-gold@gmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '2010562059', null);
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id)
-VALUES (33, 'PSY', 'Emma10', 'Stacy','stacy-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '8883292059', null);
+VALUES (33, 'PSY', 'Emma10', 'Stacy','3stacy-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '8883292059', null);
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
-VALUES (34, 'PSY', 'Emma11', 'Brown','brown-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '9003292059', null);
+VALUES (34, 'PSY', 'Emma11', 'Brown','3brown-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '9003292059', null);
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
-VALUES (35, 'PSY', 'Triss4', 'Gold','triss-gold@gmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '2010562059', null);
+VALUES (35, 'PSY', 'Triss4', 'Gold','3triss-gold@gmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '2010562059', null);
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id)
-VALUES (36, 'PSY', 'Emma12', 'Stacy','stacy-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '8883292059', null);
+VALUES (36, 'PSY', 'Emma12', 'Stacy','4stacy-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '8883292059', null);
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
-VALUES (37, 'PSY', 'Emma13', 'Brown','brown-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '9003292059', null);
+VALUES (37, 'PSY', 'Emma13', 'Brown','4brown-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '9003292059', null);
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
-VALUES (38, 'PSY', 'Triss6', 'Gold','triss-gold@gmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '2010562059', null);
+VALUES (38, 'PSY', 'Triss6', 'Gold','4triss-gold@gmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '2010562059', null);
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id)
-VALUES (39, 'PSY', 'Emma14', 'Stacy','stacy-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '8883292059', null);
+VALUES (39, 'PSY', 'Emma14', 'Stacy','5stacy-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '8883292059', null);
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
-VALUES (40, 'PSY', 'Emma15', 'Brown','brown-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '9003292059', null);
+VALUES (40, 'PSY', 'Emma15', 'Brown','5brown-emma@hotmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '9003292059', null);
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id) 
-VALUES (41, 'PSY', 'Triss7', 'Gold','triss-gold@gmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '2010562059', null);
+VALUES (41, 'PSY', 'Triss7', 'Gold','5triss-gold@gmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '2010562059', null);
 --insert a default user
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id, disorder, treatment) 
 VALUES (100, 'PAT', 'Paco', 'Es Batman','pacoelmagias@elmundomagico.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '2017568459', 11, 'Loquísimo', 'Pastillas super fuertes');

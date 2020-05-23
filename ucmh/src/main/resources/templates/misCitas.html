@@ -12,10 +12,10 @@
   <!-- Place favicon.ico in the root directory -->
 
   <link rel="stylesheet" href="/css/schedule-style.css">
-  <link rel="stylesheet" href="/css/main.css">
-  <link rel="stylesheet" href="/css/normalize.css">
-  <link rel="stylesheet" href="/css/materialize.css">
-  <link rel="stylesheet" href="/css/my-theme.css">
+  
+  <!-- Change made by Alejandro Cancelo Correia -->
+	<th:block th:replace="fragments/head :: header"></th:block>
+	<!-- ########################################### -->
 
 
   <link href="https://fonts.googleapis.com/css?family=Muli|Oswald&display=swap" rel="stylesheet">
@@ -25,26 +25,12 @@
 </head>
 
 <body>
-  <!--[if IE]>
-    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
-  <![endif]-->
-
-  <!-- Add your site or application content here -->
 
   <!-- Menú -->
 
-  <nav id="menu">
-    <div class="nav-wrapper">
-      <a href="#" id="logo" class="brand-logo">UCMH</a>
-      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
-          <li class="active"><a href="misCitas">Mis citas</a></li>
-          <li><a href="estadisticasPaciente">Estadisticas</a></li>
-          <li><a href="ajustesPaciente">Ajustes</a></li>
-          <a class="waves-effect waves-light btn">Cerrar sesión</a>
-      </ul>
-    </div>
-  </nav>
+  <!-- Change made by Alejandro Cancelo Correia -->
+	<th:block th:replace="fragments/nav :: nav"></th:block>
+	<!-- ########################################### -->
 
   <!-- Menú desplegable mobile-->
 
@@ -283,11 +269,10 @@
     </div>
   </div>
 
-  <script src="js/vendor/modernizr-3.8.0.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-  <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
-  <script src="js/plugins.js"></script>
-  <script src="js/vendor/materialize.min.js"></script>
+  <!-- Change made by Alejandro Cancelo Correia -->
+	<th:block th:replace="fragments/footer :: jslibs"></th:block>
+<!-- ########################################### -->
+
   <script src="js/vendor/schedule-util.js"></script>
   <script src="js/vendor/schedule-main.js"></script>
 

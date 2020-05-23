@@ -1,3 +1,7 @@
+.sender-id{
+	display: none;
+}
+
 #user-message-owner{
 	display: none;
 }

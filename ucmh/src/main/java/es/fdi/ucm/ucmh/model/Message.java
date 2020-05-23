@@ -17,22 +17,26 @@ import es.fdi.ucm.ucmh.model.Message;
 @Entity
 
 @NamedQueries({
-	@NamedQuery(name = "Message.getMessageList",
+//This is a workaround because a JPA query can't return more than one parameter for a TypedQuery
+//object. reference: https://stackoverflow.com/a/10812445/11769687
+	@NamedQuery(name="Message.getMessageSenderList",
+				query="SELECT NEW es.fdi.ucm.ucmh.controller.auxiliary.MessageQueryObject(m.from, SUM(case when m.dirty = false then 1 else 0 end)) "
+						+ "FROM Message m "
+						+ "WHERE m.to.id = :senderId "
+						+ "GROUP BY m.from.id"),
+	@NamedQuery(name="Message.getAllMessagesOf",
 				query="SELECT m "
-					+ "FROM Message m "
-					+ "WHERE m.to.id = :userId "
-					+ "ORDER BY m.date ASC")
-	})
-
-/************************UNDER TEST**********************
-import es.fdi.ucm.ucmh.transfer.MessageTransferData;
-
-@Entity
-@NamedQueries({
-	@NamedQuery(name="Message.countUnread",
-	query="SELECT COUNT(m) FROM Message m "
-			+ "WHERE m.to.id = :userId")
-*/
+						+ "FROM Message m "
+						+ "WHERE m.from.id = :senderId OR m.to.id = :senderId"),
+	@NamedQuery(name="Message.getMessageFrom",
+				query="SELECT m "
+						+ "FROM Message m "
+						+ "WHERE (m.from.mail = :senderMail AND m.to.id = :userId) OR "
+						+ "(m.from.id = :userId AND m.to.mail = :senderMail) "
+						+ "ORDER BY m.date ASC"),
+	@NamedQuery(name = "Message.updateSeenMessageStatus",
+				query = "UPDATE Message SET dirty = True WHERE from_id = :senderId AND to_id = :userId")
+})
 public class Message {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
