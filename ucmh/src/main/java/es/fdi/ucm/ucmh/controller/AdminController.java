@@ -4,16 +4,11 @@
 package es.fdi.ucm.ucmh.controller;
 
 import java.util.List;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.lang.Long;
-import java.time.LocalDateTime;
-
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
@@ -39,14 +34,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import es.fdi.ucm.ucmh.controller.auxiliary.MessageQueryObject;
 import es.fdi.ucm.ucmh.controller.auxiliary.PagePATCache;
 import es.fdi.ucm.ucmh.controller.auxiliary.PagePSYCache;
 import es.fdi.ucm.ucmh.model.Message;
 import es.fdi.ucm.ucmh.model.User;
 import es.fdi.ucm.ucmh.model.repositories.UserQueryStringNames;
 import es.fdi.ucm.ucmh.transfer.JSONTransferMessage;
-import es.fdi.ucm.ucmh.transfer.MessageTransferData;
 import es.fdi.ucm.ucmh.transfer.UserTransferData;
 import es.fdi.ucm.ucmh.model.UserType;
 

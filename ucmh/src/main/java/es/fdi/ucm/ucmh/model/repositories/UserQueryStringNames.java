@@ -75,5 +75,11 @@ public class UserQueryStringNames {
 	 * */
 	public static final String GET_MESSAGE_FROM = "Message.getMessageFrom";
 	
+	/**
+	 * String representing a <b>named</b> query to update the status of all messages
+	 * sent from one user to another
+	 * */
 	public static final String UPDATE_SEEN_MESSAGE = "Message.updateSeenMessageStatus";
+	
+	public static final String GET_PATIENT_HISTORY_MADE_BY = "PatientHistory.getHistoryMadeBy";
 }

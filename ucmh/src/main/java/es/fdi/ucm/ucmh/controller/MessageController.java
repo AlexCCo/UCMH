@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.fdi.ucm.ucmh.controller.MessageController;
+import es.fdi.ucm.ucmh.controller.auxiliary.AuxiliaryStringPaths;
 import es.fdi.ucm.ucmh.controller.auxiliary.MessageQueryObject;
 import es.fdi.ucm.ucmh.model.Message;
 import es.fdi.ucm.ucmh.model.User;
@@ -65,7 +66,7 @@ public class MessageController{
 	@GetMapping(value = "/admin/messages")
 	public String getAdminMessagesTemplate(Model model) {
 		
-		session.setAttribute("msgURI", "/admin/msg/");
+		session.setAttribute("msgURI", AuxiliaryStringPaths.ADMIN_SEND_MESSAGE_PATH);
 		
 		return processPetition(model);
 	}
@@ -85,7 +86,7 @@ public class MessageController{
 	@GetMapping(value = "/psy/messages")
 	public String getPsyMessagesTemplate(Model model) {
 		
-		session.setAttribute("msgURI", "/psy/msg/");
+		session.setAttribute("msgURI", AuxiliaryStringPaths.PSY_SEND_MESSAGE_PATH);
 		
 		return processPetition(model);
 	}

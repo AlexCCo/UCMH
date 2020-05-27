@@ -61,37 +61,6 @@ public class Message {
 	 */
 	@Column(name = "seen")
 	private boolean dirty;
-	
-	
-	/**
-	 * ****************************UNDER TEST**********************************
-	 * 
-	 * Convierte colecciones de mensajes a lista de mensajes
-	 * que cumplen el formato JSON
-	 * 
-	 * @param messages
-	 * Una coleccion representando un conjuntos de mensajes
-	 * @return
-	 * Una lista de MessageTransferData que cumple el formato
-	 * JSON
-	 *  
-	 * @throws JsonProcessingException
-	 * 
-	 * @see MessageTransferData
-	 *
-	public static List<MessageTransferData> asMessageTransferDataObjects(Collection<Message> messages) {
-		ArrayList<MessageTransferData> all = new ArrayList<>();
-		
-		for (Message m : messages) {
-			all.add(new MessageTransferData(m));
-		}
-		
-		return all;
-	}
-	*/
-
-
-	
 
 	/**
 	 * @return the id

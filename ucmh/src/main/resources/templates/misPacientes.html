@@ -9,7 +9,7 @@
 		<!-- Change made by Alejandro Cancelo Correia -->
 		<th:block th:replace="fragments/head :: header"></th:block>
 		<!-- ########################################### -->
-
+		<link href="/css/psychologist.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Muli|Oswald&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -21,45 +21,26 @@
 		<th:block th:replace="fragments/nav :: nav"></th:block>
 		<!-- ########################################### -->
 
-    <ul class="sidenav" id="mobile-demo">
-       <li><a href="horarioPsicologo">Mi horario</a></li>
-       <li class="active"><a>Pacientes</a></li>
-       <li><a>Cerrar sesión</a></li>
-     </ul>
-
     <h4 class="center-align">Mis pacientes</h4>
 
     <div class="row">
 
       <div class="col s6">
-        <ul class="collection" >
-        <table>
-        <tr th:if="${pacientes.empty}">
-        	<td colspan="2"> No hay pacientes </td>
-        </tr>
-        <tr th:each="u, itemstat: *{pacientes}">
-        <td></td>
-        <td>
-	        <li class="collection-item avatar">
+        <ul class="collection">
+        	<li th:if="${pacientes.empty}"> No hay pacientes </li>
+	        <li class="collection-item avatar" th:each="u, itemstat: *{pacientes}">
 	          <img src="/image/ejemplo_opt.jpg" alt="" class="circle">
-	          <span class = "title" th:text="${u.firstName}"> Title </span>
-	          <span class = "title" th:text="${u.lastName}"> Title </span>
+	          <span th:text="${u.firstName}"> Title </span>
+	          <span th:text="${u.lastName}"> Title </span>
 	          <p>
-	          <span class = "title" th:text="${u.mail}"> Title </span><br>
-	          <span class = "title" th:text="${u.phoneNumber}"> Title </span><br>
+	          <span th:text="${u.mail}"> Title </span><br>
+	          <span th:text="${u.phoneNumber}"> Title </span><br>
 	          </p>
 	          <p>Trastorno de ansiedad <br>
 	             Receta: Pastillas fuertes
 	          </p>
-	          <form action="#" th:action="@{/modify/{id}(id=${u.id})}" method="post" th:object="${u}">
-	             <span class = "title" th:text="${u.firstName}"> Title </span>
-	          	<!-- <p>Nombre: <input type = "text" th:field = "*{firstName}"/></p> -->
-	          </form>
-	          <a th:id="${u.id}" class="secondary-content pacientBTN"><i class="material-icons">face</i></a>
+	          <button th:attr="data-user-mail=${u.mail}" class="waves-effect blue lighten-5 blue-text text-darken-2 btn pacientBTN">ver info</button>
 	        </li>
-	    </td>
-        </tr>
-        </table>
       </ul>
     </div>
 
@@ -84,87 +65,32 @@
               </div>
             </div>
             <div class="sidebar">
-				<textarea id="message" placeholder="escribe a este usuario" rows="4" cols="20"></textarea>
-				<button class="sendmsg" type="submit">Enviar</button>
-			</div>
+							<textarea id="message" placeholder="escribe a este usuario" rows="4" cols="20"></textarea>
+							<button class="sendmsg" type="submit">Enviar</button>
+							<span id="sent-confirmation">Mensaje enviado</span>
+						</div>
           </div>
+          <div class="card-action">
+	          <a id="contact" href="#">Contactar</a>
+	          <a href="#">Nueva cita</a>
+	        </div>
+	        
         <div class="col-md-12">
-	            <table id="conversation" class="table table-striped">
-	                <thead>
-	                <tr>
-	                    <th>MENSAJES:</th>
-	                </tr>
-	                </thead>
-	                <tbody id="message">
-	                </tbody>
-	            </table>
-       		 	</div>
-        <div class="card-action">
-          <a id="contact" href="#">Contactar</a>
-          <a href="#">Nueva cita</a>
-        </div>
-      </div>
+        	<button id="get-user-history">Obtener historial</button>
+	        <ul id="entry-history" class="collection">
+<!-- 	        	<li th:each="entry : ${history}"> -->
+<!-- 	        		<p>fecha: <span th:text="*{entryDate}"></span></p> -->
+<!-- 	        		<p th:text="*{entryText}"></p> -->
+	        	</li>
+	        </ul>    
+	        
+      	</div>
     </div>
-  <script>
-  //$(document).ready(function(){
-    //  $('.sidenav').sidenav();
- // });
-  </script>
+    </div>
   
 <!-- Change made by Alejandro Cancelo Correia -->
 	<th:block th:replace="fragments/footer :: jslibs"></th:block>
 <!-- ########################################### -->
-
-  <script type="text/javascript">
-  $( ".pacientBTN" ).click(function(e) {
-	  var id = $(this).attr("id");
-	  $.ajax({		    
-		  method: "GET",
-		  url: `${window.location.origin}/psy/pacient/${id}`,
-		  data: {}
-		})
-		  .done(function( msg ) {
-			  $("#pacientName").text(msg.firstName + " " + msg.lastName);
-			  $("#pacientDisorder").val(msg.disorder);
-			  $("#pacientTreatment").val(msg.treatment);
-			  $(".savePacient").attr("id", id); 
-			  $(".sendmsg").attr("id", id);
-			  console.log(msg);
-      });
-	});
-  </script>
-    
-  <script type="text/javascript">
-  $( ".savePacient" ).click(function(e) {
-	  var id = $(this).attr("id");
-	  var disorderB = $("#pacientDisorder").val();
-	  var treatmentB = $("#pacientTreatment").val();
-	  console.log("click");
-	  $.ajax({
-		  headers: {'X-CSRF-TOKEN' : config.csrf.value},
-		  method: "POST",
-		  url: `${window.location.origin}/psy/modify/${id}`,
-		  data: {disorder : disorderB, treatment : treatmentB}
-	  })
-	  .done(function( msg ) {
-		  alert("Cambios guardados");
-	  });
-  });
-
-  
-  </script>
-    <script type="text/javascript">
-   $( ".sendmsg" ).click(function(e) {
-  	var id = $(this).attr("id");
-  	$.ajax({
-  	method: "POST",
-  	 url: "/" + id + "/msg",
-  	data: {}
-  	})
-  	.done(function( msg ) {
-  	alert("Cambios guardados");
-  	});
-   });
-   </script>
+	<script src="/js/psychologist.js"></script>
   </body>
 </html>

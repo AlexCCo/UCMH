@@ -1,9 +1,12 @@
 package es.fdi.ucm.ucmh.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -31,27 +34,19 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import es.fdi.ucm.ucmh.controller.auxiliary.AuxiliaryStringPaths;
 import es.fdi.ucm.ucmh.model.GroupAppointment;
 import es.fdi.ucm.ucmh.model.GroupAppointmentJsonRespone;
 import es.fdi.ucm.ucmh.model.Message;
+import es.fdi.ucm.ucmh.model.PatientHistory;
 import es.fdi.ucm.ucmh.model.User;
+import es.fdi.ucm.ucmh.model.repositories.UserQueryStringNames;
+import es.fdi.ucm.ucmh.transfer.PatientHistoryTransfer;
 import es.fdi.ucm.ucmh.transfer.UserTransferData;
 
-/********************************************/
-//@Controller
-//public class PsychologistController {
-//	private static final Logger log = LogManager.getLogger(UserController.class);
-
-
-//			ESTO ES LO QUE EL PROFE TIENE
-/*
-import es.fdi.ucm.ucmh.model.GroupAppointment;
-import es.fdi.ucm.ucmh.model.GroupAppointmentResponse;
-import es.fdi.ucm.ucmh.model.Message;
-import es.fdi.ucm.ucmh.model.User;
-
-//************************************ */	
-
+/**
+ * @author GARCÍA GROSSI, PABLO
+ * */
 @Controller
 @RequestMapping("/psy")
 public class PsychologistController {
@@ -79,6 +74,9 @@ public class PsychologistController {
 		model.addAttribute("pacientes", entityManager.createNamedQuery(
 			"User.findPatientsOf", User.class).setParameter("psychologistId", psy.getId())
 			.getResultList());
+				
+		session.setAttribute("msgURI", AuxiliaryStringPaths.PSY_SEND_MESSAGE_PATH);
+		
 		return "misPacientes";
 	}
 	
@@ -88,66 +86,34 @@ public class PsychologistController {
 		return "horarioPsicologo";
 	}
 	
-	@PostMapping(path="/modify/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	//Edited by Alejandro Cancelo Correia
+	@PostMapping(path="/modify/{mail}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Transactional
 	@ResponseBody
 	public UserTransferData modifyUser(@ModelAttribute User user, @RequestParam(required=false) String disorder,
-			@RequestParam(required=false) String treatment,@PathVariable("id") long id)
+			@RequestParam(required=false) String treatment,@PathVariable long mail)
 	{
-		User target = entityManager.find(User.class, id);
+		TypedQuery<User> query = entityManager.createNamedQuery(UserQueryStringNames.GET_USER_BY_MAIL, User.class);
+		query.setParameter("mail", mail);
+		User target = query.getSingleResult();
 		target.setDisorder(disorder);
 		target.setTreatment(treatment);
 		entityManager.merge(target);
 		return new UserTransferData(target);
 	}
 	
-	@GetMapping(path="/pacient/{id}", produces = { MediaType.APPLICATION_JSON_VALUE }/*, consumes = { MediaType.APPLICATION_JSON_VALUE }*/)
+	//Edited by Alejandro Cancelo Correia
+	@GetMapping(path="/pacient/{mail}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Transactional
 	@ResponseBody
-	public UserTransferData getPacient(@PathVariable long id/*, @RequestBody MessageTransfer cosa*/)
+	public UserTransferData getPacient(@PathVariable String mail)
 	{
-		User pacient = entityManager.find(User.class, id);
+		TypedQuery<User> query = entityManager.createNamedQuery(UserQueryStringNames.GET_USER_BY_MAIL, User.class);
+		query.setParameter("mail", mail);
+		User pacient = query.getSingleResult();
 		return new UserTransferData(pacient);
 	}
-	
-	@PostMapping("/{id}/msg")
-	@ResponseBody
-	@Transactional
-	public String postMsg(@PathVariable long id, 
-			@RequestBody JsonNode o, Model model, HttpSession session) 
-		throws JsonProcessingException {
 		
-		String text = o.get("message").asText();
-		User u = entityManager.find(User.class, id);
-		User sender = entityManager.find(
-				User.class, ((User)session.getAttribute("u")).getId());
-		model.addAttribute("user", u);
-		
-		// construye mensaje, lo guarda en BD
-		Message m = new es.fdi.ucm.ucmh.model.Message();
-		m.setTo(u);
-		m.setFrom(sender);
-		m.setText(text);
-		entityManager.persist(m);
-		entityManager.flush(); // to get Id before commit
-		
-		// construye json
-		ObjectMapper mapper = new ObjectMapper();
-		ObjectNode rootNode = mapper.createObjectNode();
-		rootNode.put("from", sender.getFirstName() +  " " + sender.getLastName());
-		rootNode.put("to", u.getFirstName() +  " " + u.getLastName());
-		rootNode.put("text", text);
-		rootNode.put("id", m.getId());
-		String json = mapper.writeValueAsString(rootNode);
-		
-		log.info("Sending a message to {} with contents '{}'", id, json);
-
-		//LO VUESTO >> messagingTemplate.convertAndSend("/user/"+u.getFirstName()+"/queue/updates", json);
-		//LO DEL PROFE
-		messagingTemplate.convertAndSend("/user/"+u.getFirstName()+"/queue/updates", json);
-		return "{\"result\": \"message sent.\"}";
-	}
-	
    @PostMapping(value = "/saveGroupAppointment", produces = { MediaType.APPLICATION_JSON_VALUE })
    @ResponseBody
    @Transactional
@@ -174,5 +140,33 @@ public class PsychologistController {
          entityManager.persist(respone.getGroupAppointment());      }
 	  return respone;
    }
-      
+   
+   /**
+    * @author Alejandro Cancelo Correia
+    * */
+   @GetMapping(value = "/history-of/{userMail}", produces = MediaType.APPLICATION_JSON_VALUE)
+   public @ResponseBody List<PatientHistoryTransfer> getHistoryOf(@PathVariable String userMail){
+	   TypedQuery<User> validateMail= entityManager.createNamedQuery(UserQueryStringNames.GET_USER_BY_MAIL, User.class);
+	   validateMail.setParameter("mail", userMail);
+	   
+	   User u = validateMail.getSingleResult();
+	   //the is no user registered with that mail
+	   if(u == null) {
+		   return null;
+	   }
+	   
+	   TypedQuery<PatientHistory> query = entityManager.createNamedQuery(
+			   								UserQueryStringNames.GET_PATIENT_HISTORY_MADE_BY,
+			   								PatientHistory.class);
+	   query.setParameter("psyId", userFromSession().getId());
+	   query.setParameter("patientMail", userMail);
+	   
+	   List<PatientHistoryTransfer> transfer = new ArrayList<PatientHistoryTransfer>();
+	   
+	   for(PatientHistory ph : query.getResultList()) {
+		   transfer.add(new PatientHistoryTransfer(ph));
+	   }
+	   
+	   return transfer;
+   }
 }
