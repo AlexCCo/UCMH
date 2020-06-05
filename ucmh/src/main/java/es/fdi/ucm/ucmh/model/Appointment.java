@@ -7,9 +7,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Version;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "Appointment.getAppointmentListOfPatient",
+				query = "SELECT p "
+						+ "FROM Appointment p "
+						+ "WHERE p.patient.id = :patientId")
+})
 public class Appointment {
 	//---------------Atributos-----------------
 	@Id
@@ -19,7 +27,7 @@ public class Appointment {
 	@ManyToOne
 	private User patient;
 	@ManyToOne
-	private User pychologist;
+	private User psychologist;
 	//------------------------------------------
 
 	public Integer getID() {
@@ -40,11 +48,11 @@ public class Appointment {
 	public void setPatiente(User patient) {
 		this.patient = patient;
 	}
-	public User getPychologist() {
-		return pychologist;
+	public User getPsychologist() {
+		return psychologist;
 	}
 	public void setPychologist(User pychologist) {
-		this.pychologist = pychologist;
+		this.psychologist = pychologist;
 	}
 
 }

@@ -99,6 +99,54 @@ INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number
 VALUES (113, 'PAT', 'Irene', 'Gomez','inemez@bmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '2013521333', 14,'Loquísimo', 'Pastillas super fuertes');
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id,disorder, treatment) 
 VALUES (114, 'PAT', 'Irene', 'Gonzalez','regon@bmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '2013521777', 14,'Loquísimo', 'Pastillas super fuertes');
+--insert some default appointments
+INSERT INTO appointment (id, fecha, patient_id, psychologist_id)
+VALUES (1, TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), 100, 11);
+INSERT INTO appointment (id, fecha, patient_id, psychologist_id)
+VALUES (2, TO_DATE('17/11/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), 100, 11);
+INSERT INTO appointment (id, fecha, patient_id, psychologist_id)
+VALUES (3, TO_DATE('17/10/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), 100, 11);
+INSERT INTO appointment (id, fecha, patient_id, psychologist_id)
+VALUES (4, TO_DATE('17/9/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), 100, 11);
+INSERT INTO appointment (id, fecha, patient_id, psychologist_id)
+VALUES (5, TO_DATE('17/8/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), 100, 11);
+--insert some default psychologist history entries
+INSERT INTO patient_history (entry_id, made_by_id, entry_text, patient_mail, entry_date)
+VALUES (1, 11, 'The patient seems altered by some tragic trauma from its youth', 'pacoelmagias@elmundomagico.es', TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'));
+INSERT INTO patient_history (entry_id, made_by_id, entry_text, patient_mail, entry_date)
+VALUES (2, 11, 'The patient seems altered by some tragic trauma from its youth', 'pacoelmagias@elmundomagico.es', TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'));
+INSERT INTO patient_history (entry_id, made_by_id, entry_text, patient_mail, entry_date)
+VALUES (3, 11, 'The patient seems altered by some tragic trauma from its youth', 'pacoelmagias@elmundomagico.es', TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'));
+INSERT INTO patient_history (entry_id, made_by_id, entry_text, patient_mail, entry_date)
+VALUES (4, 11, 'The patient seems altered by some tragic trauma from its youth', 'pacoelmagias@elmundomagico.es', TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'));
+INSERT INTO patient_history (entry_id, made_by_id, entry_text, patient_mail, entry_date)
+VALUES (5, 11, 'The patient seems altered by some tragic trauma from its youth', 'pacoelmagias@elmundomagico.es', TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'));
+INSERT INTO patient_history (entry_id, made_by_id, entry_text, patient_mail, entry_date)
+VALUES (6, 11, 'The patient seems altered by some tragic trauma from its youth', 'pacoelmagias@elmundomagico.es', TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'));
+INSERT INTO patient_history (entry_id, made_by_id, entry_text, patient_mail, entry_date)
+VALUES (7, 11, 'The patient seems altered by some tragic trauma from its youth', 'pacoelmagias@elmundomagico.es', TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'));
+INSERT INTO patient_history (entry_id, made_by_id, entry_text, patient_mail, entry_date)
+VALUES (8, 11, 'The patient seems altered by some tragic trauma from its youth', 'pacoelmagias@elmundomagico.es', TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'));
+INSERT INTO patient_history (entry_id, made_by_id, entry_text, patient_mail, entry_date)
+VALUES (9, 11, 'The patient seems altered by some tragic trauma from its youth', 'pacoelmagias@elmundomagico.es', TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'));
+INSERT INTO patient_history (entry_id, made_by_id, entry_text, patient_mail, entry_date)
+VALUES (10, 11, 'The patient seems altered by some tragic trauma from its youth', 'poca-cosa@hotmail.es', TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'));
+INSERT INTO patient_history (entry_id, made_by_id, entry_text, patient_mail, entry_date)
+VALUES (11, 11, 'The patient seems altered by some tragic trauma from its youth', 'poca-cosa@hotmail.es', TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'));
+INSERT INTO patient_history (entry_id, made_by_id, entry_text, patient_mail, entry_date)
+VALUES (12, 11, 'The patient seems altered by some tragic trauma from its youth', 'poca-cosa@hotmail.es', TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'));
+INSERT INTO patient_history (entry_id, made_by_id, entry_text, patient_mail, entry_date)
+VALUES (13, 11, 'The patient seems altered by some tragic trauma from its youth', 'poca-cosa@hotmail.es', TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'));
+INSERT INTO patient_history (entry_id, made_by_id, entry_text, patient_mail, entry_date)
+VALUES (14, 11, 'The patient seems altered by some tragic trauma from its youth', 'poca-cosa@hotmail.es', TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'));
+INSERT INTO patient_history (entry_id, made_by_id, entry_text, patient_mail, entry_date)
+VALUES (15, 11, 'The patient seems altered by some tragic trauma from its youth', 'poca-cosa@hotmail.es', TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'));
+INSERT INTO patient_history (entry_id, made_by_id, entry_text, patient_mail, entry_date)
+VALUES (16, 11, 'The patient seems altered by some tragic trauma from its youth', 'poca-cosa@hotmail.es', TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'));
+INSERT INTO patient_history (entry_id, made_by_id, entry_text, patient_mail, entry_date)
+VALUES (17, 11, 'The patient seems altered by some tragic trauma from its youth', 'poca-cosa@hotmail.es', TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'));
+INSERT INTO patient_history (entry_id, made_by_id, entry_text, patient_mail, entry_date)
+VALUES (18, 11, 'The patient seems altered by some tragic trauma from its youth', 'poca-cosa@hotmail.es', TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'));
 --insert default messages
 INSERT INTO message (id, sent_date, estado_animo, text, from_id, to_id, seen)
 VALUES (1, TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), null, 'The quick brown fox jumps over the lazy dog', 10, 17, false);
@@ -3432,3 +3480,5 @@ INSERT INTO message (id, sent_date, estado_animo, text, from_id, to_id, seen)
 VALUES (1665, TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), null, 'The quick brown fox jumps over the lazy dog', 12, 1, false);
 INSERT INTO message (id, sent_date, estado_animo, text, from_id, to_id, seen)
 VALUES (1666, TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), null, 'The quick brown fox jumps over the lazy dog', 16, 1, false);
+INSERT INTO message (id, sent_date, estado_animo, text, from_id, to_id, seen)
+VALUES (1667, TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), null, 'The quick brown fox jumps over the lazy dog', 1, 11, false);

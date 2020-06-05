@@ -43,7 +43,7 @@ public class GroupAppointment {
 	
 	//@NotEmpty(message="Tienes que estar registrado")
 	@ManyToOne
-	private User pychologist;
+	private User psychologist;
 	
 	private String example;
 
@@ -88,12 +88,12 @@ public class GroupAppointment {
 		this.patient = patient;
 	}
 
-	public User getPychologist() {
-		return pychologist;
+	public User getPsychologist() {
+		return psychologist;
 	}
 
-	public void setPychologist(User pychologist) {
-		this.pychologist = pychologist;
+	public void setPsychologist(User pychologist) {
+		this.psychologist = pychologist;
 	}
 
 	public String getExample() {

@@ -1,6 +1,4 @@
-/**
- * Code mae entirely by Alejandro Cancelo Correia
- * */
+
 package es.fdi.ucm.ucmh.controller;
 
 import java.time.LocalDateTime;
@@ -37,6 +35,10 @@ import es.fdi.ucm.ucmh.model.repositories.UserQueryStringNames;
 import es.fdi.ucm.ucmh.transfer.MessageTransferData;
 
 
+/**
+ * 
+ * @author Alejandro Cancelo Correia
+ * */
 @Controller
 public class MessageController{
 	private static final Logger log = LogManager.getLogger(MessageController.class);
@@ -196,7 +198,7 @@ public class MessageController{
 		}
 		
 		String destination = String.format("/user/%s/queue/updates", u.getMail());
-		String textToSent = String.format("{\"name\":\"%s,%s\",\"from\":\"%s\",\"text\": \"%s\", \"time\": \"%s\"}",
+		String textToSent = String.format("{\"name\":\"%s,%s\",\"from\":\"%s\",\"text\": \"%s\",\"time\":\"%s\"}",
 												sender.getFirstName(), sender.getLastName(), sender.getMail(),
 												message.msg, message.time);
 		messagingTemplate.convertAndSend(destination, textToSent);
@@ -217,6 +219,11 @@ public class MessageController{
 	@GetMapping(value = "/admin/msg/recv", produces = {MediaType.APPLICATION_JSON_VALUE})
 	@Transactional
 	public @ResponseBody List<MessageTransferData> historyMessageRequestedFor(@RequestParam String requestedUserMail) {
+		return processHistoryRequest(requestedUserMail);
+	}
+	@GetMapping(value = "/psy/msg/recv", produces = {MediaType.APPLICATION_JSON_VALUE})
+	@Transactional
+	public @ResponseBody List<MessageTransferData> psyHistoryMessageRequestedFor(@RequestParam String requestedUserMail) {
 		return processHistoryRequest(requestedUserMail);
 	}
 

@@ -1,6 +1,8 @@
-package es.fdi.ucm.ucmh.model;
+package es.fdi.ucm.ucmh.transfer;
 
 import java.util.Map;
+
+import es.fdi.ucm.ucmh.model.GroupAppointment;
 
 public class GroupAppointmentJsonRespone {
 	   private GroupAppointment group_appointment;

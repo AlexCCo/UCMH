@@ -1,0 +1,140 @@
+<!doctype html>
+<!-- License: https://codyhouse.co/mit -->
+<html class="no-js" lang="es">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>document.getElementsByTagName("html")[0].className += " js";</script>
+  
+  <link rel="stylesheet" href="/css/schedule-style.css">
+  
+  <!-- Change made by Alejandro Cancelo Correia -->
+	<th:block th:replace="fragments/head :: header"></th:block>
+	<!-- ########################################### -->
+
+
+  <link href="https://fonts.googleapis.com/css?family=Muli|Oswald&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+
+  <!-- Menú -->
+
+  <!-- Change made by Alejandro Cancelo Correia -->
+	<th:block th:replace="fragments/nav :: nav"></th:block>
+	<!-- ########################################### -->
+
+  <!-- Menú desplegable mobile-->
+
+  <ul class="sidenav" id="mobile-demo">
+    <li class="active"><a>Mis citas</a></li>
+    <li><a href="estadisticasPaciente">Estadisticas</a></li>
+    <li><a href="ajustesPaciente">Ajustes</a></li>
+    <li><a>Cerrar sesión</a></li>
+  </ul>
+
+  <header class="cd-main-header text-center flex flex-column flex-center">
+    <h4 class="center-align">Citas de <span th:text="${user}"></span></h4>
+  </header>
+	
+	<div id="appointments-table">
+		<ul class="collection">
+      <li class="collection-item card appoint" th:each="appnt : ${appointments}">
+      	<div>
+      		<div class="appoint-date">DATE: <span th:text="${appnt.date}" class="date-value"></span></div>
+      		<div class="lower-separator-container">
+      			<div class="lower-separator"></div>
+      		</div>
+      		<div class="appoint-with">
+      			Psychologist: <span th:attr="data-psy-mail=${appnt.psychologistMail}" 
+      												  th:text="|${appnt.psychologistName}|" 
+      												  class="appoint-psy"></span>
+      		</div>
+      	</div>
+      </li>
+    </ul>
+	</div>
+
+  <!-- Botón estático y modales -->
+
+  <div class="fixed-action-btn">
+    <a class="btn-floating btn-large waves-effect waves-light red">
+      <i class="material-icons">add</i>
+    </a>
+    <ul>
+      <li><a id="green-button-correction" class="btn-floating green modal-trigger" href="#modal1"><i class="material-icons">person</i></a></li>
+    </ul>
+  </div>
+
+  <div id="modal1" class="modal prueba">
+    <div class="modal-content">
+      <h4>Cita individual</h4>
+      <!-- Selección de día -->
+
+      <p> Selecciona día para la sesión </p>
+      <input type="text" class="datepicker">
+
+      <!-- Selección de hora ini -->
+
+      <p> Selecciona hora de la sesión </p>
+      <input type="text" class="timepicker">
+
+      <!-- Selección hora fin -->
+
+      <p> Selecciona hora de fin de la sesión </p>
+      <input type="text" class="timepicker">
+
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-red btn-flat red">Cancelar</a>
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat green">Aceptar</a>
+    </div>
+  </div>
+
+  <!-- Change made by Alejandro Cancelo Correia -->
+	<th:block th:replace="fragments/footer :: jslibs"></th:block>
+<!-- ########################################### -->
+
+  <script src="/js/vendor/schedule-util.js"></script>
+  <script src="/js/vendor/schedule-main.js"></script>
+
+	<script src=""></script>
+  <script>
+  $(document).ready(function(){
+      $('.sidenav').sidenav();
+      $('.fixed-action-btn').floatingActionButton();
+      $('.modal').modal();
+      $('.trigger-modal').modal();
+      $('select').formSelect();
+      $('.datepicker').datepicker();
+      $('.timepicker').timepicker();
+    });
+  </script>
+  <style>
+  	#appointments-table {
+  		padding: 0 20px;
+  	}
+  	
+  	.appoint {
+  		margin: 5px !important;
+  	}
+  	
+  	.lower-separator-container {
+  			padding-right: 70%;
+  	}
+  	
+  	.lower-separator {
+  		border-bottom: 1px solid black;
+  	}
+  	
+  	.appoint-with {
+  		padding: 9px 5px;
+  	}
+  </style>
+</body>
+</html>

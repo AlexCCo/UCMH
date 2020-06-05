@@ -76,21 +76,34 @@
 	        </div>
 	        
         <div class="col-md-12">
-        	<button id="get-user-history">Obtener historial</button>
-	        <ul id="entry-history" class="collection">
-<!-- 	        	<li th:each="entry : ${history}"> -->
-<!-- 	        		<p>fecha: <span th:text="*{entryDate}"></span></p> -->
-<!-- 	        		<p th:text="*{entryText}"></p> -->
-	        	</li>
-	        </ul>    
-	        
+        	<button id="get-user-history" class="waves-effect light-blue lighten-5 light-blue-text btn">Obtener historial</button>
+        	<a id="add-new-entry" href="#entry-modal" class="waves-effect light-blue lighten-5 light-blue-text btn modal-trigger">Nueva entrada</a>
+	        <ul id="entry-history" class="collection"></ul>    
       	</div>
     </div>
     </div>
-  
+  	<div id="entry-modal" class="modal">
+			<div class="modal-content">
+					<p id="error-text">Ambos campos no deben de estar vacios</p>
+					<p>Entrada del historial</p>
+	      	<textarea id="entry-text" cols="80" placeholder="Escribe la nueva entrada"></textarea>
+				<div class="modal-footer">
+					<span id="result-text">¡Entrada guardada!</span>
+					<a class="modal-action waves-effect waves-green btn-flat accept-user" id="accept-entry">Aceptar</a>
+					<a class="modal-action modal-close waves-effect waves-red btn-flat reject-entry">Cancelar</a>
+				</div>
+			</div>
+		</div>
 <!-- Change made by Alejandro Cancelo Correia -->
 	<th:block th:replace="fragments/footer :: jslibs"></th:block>
 <!-- ########################################### -->
+	
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('.modal').modal();
+			$('.modal-trigger').modal();
+		});
+	</script>
 	<script src="/js/psychologist.js"></script>
   </body>
 </html>

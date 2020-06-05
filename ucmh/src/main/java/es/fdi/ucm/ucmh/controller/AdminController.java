@@ -1,6 +1,4 @@
-/**
- * Controller made entirely by Alejandro Cancelo Correia
- * */
+
 package es.fdi.ucm.ucmh.controller;
 
 import java.util.List;
@@ -43,6 +41,10 @@ import es.fdi.ucm.ucmh.transfer.JSONTransferMessage;
 import es.fdi.ucm.ucmh.transfer.UserTransferData;
 import es.fdi.ucm.ucmh.model.UserType;
 
+/**
+ *
+ * @author Alejandro Cancelo Correia
+ * */
 @Controller
 @RequestMapping(value = "/admin")
 public class AdminController {

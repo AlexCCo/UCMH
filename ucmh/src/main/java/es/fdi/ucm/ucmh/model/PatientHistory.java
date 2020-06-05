@@ -27,7 +27,8 @@ import org.springframework.data.jpa.repository.Query;
 	@NamedQuery(name = "PatientHistory.getHistoryMadeBy",
 			query = "SELECT p "
 					+ "FROM PatientHistory p "
-					+ "WHERE p.madeBy.id = :psyId AND p.referredUserMail = :patientMail ")
+					+ "WHERE p.madeBy.id = :psyId AND p.referredUserMail = :patientMail "
+					+ "ORDER BY p.entryDate ASC ")
 })
 public class PatientHistory {
 	@Id
@@ -90,6 +91,18 @@ public class PatientHistory {
 	 */
 	public void setEntryDate(LocalDateTime entryDate) {
 		this.entryDate = entryDate;
+	}
+	/**
+	 * @return the referredUserMail
+	 */
+	public String getReferredUserMail() {
+		return referredUserMail;
+	}
+	/**
+	 * @param referredUserMail the referredUserMail to set
+	 */
+	public void setReferredUserMail(String referredUserMail) {
+		this.referredUserMail = referredUserMail;
 	}
 	
 	

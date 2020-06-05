@@ -1,5 +1,7 @@
 package es.fdi.ucm.ucmh.controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,18 +31,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import es.fdi.ucm.ucmh.controller.auxiliary.AuxiliaryStringPaths;
 import es.fdi.ucm.ucmh.model.GroupAppointment;
-import es.fdi.ucm.ucmh.model.GroupAppointmentJsonRespone;
-import es.fdi.ucm.ucmh.model.Message;
 import es.fdi.ucm.ucmh.model.PatientHistory;
 import es.fdi.ucm.ucmh.model.User;
 import es.fdi.ucm.ucmh.model.repositories.UserQueryStringNames;
+import es.fdi.ucm.ucmh.transfer.CreateEntryReceivedData;
+import es.fdi.ucm.ucmh.transfer.GroupAppointmentJsonRespone;
+import es.fdi.ucm.ucmh.transfer.JSONTransferMessage;
 import es.fdi.ucm.ucmh.transfer.PatientHistoryTransfer;
 import es.fdi.ucm.ucmh.transfer.UserTransferData;
 
@@ -77,7 +75,7 @@ public class PsychologistController {
 				
 		session.setAttribute("msgURI", AuxiliaryStringPaths.PSY_SEND_MESSAGE_PATH);
 		
-		return "misPacientes";
+		return "psychologist";
 	}
 	
 	@GetMapping("/horarioPsicologo")
@@ -146,12 +144,15 @@ public class PsychologistController {
     * */
    @GetMapping(value = "/history-of/{userMail}", produces = MediaType.APPLICATION_JSON_VALUE)
    public @ResponseBody List<PatientHistoryTransfer> getHistoryOf(@PathVariable String userMail){
+	   log.info("get history request made by psychologist with id {} "
+	   		+ "to obtain psychological history from user with mail {}", userFromSession().getId(), userMail);
 	   TypedQuery<User> validateMail= entityManager.createNamedQuery(UserQueryStringNames.GET_USER_BY_MAIL, User.class);
 	   validateMail.setParameter("mail", userMail);
 	   
 	   User u = validateMail.getSingleResult();
 	   //the is no user registered with that mail
 	   if(u == null) {
+		   log.error("get history request FAILED: There is no such user with mail {}", userMail);
 		   return null;
 	   }
 	   
@@ -168,5 +169,44 @@ public class PsychologistController {
 	   }
 	   
 	   return transfer;
+   }
+   
+   /**
+    * 
+    * @author Alejandro Cancelo Correia
+    * */
+   @PostMapping(value = "/create-entry", consumes = MediaType.APPLICATION_JSON_VALUE,
+		   produces = MediaType.APPLICATION_JSON_VALUE)
+   @Transactional
+   public @ResponseBody JSONTransferMessage createHistoryEntryForPatient(@RequestBody CreateEntryReceivedData request){
+	   log.info("request made by psychologist with id {} "
+	   		+ "to create a new history entry for user", userFromSession().getId(), request.getMail());
+	   
+	   TypedQuery<User> query = entityManager.createNamedQuery(UserQueryStringNames.GET_USER_BY_MAIL, User.class);
+	   query.setParameter("mail", request.getMail());
+	   
+	   User u = query.getSingleResult();
+	   
+	   if(u == null) {
+		   log.info("REJECTED: Request of psychologist with id {} "
+		   		+ "to create new history entry for user {}", userFromSession().getId(), request.getMail());
+		   return new JSONTransferMessage("error");
+	   }
+	   
+	   try {
+		   PatientHistory newHistory = new PatientHistory();
+		   newHistory.setEntryDate(LocalDateTime.parse(request.getDate(), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+		   newHistory.setEntryText(request.getText());
+		   newHistory.setMadeBy(userFromSession());
+		   newHistory.setReferredUserMail(request.getMail());
+		   
+		   entityManager.persist(newHistory);
+	   }catch(Exception e) {
+		   log.info("REJECTED: Request of psychologist with id {} "
+			   		+ "to create new history entry for user {}", userFromSession().getId(), request.getMail());
+		   return new JSONTransferMessage("Error");
+	   }
+	   
+	   return new JSONTransferMessage("ok");
    }
 }

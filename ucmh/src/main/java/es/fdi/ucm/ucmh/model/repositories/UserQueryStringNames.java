@@ -2,6 +2,11 @@ package es.fdi.ucm.ucmh.model.repositories;
 
 import es.fdi.ucm.ucmh.controller.auxiliary.MessageQueryObject;
 
+/**
+ * Class for obtaining query names
+ *  
+ * @author Alejandro Cancelo Correia
+ * */
 public class UserQueryStringNames {
 	/**
 	 * String representing a <b>named</b> query to obtain a list of users.<br>
@@ -81,5 +86,14 @@ public class UserQueryStringNames {
 	 * */
 	public static final String UPDATE_SEEN_MESSAGE = "Message.updateSeenMessageStatus";
 	
+	/**
+	 * String representing a <b>named</b> query to obtain every history entry made by
+	 * a psychologist in regard of his patient
+	 * */
 	public static final String GET_PATIENT_HISTORY_MADE_BY = "PatientHistory.getHistoryMadeBy";
+	
+	/**
+	 * String representing a <b>named</b> query to obtain every appointment of a patient
+	 * */
+	public static final String GET_PATIENT_APPOINTMENTS = "Appointment.getAppointmentListOfPatient";
 }

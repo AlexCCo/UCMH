@@ -84,7 +84,7 @@ public class User {
 	@OneToMany(mappedBy="patient")
 	private Collection<Appointment> patientsDate;
 
-	@OneToMany(mappedBy="pychologist")
+	@OneToMany(mappedBy="psychologist")
 	private Collection<Appointment> psichologistsDate;
 	//-----
 
@@ -92,7 +92,7 @@ public class User {
 	@ManyToMany(mappedBy="patient")
 	private Collection<GroupAppointment> patientsGroupDate;
 
-	@OneToMany(mappedBy="pychologist")
+	@OneToMany(mappedBy="psychologist")
 	private Collection<GroupAppointment> psichologistsGroupDate;
 	//-----
 	//message

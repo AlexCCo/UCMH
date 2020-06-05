@@ -158,7 +158,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 function obtain_messages(origin_element) {
 	let sender_mail = origin_element.getElementsByClassName("sender-mail")[0].innerText;
-	let uri = `${config.uri}recv/?requestedUserMail=${sender_mail}`;
+	let uri = `${config.uri}recv?requestedUserMail=${sender_mail}`;
 	
 	console.log("Requesting message list...");
 	requestData.open('GET', uri);
