@@ -66,7 +66,7 @@ public class PsychologistController {
 		return entityManager.find(User.class, u.getId());
 	}
 	
-	@GetMapping("")
+	@GetMapping("/psychologist")
 	public String getUser(Model model) {
 		User psy = refreshUser(userFromSession());
 		model.addAttribute("pacientes", entityManager.createNamedQuery(

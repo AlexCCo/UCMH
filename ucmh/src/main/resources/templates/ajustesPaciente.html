@@ -24,46 +24,36 @@
 	<th:block th:replace="fragments/nav :: nav"></th:block>
 	<!-- ########################################### -->
 
-	<!-- Menú desplegable mobile-->
-
-	<ul class="sidenav" id="mobile-demo">
-		<li><a>Mis citas</a></li>
-		<li><a href="estadisticasPaciente">Estadisticas</a></li>
-		<li class="active"><a href="ajustesPaciente">Ajustes</a></li>
-		<li><a>Cerrar sesión</a></li>
-	</ul>
-
 	<h4 class="center-align">Ajustes de <spam th:text="${user.firstName}"></spam></h4>
 
-	<div class="card">
+	<div class="card central-div">
 		<div class="card-content">
-			<span class="card-title" th:text="${user.firstName}"></span>
-			<div class="row valign-wrapper">
-				<div class="col s4">
-					<img src="image/ejemplo.jpg" alt="" class="responsive-img">
-				</div>
-				<div class="col s8">
-					<h4>Tu psicolog@${user.psychologist.firstName}</h4>
-					<p>Nombre:<spam th:text="${user.psychologist.firstName}"></spam></p>
-					<p>Apellidos:<spam th:text="${user.psychologist.lastName}"></spam></p>
-					<p>Correo electrónico: <spam th:text="${user.psychologist.mail}"></spam></p>
-					<p>Horario: 9:00-17:00</p>
-				</div>
+			<div class="col s8">
+				<h4>Tu psicologo</h4>
+				<p>Nombre: <spam th:text="${user.psychologist.firstName}"></spam></p>
+				<p>Apellidos: <spam th:text="${user.psychologist.lastName}"></spam></p>
+				<p>Correo electrónico: <spam th:text="${user.psychologist.mail}"></spam></p>
 			</div>
-		
-
-	</div>
-	</div>
-		<div class="card-action">
-			<a href="#">Contactar</a> <a href="#modal2">Cambio de psicólogo</a>
+			<div>
+				<button class="contact-psy waves-effect waves-indigo blue lighten-2 white-text btn-flat">
+					Contactar
+				</button>
+				<a href="#change-psy-modal" class="modal-trigger change-psy waves-effect waves-red-darken-4 red lighten-2 btn-flat">
+					Cambiar de psicologo
+				</a>
+			</div>
 		</div>
-	<div id="modal2" class="modal">
+	</div>
+	<div id="change-psy-modal" class="modal">
 		<div class="modal-content">
-			<h4>Cita grupal</h4>
-			<p>A bunch of text</p>
+			<h4>Cambio de psicologo</h4>
+			<p>Cuentanos por que quieres cambiar de psicologo (opcional):</p>
+			<textarea id="change-psy-feedback" cols="120"></textarea>
 		</div>
 		<div class="modal-footer">
-			<a href="#!" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+			<p id="result-text">Mensaje enviado!</p>
+			<button class="modal-close red darken-3 btn-flat">Cancelar</button>
+			<button id="accept-change-psy" class="waves-effect waves-teal green darken-1 btn-flat">Aceptar</button>
 		</div>
 	</div>
 
@@ -71,18 +61,26 @@
 	<th:block th:replace="fragments/footer :: jslibs"></th:block>
 <!-- ########################################### -->
 
-	<script src="js/vendor/schedule-util.js"></script>
-	<script src="js/vendor/schedule-main.js"></script>
-
-	<script src="js/main.js"></script>
+	<script src="/js/vendor/schedule-util.js"></script>
+	<script src="/js/vendor/schedule-main.js"></script>
+	<script src="/js/settings-p.js"></script>
 	<script>
 		$(document).ready(function() {
-			$('.sidenav').sidenav();
-			var x = document.getElementsByClassName(".modal");
-			x.modal();
-			//$('.modal').modal();
-			$('.trigger-modal').modal();
+			$('.modal').modal();
+			$('.modal-trigger').modal();
 		});
 		</script>
+		<style>
+			.central-div {
+				text-align: center;
+			}
+			
+			#result-text {
+				color: green;
+				display: inline-block;
+				margin-right: 50px;
+				visibility: hidden;
+			}
+		</style>
 		</body>
 </html>

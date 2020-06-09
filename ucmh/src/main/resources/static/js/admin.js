@@ -413,7 +413,7 @@ function accept_handler(btn_id){
 		requestData.open('POST', uri);
 		//tell what to do one the request is done
 		requestData.onload = function() {
-			console.log("message was sent");
+			console.log(requestData.responseText);
 		};
 		
 		requestData.setRequestHeader("X-CSRF-TOKEN", config.csrf.value);

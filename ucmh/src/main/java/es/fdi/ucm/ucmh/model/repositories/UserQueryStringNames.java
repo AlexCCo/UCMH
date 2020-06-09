@@ -8,6 +8,8 @@ import es.fdi.ucm.ucmh.controller.auxiliary.MessageQueryObject;
  * @author Alejandro Cancelo Correia
  * */
 public class UserQueryStringNames {
+	public static final String GET_LAST_ID = "SELECT MAX(id) " + 
+											"FROM User ";
 	/**
 	 * String representing a <b>named</b> query to obtain a list of users.<br>
 	 * The resulting list will be in the range of :

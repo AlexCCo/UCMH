@@ -129,6 +129,8 @@ public class AdminController {
 		
 		theNewUser.setPassword(encodedPassword);
 		
+		query.setParameter("mail", theNewUser.getMail());
+		
 		try {
 			query.getSingleResult();
 		} catch (NoResultException e) {}
@@ -139,7 +141,6 @@ public class AdminController {
 		try {
 			entityManager.persist(theNewUser);
 			entityManager.flush();
-			entityManager.clear();
 		} catch (Exception e) {
 			return "Error: something went wrong!";
 		}
@@ -367,7 +368,7 @@ public class AdminController {
 		}
 		
 		entityManager.remove(u);
-		entityManager.clear();
+		entityManager.flush();
 		return new JSONTransferMessage("OK");
 	}
 	
