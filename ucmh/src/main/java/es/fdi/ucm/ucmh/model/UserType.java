@@ -4,6 +4,7 @@ public enum UserType {
 
 	PAT,   // a patient
 	PSY,   // a psychologist
+	USER,  // a user
 	ADMIN; // an admin
 
 	private static String[] validPaths = {

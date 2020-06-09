@@ -87,17 +87,26 @@
 			// open modal when user selects an event
 			this.singleEvents[i].addEventListener('click', function(event){
 				event.preventDefault();
-				if(!self.animating) self.openModal(this.getElementsByTagName('a')[0]);
+				if(!self.animating) {
+					self.openModal(this.getElementsByTagName('a')[0]);
+					change(this.getElementsByTagName('a')[0]);
+				}
 			});
 		}
 		//close modal window
 		this.modalClose.addEventListener('click', function(event){
 			event.preventDefault();
-			if( !self.animating ) self.closeModal();
+			if( !self.animating ) {
+				self.closeModal();
+				changeBack();
+			}
 		});
 		this.coverLayer.addEventListener('click', function(event){
 			event.preventDefault();
-			if( !self.animating ) self.closeModal();
+			if( !self.animating ){
+				self.closeModal();
+				changeBack();
+			}
 		});
 	};
 
@@ -110,9 +119,14 @@
 		this.modalEventName.textContent = target.getElementsByTagName('em')[0].textContent;
 		this.modalDate.textContent = target.getAttribute('data-start')+' - '+target.getAttribute('data-end');
 		this.modal.setAttribute('data-event', target.getAttribute('data-event'));
+		//this.modal.setAttribute('data-content', target.getAttribute('data-content'));
+
+      	this.modal.getElementsByClassName('cd-schedule-modal__event-info')[0].innerHTML = "<div>" + target.getAttribute('data-content') + "</div>"; 
+      	Util.addClass(self.modal, 'cd-schedule-modal--content-loaded');
+
 
 		//update event content
-		this.loadEventContent(target.getAttribute('data-content'));
+		//this.loadEventContent(target.getAttribute('data-content'));
 
 		Util.addClass(this.modal, 'cd-schedule-modal--open');
 		

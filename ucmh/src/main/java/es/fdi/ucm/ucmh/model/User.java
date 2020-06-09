@@ -5,7 +5,15 @@
 
 package es.fdi.ucm.ucmh.model;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.WeekFields;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
+
 import javax.persistence.Entity;
 
 import javax.persistence.EnumType;
@@ -13,16 +21,20 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @NamedQueries({
@@ -80,20 +92,23 @@ public class User {
 	private String treatment;
 	//------
 
-	//date
-	@OneToMany(mappedBy="patient")
-	private Collection<Appointment> patientsDate;
+	@OneToMany(targetEntity = GroupAppointment.class)
+	@JsonIgnore
+	@JoinColumn(name = "psychologist_id")
+	@OrderBy("date ASC, start_hour ASC")
+	private List<GroupAppointment> groupAppointments = new ArrayList<GroupAppointment>();
 
-	@OneToMany(mappedBy="psychologist")
-	private Collection<Appointment> psichologistsDate;
-	//-----
+	@OneToMany(targetEntity = IndividualAppointment.class)
+	@JsonIgnore
+	@JoinColumn(name = "patient_id")
+	@OrderBy("date ASC, start_hour ASC")
+	private List<IndividualAppointment> appointments = new ArrayList<IndividualAppointment>();
 
-	//groupDate
-	@ManyToMany(mappedBy="patient")
-	private Collection<GroupAppointment> patientsGroupDate;
-
-	@OneToMany(mappedBy="psychologist")
-	private Collection<GroupAppointment> psichologistsGroupDate;
+	@OneToMany(targetEntity = EmotionalState.class)
+	@JsonIgnore
+	@JoinColumn(name = "patient_id")
+	@OrderBy("date ASC")
+	private List<EmotionalState> emotionalState = new ArrayList<EmotionalState>();
 	//-----
 	//message
 	@OneToMany(mappedBy="from")
@@ -167,30 +182,7 @@ public class User {
 	public void setPsychologist(User psychologist) {
 		this.psychologist = psychologist;
 	}
-	public Collection<Appointment> getPatientsDate() {
-		return this.patientsDate;
-	}
-	public void setPatientsDate(Collection<Appointment> patientsDate) {
-		this.patientsDate = patientsDate;
-	}
-	public Collection<Appointment> getPsichologistsDate() {
-		return psichologistsDate;
-	}
-	public void setPsichologistsDate(Collection<Appointment> psichologistsDate) {
-		this.psichologistsDate = psichologistsDate;
-	}
-	public Collection<GroupAppointment> getPatientsGroupDate() {
-		return this.patientsGroupDate;
-	}
-	public void setPatientsGroupDate(Collection<GroupAppointment> patientsGroupDate) {
-		this.patientsGroupDate = patientsGroupDate;
-	}
-	public Collection<GroupAppointment> getPsichologistsGroupDate() {
-		return psichologistsGroupDate;
-	}
-	public void setPsichologistsGroupDate(Collection<GroupAppointment> psichologistsGroupDate) {
-		this.psichologistsGroupDate = psichologistsGroupDate;
-	}
+
 	public Collection<Message> getMessageSent() {
 		return this.messageSent;
 	}
@@ -204,23 +196,6 @@ public class User {
 		this.receivedMessage = receivedMessage;
 	}
 
-	//auto-generated code
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", " + (firstName != null ? "firstName=" + firstName + ", " : "")
-				+ (lastName != null ? "lastName=" + lastName + ", " : "") + (mail != null ? "mail=" + mail + ", " : "")
-				+ (password != null ? "password=" + password + ", " : "")
-				+ (phoneNumber != null ? "phoneNumber=" + phoneNumber + ", " : "")
-				+ (type != null ? "type=" + type + ", " : "")
-				+ (psychologist != null ? "psychologist=" + psychologist + ", " : "")
-				+ (patientsDate != null ? "patientsDate=" + patientsDate + ", " : "")
-				+ (psichologistsDate != null ? "psichologistsDate=" + psichologistsDate + ", " : "")
-				+ (patientsGroupDate != null ? "patientsGroupDate=" + patientsGroupDate + ", " : "")
-				+ (psichologistsGroupDate != null ? "psichologistsGroupDate=" + psichologistsGroupDate + ", " : "")
-				+ (messageSent != null ? "messageSent=" + messageSent + ", " : "")
-				+ (receivedMessage != null ? "receivedMessage=" + receivedMessage : "") + "]";
-	}
-	
 	public String getTreatment() {
 		return treatment;
 	}
@@ -241,4 +216,115 @@ public class User {
 	public void deleteMessageSent(Message msg) {
 		messageSent.remove(msg);
 	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", mail=" + mail
+				+ ", password=" + password + ", phoneNumber=" + phoneNumber + ", type=" + type + ", psychologist="
+				+ psychologist + ", disorder=" + disorder + ", treatment=" + treatment + ", groupAppointments="
+				+ groupAppointments + ", appointments=" + appointments + ", emotionalState=" + emotionalState
+				+ ", messageSent=" + messageSent + ", receivedMessage=" + receivedMessage + "]";
+	}
+
+	public List<GroupAppointment> getGroupAppointments() {
+		return groupAppointments;
+	}
+
+	public void setGroupAppointments(List<GroupAppointment> groupAppointments) {
+		this.groupAppointments = groupAppointments;
+	}
+
+	public List<IndividualAppointment> getAppointments() {
+		return appointments;
+	}
+
+	public void setAppointments(List<IndividualAppointment> appointments) {
+		this.appointments = appointments;
+	}
+
+	public List<EmotionalState> getEmotionalState() {
+		return emotionalState;
+	}
+
+	public void setEmotionalState(List<EmotionalState> emotionalState) {
+		this.emotionalState = emotionalState;
+	}
+	
+	public List<LocalDate> getDaysOfTheWeek(int week) {
+
+		List<LocalDate> dates = new ArrayList<>();
+		LocalDate ahora = LocalDate.now().plusDays(week * 7);
+		DayOfWeek firstDayOfWeek = WeekFields.of(Locale.getDefault()).getFirstDayOfWeek();
+		LocalDate startOfCurrentWeek = ahora.with(TemporalAdjusters.previousOrSame(firstDayOfWeek));
+
+		LocalDate printDate = startOfCurrentWeek;
+		for (int i = 0; i < 5; i++) {
+			dates.add(printDate);
+			printDate = printDate.plusDays(1);
+		}
+		return dates;
+
+	}
+
+	public List<Appointment> getAppointmentsOfTheWeek(int week) {
+
+		List<Appointment> ga = new ArrayList<>();
+
+		LocalDate now = LocalDate.now().plusDays(week * 7);
+		DayOfWeek startOfCurrentWeek = WeekFields.of(Locale.getDefault()).getFirstDayOfWeek();
+		LocalDate firstDayOfTheWeek = now.with(TemporalAdjusters.previousOrSame(startOfCurrentWeek));
+		System.out.println(firstDayOfTheWeek);
+
+		LocalDate lastDayOfTheWeek = now.plusDays(4);
+
+		System.out.println(lastDayOfTheWeek);
+
+		for (GroupAppointment g : groupAppointments) {
+			System.out.println(firstDayOfTheWeek + " " + lastDayOfTheWeek + " " + g.getDate());
+			int comp = g.getDate().compareTo(firstDayOfTheWeek);
+			int comp2 = g.getDate().compareTo(lastDayOfTheWeek);
+			if (comp > 0 && comp2 < 0)
+				ga.add(g);
+			if (comp == 0 && comp2 > 0)
+				break;
+		}
+
+		for (IndividualAppointment g : appointments) {
+			System.out.println(firstDayOfTheWeek + " " + lastDayOfTheWeek + " " + g.getDate());
+			int comp = g.getDate().compareTo(firstDayOfTheWeek);
+			int comp2 = g.getDate().compareTo(lastDayOfTheWeek);
+			if (comp > 0 && comp2 < 0)
+				ga.add(g);
+			if (comp == 0 && comp2 > 0)
+				break;
+		}
+
+		return ga;
+
+	}
+
+	public void addGroupAppointments(GroupAppointment g) {
+		groupAppointments.add(g);
+	}
+
+	public void addIndividualAppointment(IndividualAppointment g) {
+		appointments.add(g);
+	}
+	
+	public void removeAppointment(IndividualAppointment ap) {
+		appointments.remove(ap);
+	}
+	
+	public void addEmotionalState(EmotionalState a) {
+		emotionalState.add(a);
+	}
+	
+	public void addAppointment(IndividualAppointment a) {
+		appointments.add(a);
+	}
+	
+	public void removeGroupAppointment(GroupAppointment ap) {
+		groupAppointments.remove(ap);
+	}
+
 }

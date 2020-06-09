@@ -55,11 +55,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	        	//.antMatchers("**").permitAll()
 	            .antMatchers("/css/**", "/js/**", "/img/**", "/", "/error").permitAll()
 	            .antMatchers("/admin/**").hasRole("ADMIN")
-	            .antMatchers("/psy/**").hasRole("PSY")
+	            .antMatchers("/psicologo/**").hasRole("PSY")
+	            .antMatchers("/paciente/**").hasRole("PAT")
 	            .anyRequest().authenticated()
 	            .and()
-			.formLogin()
-				.permitAll().successHandler(loginSuccessHandler); // <-- called when login Ok; can redirect
+	            .headers().frameOptions().disable() // Para h2
+	            .and()
+	            .csrf().ignoringAntMatchers("/h2/**") //Evitar comprobacion csrf en h2
+	            .and()
+	            .formLogin()
+				.loginPage("/login")
+				.permitAll().successHandler(loginSuccessHandler); // <-- called when login Ok; can redirect; 
 	}
 	
 	/**

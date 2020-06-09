@@ -1,48 +1,69 @@
 <!DOCTYPE html>
 <html 
 	xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-	>
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 	<title>Nav fragment - rest intentionally left empty</title>
-	
 </head>
 <body>
-	<nav th:fragment="nav" id="menu">
-		<div class="nav-wrapper">
-			<a href="#" id="logo" class="brand-logo">UCMH</a>
-			<a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-			<ul id="nav-mobile" class="right hide-on-med-and-down nav-buttons" th:if="${session.u}">
-			
-				<li class="erasable" th:if="${session.u.hasRole('ADMIN')}" ><a href="#psy-modal" class="waves-effect waves-light btn modal-trigger">Registrar psicologo</a></li>
-				<li class="erasable" th:if="${session.u.hasRole('ADMIN')}" ><a href="#pat-modal" class="waves-effect waves-light btn modal-trigger">Registrar paciente</a></li>
-				
-				
-				<li th:if="${session.u.hasRole('PAT')}"><a href="patient" class="waves-effect waves-light btn modal-trigger">Mis citas</a></li>
-				<li th:if="${session.u.hasRole('PAT')}"><a href="estadisticasPaciente" class="waves-effect waves-light btn modal-trigger">Estadisticas</a></li>
-				<li th:if="${session.u.hasRole('PAT')}"><a href="ajustesPaciente" class="waves-effect waves-light btn modal-trigger">Ajustes</a></li>
-				
-				
-				<li th:if="${session.u.hasRole('PSY')}"><a href="psychologist" class="waves-effect waves-light btn modal-trigger">Mis citas</a></li>
-        <li th:if="${session.u.hasRole('PSY')}"><a href="misPacientes" class="waves-effect waves-light btn modal-trigger">Pacientes</a></li>
-        
-				<li th:switch="${session.u.type.getPath()}">
-					<a th:case="'admin'" th:href="@{/admin/messages}" class="waves-effect waves-light btn modal-trigger">Mensajes recibidos</a>
-					<a th:case="'psy'" th:href="@{/psy/messages}" class="waves-effect waves-light btn modal-trigger">Mensajes recibidos</a>
-					<a th:case="'pat'" th:href="@{/user/messages}" class="waves-effect waves-light btn modal-trigger">Mensajes recibidos</a>
-				</li>
-				
-				<li>
-					<form th:action="@{/logout}" method="post">
-						<button id="log-out-button" type="submit" class="waves-effect waves-light btn modal-trigger"
-										style="margin-top: -2px;margin-left: 15px;margin-right: 15px;" >
-							Cerrar sesión
-						</button>
-					</form>
-				</li>
-			</ul>
-		</div>
-	</nav>
-</body>
 
+<!-- Men� -->
+
+  <div th:fragment="nav">
+  
+  <ul id="dropdown1" class="dropdown-content" th:if="${session.u}">
+	  <li th:if="${session.u.hasRole('USER')}"><a th:href="@{/user/{id}(id=${session.u.id})}">Modificar perfil</a></li>
+	  <li th:if="${session.u.hasRole('ADMIN')}"><a th:href="@{/admin/}">Administrar</a></li>
+	  	<form th:action="@{/logout}" method="post">
+				<button class="waves-effect waves-light btn-small" type="submit">Salir</button>
+		</form>
+  </ul>
+
+  <nav>
+  	<div class="nav-wrapper">
+      <a href="#" th:href="@{/}" id="logo" class="brand-logo">UCMH</a>
+      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down"> 
+      	  <div th:if="${session.u}">
+      	  	  <li><a th:if="${session.u.hasRole('PSY')}" th:href="@{/psicologo/horario/}">Mi horario</a></li>
+      	  	  <li><a th:if="${session.u.hasRole('PAT')}" th:href="@{/paciente/horario/}">Mi horario</a></li>
+	  		  <li><a th:if="${session.u.hasRole('PSY')}" th:href="@{/psicologo/pacientes/}">Pacientes</a></li>
+	  		  <li><a th:if="${session.u.hasRole('PAT')}" th:href="@{/paciente/estadisticas/}">Estadístcias</a></li>          
+	      	  <li><a th:href="@{/message/}"><i class="material-icons" th:text="${session.unread} ? 'mail': 'drafts'">mail</i></a></li>
+			  <li>
+			  	<a class="dropdown-trigger" href="#!" data-target="dropdown1">
+			  		<img class="circle responsive-img profile-image" th:src="@{/user/{id}/photo(id=${session.u.id})}">
+					<span th:text="${session.u.username}">Pepe</span>
+					<i class="material-icons right">arrow_drop_down</i>
+				</a>
+			</li>
+		</div>
+		<div th:unless="${session.u}">
+			<li><a th:href="@{/login/}">Iniciar sesión</a></li>
+		</div>
+          <!--<li><a th:href="@{/logout/} class="waves-effect waves-light btn">Cerrar sesi�n</a></li> -->
+      </ul>
+      
+      </div>
+   </nav>
+   
+    <ul class="sidenav" id="mobile-demo">
+    	<div th:if="${session.u}">
+    		 <li th:if="${session.u.hasRole('USER')}"><a th:href="@{/user/{id}(id=${session.u.id})}">Modificar perfil</a></li>
+    		 <li><a th:if="${session.u.hasRole('PSY')}" th:href="@{/psicologo/horario/}">Mi horario</a></li>
+      	  	 <li><a th:if="${session.u.hasRole('PAT')}" th:href="@{/paciente/horario/}">Mi horario</a></li>
+	  		 <li><a th:if="${session.u.hasRole('PSY')}">Pacientes</a></li>
+	  		 <li><a th:if="${session.u.hasRole('PAT')}" th:href="@{/paciente/estadisticas/}">Estadístcias</a></li>  
+	  		 <form th:action="@{/logout}" method="post">
+				<button class="waves-effect waves-light btn-small" type="submit">Salir</button>
+			</form>
+    	 </div>
+  	     <div th:unless="${session.u}">
+	   		 <li><a th:href="@{/login/}">Iniciar sesión</a></li>
+    	 </div>
+  	</ul>
+  	
+  	</div>
+   
+</body>
 </html>

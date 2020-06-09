@@ -1,6 +1,7 @@
 package es.fdi.ucm.ucmh.controller;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -45,14 +46,33 @@ public class RootController {
 	}
 
 	
-	
-	//ERRORS HANDLING
-	
 	@ExceptionHandler(ResourceNotFound.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public String errorCode404NotFound() {
 		log.error("the client faild my boy");
 		return "404";
+	}
+	
+	//De nuestro proyecto	
+	
+	@GetMapping("/")
+	public String index(Model model) {
+		return "index";
+	}
+
+	@GetMapping("/chat")
+	public String chat(Model model, HttpServletRequest request) {
+		return "chat";
+	}
+	
+	@GetMapping("/error")
+	public String error(Model model) {
+		return "error";
+	}
+	
+	@GetMapping("/login")
+	public String login() {
+		return "login";
 	}
 	
 }

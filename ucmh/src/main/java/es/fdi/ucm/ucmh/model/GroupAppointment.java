@@ -1,111 +1,55 @@
 package es.fdi.ucm.ucmh.model;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Collection;
-import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Version;
 import javax.validation.constraints.NotEmpty;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
+import javax.validation.constraints.Pattern;
 
 @Entity
-public class GroupAppointment {
-	// ---------------Atributos-----------------
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer ID;
-	
-	//@NotEmpty(message="Introduce la fecha de la cita")
-	@DateTimeFormat(pattern = "yyyy-mm-dd")
-	private Date date;
-	
-	//@NotEmpty(message="Introduce hora de inicio")
-	private LocalTime start_hour;
-	
-	//@NotEmpty(message="Introduce hora de fin")
-	private LocalTime finish_hour;	
-	
-	//TODO mínimo dos
-	//@NotEmpty(message="Introduce al menos dos usuarios")
-	@ManyToMany
-	private Collection<User> patient;
-	
-	//@NotEmpty(message="Tienes que estar registrado")
-	@ManyToOne
-	private User psychologist;
-	
-	private String example;
+public class GroupAppointment extends Appointment {
 
-	
-	public Integer getID() {
-		return ID;
-	}
+	@NotEmpty(message = "La cita debe tener nombre")
+	@Pattern(regexp = "[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ_-]+", message = "El nombre solo puede contener caracteres alfanumericos")
+	private String name;
 
-	public void setID(Integer iD) {
-		ID = iD;
-	}
+	private String description;
 
-	public Date getDate() {
-		return date;
-	}
+	// @NotEmpty(message="La cita debe tener pacientes")
+	// @Size(min=2, message="Debes introducir al menos dos usuarios")
+	@ManyToMany(targetEntity = User.class)
+	private List<User> patient;
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	public LocalTime getStart_hour() {
-		return start_hour;
-	}
-
-	public void setStart_hour(LocalTime start_hour) {
-		this.start_hour = start_hour;
-	}
-
-	public LocalTime getFinish_hour() {
-		return finish_hour;
-	}
-
-	public void setFinish_hour(LocalTime finish_hour) {
-		this.finish_hour = finish_hour;
-	}
-
-	public Collection<User> getPatient() {
+	public List<User> getPatient() {
 		return patient;
 	}
 
-	public void setPatient(Collection<User> patient) {
+	public void setPatient(List<User> patient) {
 		this.patient = patient;
 	}
 
-	public User getPsychologist() {
-		return psychologist;
+	public String getName() {
+		return name;
 	}
 
-	public void setPsychologist(User pychologist) {
-		this.psychologist = pychologist;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getExample() {
-		return example;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setExample(String example) {
-		this.example = example;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	// ------------------------------------------
+	public void removeAllPatients() {
+		patient.clear();
+	}
 
-
-
+	public void addPatient(User u) {
+		patient.add(u);
+	}
 }

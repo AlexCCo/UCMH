@@ -1,8 +1,6 @@
 package es.fdi.ucm.ucmh.model;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,9 +10,10 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+
 @Entity
-public abstract class Appointment {
-	
+public class EmotionalState {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long ID;
@@ -23,14 +22,17 @@ public abstract class Appointment {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate date;
 
-	@NotNull(message="Introduce hora de inicio")
-	private LocalTime start_hour;
+	//TODO comprobar entre 0 y 5
+	private Integer emotionalState;
 	
-	@NotNull(message="Introduce hora de fin")
-	private LocalTime finish_hour;
+	private String description;
 	
 	@ManyToOne
-	private User psychologist;
+	private User patient;
+
+	public void setPatient(User patient) {
+		this.patient = patient;
+	}
 
 	public long getID() {
 		return ID;
@@ -47,29 +49,26 @@ public abstract class Appointment {
 	public void setDate(LocalDate date) {
 		this.date = date;
 	}
-
-	public LocalTime getStart_hour() {
-		return start_hour;
+	
+	public Integer getEmotionalState() {
+		return emotionalState;
 	}
 
-	public void setStart_hour(LocalTime start_hour) {
-		this.start_hour = start_hour;
+	public void setEmotionalState(Integer emotionalState) {
+		this.emotionalState = emotionalState;
 	}
 
-	public LocalTime getFinish_hour() {
-		return finish_hour;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setFinish_hour(LocalTime finish_hour) {
-		this.finish_hour = finish_hour;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	public User getPsychologist() {
-		return psychologist;
+	public User getPatient() {
+		return patient;
 	}
 
-	public void setPsychologist(User pychologist) {
-		this.psychologist = pychologist;
-	}
 
 }

@@ -99,17 +99,6 @@ INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number
 VALUES (113, 'PAT', 'Irene', 'Gomez','inemez@bmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '2013521333', 14,'Loquísimo', 'Pastillas super fuertes');
 INSERT INTO  user (id, type, first_name, last_name, mail, password, phone_number, psychologist_id,disorder, treatment) 
 VALUES (114, 'PAT', 'Irene', 'Gonzalez','regon@bmail.es', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', '2013521777', 14,'Loquísimo', 'Pastillas super fuertes');
---insert some default appointments
-INSERT INTO appointment (id, fecha, patient_id, psychologist_id)
-VALUES (1, TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), 100, 11);
-INSERT INTO appointment (id, fecha, patient_id, psychologist_id)
-VALUES (2, TO_DATE('17/11/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), 100, 11);
-INSERT INTO appointment (id, fecha, patient_id, psychologist_id)
-VALUES (3, TO_DATE('17/10/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), 100, 11);
-INSERT INTO appointment (id, fecha, patient_id, psychologist_id)
-VALUES (4, TO_DATE('17/9/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), 100, 11);
-INSERT INTO appointment (id, fecha, patient_id, psychologist_id)
-VALUES (5, TO_DATE('17/8/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'), 100, 11);
 --insert some default psychologist history entries
 INSERT INTO patient_history (entry_id, made_by_id, entry_text, patient_mail, entry_date)
 VALUES (1, 11, 'The patient seems altered by some tragic trauma from its youth', 'pacoelmagias@elmundomagico.es', TO_DATE('17/12/2015 10:50:03', 'DD/MM/YYYY HH24:MI:SS'));
