@@ -29,6 +29,7 @@ div.users-results {
 	color: green;
 	display: inline-block;
 	margin-right: 50px;
+	visibility: hidden;
 }
 
 .error-msg-pat, .error-msg-psy {

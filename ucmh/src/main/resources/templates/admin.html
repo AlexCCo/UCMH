@@ -95,9 +95,13 @@
 										<button class="delete-pat waves-effect waves-red-darken-4 red lighten-1 btn-flat">
 											delete
 										</button>
-										<button class="register-psy-to-pat waves-effect waves-blue-darken-4 blue lighten-2 btn-flat">
+										<a th:attr="data-user-mail=${pat.mail}"
+												class="register-psy-to-pat 
+															 waves-effect waves-blue-darken-4 blue lighten-2
+															 btn-flat modal-trigger"
+												href="#associate-psy">
 											register psychologist
-										</button>
+										</a>
 									</div>
 				        </li>
 								
@@ -208,12 +212,21 @@
 			</div>
 		</div>
 		
-		<p style="text-align: center">TESTING FUNCTIONALITY OF WEBSOCKETS</p>
-		<form th:action="@{/admin/msg/ucmh@ucm.es}" method="POST">
-			<input id="msg" name="msg">
-			<button id="sendmsg" type="submit">Enviar</button>
-		</form>
-
+		<div id="associate-psy" class="modal">
+			<div class="modal-content">
+					<h4>Cambia el psicologo</h4>
+			  <p>Introduce el correo del psicologo:</p>
+			  <p class="error-msg-psy" id="error-mail-psy"></p>
+	      	<label for="mail-input">e-mail:</label>
+			  	<input name="mail-input" type="email" id="mail-psy">
+				<div class="modal-footer">
+					<p class="result-register assign-psy">Result text</p>
+					<a class="modal-action waves-effect waves-green  btn-flat" id="accept-new-psy">Aceptar</a>
+					<a class="modal-action modal-close waves-effect waves-red btn-flat reject-user">Cancelar</a>
+				</div>
+			</div>
+		</div>
+		
 	  <script src="/js/admin.js"></script>
 		<th:block th:replace="fragments/footer :: jslibs"></th:block>
 

@@ -27,9 +27,12 @@
         <li th:if="${session.u.hasRole('PSY')}"><a href="misPacientes" class="waves-effect waves-light btn modal-trigger">Pacientes</a></li>
         
 				<li th:switch="${session.u.type.getPath()}">
-					<a th:case="'admin'" th:href="@{/admin/messages}" class="waves-effect waves-light btn modal-trigger">Mensajes recibidos</a>
-					<a th:case="'psy'" th:href="@{/psy/messages}" class="waves-effect waves-light btn modal-trigger">Mensajes recibidos</a>
-					<a th:case="'pat'" th:href="@{/user/messages}" class="waves-effect waves-light btn modal-trigger">Mensajes recibidos</a>
+					<div th:case="'admin'">
+						<a th:href="@{/admin/}" class="waves-effect waves-light btn">Panel de administracion</a>
+						<a th:href="@{/admin/messages}" class="waves-effect waves-light btn ">Mensajes recibidos</a>
+					</div>
+					<a th:case="'psy'" th:href="@{/psy/messages}" class="waves-effect waves-light btn ">Mensajes recibidos</a>
+					<a th:case="'pat'" th:href="@{/user/messages}" class="waves-effect waves-light btn ">Mensajes recibidos</a>
 				</li>
 				
 				<li>

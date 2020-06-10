@@ -47,22 +47,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 			new_incoming_messages.style.visibility = "visible";
 		}
 	};
-	
-	//this button is for testing purposes
-	let send_button = document.getElementById("sendmsg");
-	
-	send_button.addEventListener("click", (e) => {
-		let now = new Date();
-		e.preventDefault();
-		console.log(send_button, send_button.parentNode)
-		go(send_button.parentNode.action, 'POST', 
-				{msg: document.getElementById("msg").value,
-				 time: `${now.getUTCFullYear()}-${now.getUTCMonth()+1}-${now.getUTCDate()}-${now.getUTCHours()}-${now.getUTCMinutes()}-${now.getUTCSeconds()}`
-		   })
-			.then(d => console.log("happy", d))
-			.catch(e => console.log("sad", e))
-	});
-	
+		
 	//all of these are buttons
 	let less_patiens = document.getElementById("less-patiens");
 	let more_patiens = document.getElementById("more-patiens");
@@ -82,7 +67,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	
 	for(const btn of register_psy_to_pat){
 		btn.addEventListener("click", (e) => {
-			register_to_patient();
+			$("#accept-new-psy").attr("data-user-mail", btn.getAttribute("data-user-mail"));
+			$(".assign-psy").css("visibility","hidden");
 		});
 	}
 	
@@ -127,6 +113,28 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	});
 	more_psychologists.addEventListener("click", (e) => {
 		get_users(user_types.PSYCHOLOGIST, user_methods.MORE);
+	});
+	
+	$("#accept-new-psy").click(function(event){
+		let uri = `${config.rootUrl}admin/change-psy-of`;
+		let payload = {
+				"userMail": $(this).attr("data-user-mail"),
+				"psyMail": $("#mail-psy").val()
+				}
+		console.log(payload);
+		console.log();
+		
+		requestData.open('POST', uri);
+		requestData.setRequestHeader("X-CSRF-TOKEN", config.csrf.value);
+		requestData.setRequestHeader("Content-Type", "application/json")
+		
+		requestData.onload =function(event){
+			console.log(requestData.responseText);
+			$(".assign-psy").css("visibility","visible");
+			$(".assign-psy").text(JSON.parse(requestData.responseText).result);
+		};
+		
+		requestData.send(JSON.stringify(payload));
 	});
 });
 
@@ -173,7 +181,8 @@ function get_users(userType, userMethod){
 
 			for(let btn of register_buttons){
 				btn.addEventListener("click", (e) => {
-					register_to_patient();
+					$("#accept-new-psy").attr("data-user-mail", btn.getAttribute("data-user-mail"));
+					$(".assign-psy").css("visibility","hidden");
 				})
 			}
 			
@@ -258,7 +267,7 @@ function renderHTMLUsers(json_object, userType){
 		button_string = "<div class=\"user-delete\">";
 		button_string +="<button class=\"delete-pat waves-effect waves-red-darken-4 red lighten-1 btn-flat\">";
 		button_string +="delete</button>";
-		button_string += "<button class=\"register-psy-to-pat waves-effect waves-blue-darken-4 blue lighten-2 btn-flat\">";
+		button_string += "<button data-user-mail="+json_object.mail+" class=\"register-psy-to-pat waves-effect waves-blue-darken-4 blue lighten-2 btn-flat\">";
 		button_string +="register psychologist</button></div></li>";
 	}
 	else if(userType === user_types.PSYCHOLOGIST){
@@ -336,7 +345,8 @@ function get_users_by_name(){
 		
 		for(let btn of buttons_pat_register_psy){
 			btn.addEventListener("click", (e) => {
-				register_to_patient();
+				$("#accept-new-psy").attr("data-user-mail", btn.getAttribute("data-user-mail"));
+				$(".assign-psy").css("visibility","hidden");
 			})
 		}
 		
@@ -444,10 +454,6 @@ function clean_error_msg(userType, clear_input){
 			document.getElementById(`${elem}-input-${userType}`).value = "";
 		}
 	}
-}
-
-function register_to_patient(){
-	console.log("add psychologist to patient");
 }
 
 

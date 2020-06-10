@@ -128,7 +128,7 @@ public class AdminController {
 		String encodedPassword = String.format("{bcrypt}%s",encoder.encode(theNewUser.getPassword()));
 		
 		theNewUser.setPassword(encodedPassword);
-		
+		query.setParameter("mail", theNewUser.getMail());
 		try {
 			query.getSingleResult();
 		} catch (NoResultException e) {}
@@ -367,7 +367,7 @@ public class AdminController {
 		}
 		
 		entityManager.remove(u);
-		entityManager.clear();
+		entityManager.flush();
 		return new JSONTransferMessage("OK");
 	}
 	
@@ -398,6 +398,67 @@ public class AdminController {
 		String result = insertNewUser(userInfo);
 		
 		return new JSONTransferMessage(result);
+	}
+	
+	private static class UsersMails {
+		private String userMail;
+		private String psyMail;
+		
+		/**
+		 * @param userMail the userMail to set
+		 */
+		public void setUserMail(String userMail) {
+			this.userMail = userMail;
+		}
+		/**
+		 * @param psyMail the psyMail to set
+		 */
+		public void setPsyMail(String psyMail) {
+			this.psyMail = psyMail;
+		}
+				
+	}
+	/**
+	 * This method will assing a new psychologist to a given user
+	 * 
+	 * @param mails Mails of the user and psychologist involve in the operation
+	 * @return A JSONTransferMessage where we send the result of the operation
+	 * */
+	@Secured(value = "ROLE_ADMIN")
+	@PostMapping(value = "/change-psy-of",
+			produces = MediaType.APPLICATION_JSON_VALUE,
+			consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Transactional
+	public @ResponseBody JSONTransferMessage changePsyOf(@RequestBody UsersMails mails) {
+		log.info("Request to change the psychologist of this user {} made by admin: {}", mails.userMail, userFromSession().getId());
+		TypedQuery<User> query = entityManager.createNamedQuery(UserQueryStringNames.GET_USER_BY_MAIL, User.class);
+		
+				
+		User pat = null, psy= null;
+		try {
+			query.setParameter("mail", mails.userMail);
+			pat = query.getSingleResult();
+			query.setParameter("mail", mails.psyMail);
+			psy = query.getSingleResult();
+			
+		} catch (NoResultException e) {
+			log.error("Request to change the psychologist of an user"
+					+ "made by admin: {}. FAILED: mails user={}, psy={},"
+					+ " reason= {}", userFromSession().getId(), mails.userMail,
+					mails.psyMail, e.getCause());
+			return new JSONTransferMessage("That mail doesn't exits");
+		} catch (Exception e) {
+			log.error("Request to change the psychologist of an user"
+					+ "made by admin: {}. FAILED: mails user={}, psy={},"
+					+ " reason= {}", userFromSession().getId(), mails.userMail,
+					mails.psyMail, e.getCause());
+			return new JSONTransferMessage("Some error occurred!");
+		}
+		
+		pat.setPsychologist(psy);
+		entityManager.persist(pat);
+		
+		return new JSONTransferMessage("Success!");
 	}
 	
 }
