@@ -63,12 +63,8 @@
   <!-- Botón estático y modales -->
 
   <div class="fixed-action-btn">
-    <a class="btn-floating btn-large waves-effect waves-light red">
-      <i class="material-icons">add</i>
+    <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#modal1"><i class="material-icons">add</i>
     </a>
-    <ul>
-      <li><a id="green-button-correction" class="btn-floating green modal-trigger" href="#modal1"><i class="material-icons">person</i></a></li>
-    </ul>
   </div>
 
   <div id="modal1" class="modal prueba">
@@ -77,22 +73,16 @@
       <!-- Selección de día -->
 
       <p> Selecciona día para la sesión </p>
-      <input type="text" class="datepicker">
+      <input id="new-appnt-date"type="date">
 
       <!-- Selección de hora ini -->
 
       <p> Selecciona hora de la sesión </p>
-      <input type="text" class="timepicker">
-
-      <!-- Selección hora fin -->
-
-      <p> Selecciona hora de fin de la sesión </p>
-      <input type="text" class="timepicker">
-
+      <input id="new-appnt-hour" type="time">
     </div>
     <div class="modal-footer">
-      <a href="#!" class="modal-close waves-effect waves-red btn-flat red">Cancelar</a>
-      <a href="#!" class="modal-close waves-effect waves-green btn-flat green">Aceptar</a>
+      <button class="modal-close waves-effect waves-red btn-flat red">Cancelar</button>
+      <button id="accept-new-appnt"class="waves-effect waves-green btn-flat green">Aceptar</button>
     </div>
   </div>
 
@@ -102,6 +92,7 @@
 
   <script src="/js/vendor/schedule-util.js"></script>
   <script src="/js/vendor/schedule-main.js"></script>
+  <script src="/js/patient.js"></script>
 
 	<script src=""></script>
   <script>
