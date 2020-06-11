@@ -41,7 +41,7 @@ import es.fdi.ucm.ucmh.transfer.MessageTransferData;
  * */
 @Controller
 public class MessageController{
-	private static final Logger log = LogManager.getLogger(MessageController.class);
+private static final Logger log = LogManager.getLogger(MessageController.class);
 	
 	@Autowired
 	private EntityManager entityManager;
@@ -72,18 +72,7 @@ public class MessageController{
 		
 		return processPetition(model);
 	}
-	
-	/**
-	 * It will retrieve the basic template where you can see your incoming messages and chat with
-	 * anyone you want in real time
-	 * 
-	 * @param model A model given by Spring MVC. It is use to store information needed
-	 * by the template engine to render the corresponding view, in this case, our HTML
-	 * page
-	 * @return 
-	 * It returns a string that indicates to the Spring's ViewResolvers what
-	 * view (in this case HTML page) we want to render and send to our client
-	 * */
+
 	@Secured(value = "ROLE_PSY")
 	@GetMapping(value = "/psy/messages")
 	public String getPsyMessagesTemplate(Model model) {
@@ -92,7 +81,19 @@ public class MessageController{
 		
 		return processPetition(model);
 	}
+
+	@Secured(value = "ROLE_PAT")
+	@GetMapping(value = "/user/messages")
+	public String getUserMessagesTemplate(Model model) {
+		
+		session.setAttribute("msgURI", AuxiliaryStringPaths.USER_SEND_MESSAGE_PATH);
+		
+		return processPetition(model);
+	}
 	
+	/**
+	 * 
+	 * */
 	private String processPetition(Model model) {
 
 		User u = userFromSession();
@@ -130,7 +131,7 @@ public class MessageController{
 	 * @param message A java object representing the sender message
 	 * @param id Id of the user we want to received the message
 	 * */
-	@Secured(value = "ROLE_PSY")
+	@Secured(value = "ROLE_ADMIN")
 	@PostMapping(value = "/admin/msg/{userMail}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE},
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
@@ -138,14 +139,7 @@ public class MessageController{
 	public String sendMsgFromAdmin(@PathVariable String userMail, @RequestBody DemoMessage message) {
 		return processMessageSend(userMail, message);
 	}
-	
-	/**
-	 * It will store the message sent into database and forward it to websocket broker for him to
-	 * give it to the correct destination
-	 * 
-	 * @param message A java object representing the sender message
-	 * @param id Id of the user we want to received the message
-	 * */
+
 	@Secured(value = "ROLE_PSY")
 	@PostMapping(value = "/psy/msg/{userMail}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE},
 			produces = MediaType.APPLICATION_JSON_VALUE)
@@ -154,7 +148,19 @@ public class MessageController{
 	public String sendMsgFromPsy(@PathVariable String userMail, @RequestBody DemoMessage message) {
 		return processMessageSend(userMail, message);
 	}
-
+	
+	@Secured(value = "ROLE_PAT")
+	@PostMapping(value = "/user/msg/{userMail}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE},
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	@Transactional
+	public String sendMsgFromUser(@PathVariable String userMail, @RequestBody DemoMessage message) {
+		return processMessageSend(userMail, message);
+	}
+	
+	/**
+	 * 
+	 * */
 	private String processMessageSend(String userMail, DemoMessage message) {
 		TypedQuery<User> userQuery = entityManager.createNamedQuery(UserQueryStringNames.GET_USER_BY_MAIL, User.class);
 		
@@ -186,8 +192,7 @@ public class MessageController{
 		body.setTo(u);
 		body.setText(message.msg);
 		body.setDate(receivedTime);
-		body.setDirty(true);
-		body.setEstadoAnimo(null);
+		body.setDirty(false);
 		
 		try {
 			entityManager.persist(body);
@@ -216,17 +221,30 @@ public class MessageController{
 	 * @return A list of MessageTransferData containing all the messages between the users
 	 * 
 	 * */
+	@Secured(value = "ROLE_ADMIN")
 	@GetMapping(value = "/admin/msg/recv", produces = {MediaType.APPLICATION_JSON_VALUE})
 	@Transactional
 	public @ResponseBody List<MessageTransferData> historyMessageRequestedFor(@RequestParam String requestedUserMail) {
 		return processHistoryRequest(requestedUserMail);
 	}
+	
+	@Secured(value = "ROLE_PSY")
 	@GetMapping(value = "/psy/msg/recv", produces = {MediaType.APPLICATION_JSON_VALUE})
 	@Transactional
 	public @ResponseBody List<MessageTransferData> psyHistoryMessageRequestedFor(@RequestParam String requestedUserMail) {
 		return processHistoryRequest(requestedUserMail);
 	}
+	
+	@Secured(value = "ROLE_PAT")
+	@GetMapping(value = "/user/msg/recv", produces = {MediaType.APPLICATION_JSON_VALUE})
+	@Transactional
+	public @ResponseBody List<MessageTransferData> userHistoryMessageRequestedFor(@RequestParam String requestedUserMail) {
+		return processHistoryRequest(requestedUserMail);
+	}
 
+	/**
+	 * 
+	 * */
 	private List<MessageTransferData> processHistoryRequest(String requestedUserMail) {
 		User u = userFromSession();
 		

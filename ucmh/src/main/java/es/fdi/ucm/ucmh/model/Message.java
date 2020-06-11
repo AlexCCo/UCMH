@@ -45,9 +45,6 @@ public class Message {
 	@Column(name = "sent_date")
 	private LocalDateTime date;
 	
-	@Column(name="estado_animo", nullable=true)
-	private Animosity estadoAnimo;
-	
 	@ManyToOne
 	private User from;
 	
@@ -88,20 +85,6 @@ public class Message {
 	 */
 	public void setDate(LocalDateTime date) {
 		this.date = date;
-	}
-
-	/**
-	 * @return the estadoAnimo
-	 */
-	public Animosity getEstadoAnimo() {
-		return estadoAnimo;
-	}
-
-	/**
-	 * @param estadoAnimo the estadoAnimo to set
-	 */
-	public void setEstadoAnimo(Animosity estadoAnimo) {
-		this.estadoAnimo = estadoAnimo;
 	}
 
 	/**

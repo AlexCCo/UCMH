@@ -1,5 +1,6 @@
 
 document.addEventListener("DOMContentLoaded", function(e){
+	
 	$( ".pacientBTN" ).click(function(e) {
 	  let mail = $(this).attr("data-user-mail");
 	  

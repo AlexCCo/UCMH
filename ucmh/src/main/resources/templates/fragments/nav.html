@@ -18,13 +18,14 @@
 				<li class="erasable" th:if="${session.u.hasRole('ADMIN')}" ><a href="#pat-modal" class="waves-effect waves-light btn modal-trigger">Registrar paciente</a></li>
 				
 				
-				<li th:if="${session.u.hasRole('PAT')}"><a href="misCitas" class="waves-effect waves-light btn modal-trigger">Mis citas</a></li>
-				<li th:if="${session.u.hasRole('PAT')}"><a href="estadisticasPaciente" class="waves-effect waves-light btn modal-trigger">Estadisticas</a></li>
-				<li th:if="${session.u.hasRole('PAT')}"><a href="ajustesPaciente" class="waves-effect waves-light btn modal-trigger">Ajustes</a></li>
+				<li th:if="${session.u.hasRole('PAT')}"><a th:href="@{/user/}" class="waves-effect waves-light btn modal-trigger">Mis citas</a></li>
+				<li th:if="${session.u.hasRole('PAT')}"><a th:href="@{/user/}" class="waves-effect waves-light btn modal-trigger">Estadisticas</a></li>
+				<li th:if="${session.u.hasRole('PAT')}"><a th:href="@{/user/ajustesPaciente}" class="waves-effect waves-light btn modal-trigger">Ajustes</a></li>
 				
 				
-				<li th:if="${session.u.hasRole('PSY')}"><a class="waves-effect waves-light btn modal-trigger">Mis citas</a></li>
-        <li th:if="${session.u.hasRole('PSY')}"><a href="misPacientes" class="waves-effect waves-light btn modal-trigger">Pacientes</a></li>
+				<li th:if="${session.u.hasRole('PSY')}"><a th:href="@{/psy/psychologistAppointments}"
+																									 class="waves-effect waves-light btn modal-trigger">Mis citas</a></li>
+        <li th:if="${session.u.hasRole('PSY')}"><a th:href="@{/psy/}" class="waves-effect waves-light btn modal-trigger">Pacientes</a></li>
         
 				<li th:switch="${session.u.type.getPath()}">
 					<div th:case="'admin'">

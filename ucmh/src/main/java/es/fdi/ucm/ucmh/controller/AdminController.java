@@ -355,7 +355,6 @@ public class AdminController {
 
 			msg.setFrom(null);
 			msg.setTo(null);
-			msg.setEstadoAnimo(null);
 			
 			entityManager.persist(msg);
 			entityManager.persist(userMsg);
