@@ -43,7 +43,7 @@
   </header>
 	
 	<div id="appointments-table">
-		<ul class="collection">
+	<ul id="appointment-list" class="collection">
       <li class="collection-item card appoint" th:each="appnt : ${appointments}">
       	<div>
       		<div class="appoint-date">DATE: <span th:text="${appnt.date}" class="date-value"></span></div>

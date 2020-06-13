@@ -2,6 +2,7 @@ package es.fdi.ucm.ucmh.controller;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +54,7 @@ public class UserController {
 	private User userFromSession() {
 		return (User)session.getAttribute("u");
 	}
+	
 	/**
 	 * It will obtain the main template for each user that logs in and
 	 * prepare the model to show information of user appointments
@@ -98,7 +100,7 @@ public class UserController {
 		log.info("Request to obtain settings template from {}", u.getId());
 		
 		model.addAttribute("user", u);
-		
+		session.setAttribute("msgURI", "/user/msg/");
 		return "ajustesPaciente";
 	}
 	
@@ -126,6 +128,19 @@ public class UserController {
 		
 		return new JSONTransferMessage("ok");
 	}
+	
+	private static class AppointmentSettings
+	{
+		private LocalDateTime date;
+
+		public LocalDateTime getDate() {
+			return date;
+		}
+
+		public void setDate(LocalDateTime date) {
+			this.date = date;
+		}
+	}
 	/**
 	 * It will add a new appointment in the database.
 	 * @param fecha
@@ -135,54 +150,35 @@ public class UserController {
 	 * @author Pablo García Grossi
 	 */
 	@Secured(value = "ROLE_PAT")
-	@PostMapping(value = "/saveAppointment", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@PostMapping(value = "/saveAppointment", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = MediaType.APPLICATION_JSON_VALUE)
 	   @ResponseBody
 	   @Transactional
-		public AppointmentTransfer saveAppointment(@RequestParam(required=false) String fecha,
-				@RequestParam(required=false) String hora) {
+		public JSONTransferMessage saveAppointment(@RequestBody AppointmentSettings appointment) {
 		User u = userFromSession();
 		User psy = u.getPsychologist();
 		
-		Appointment app= new Appointment();
+		Appointment returnedApp= new Appointment();
 		
 		TypedQuery<Appointment> query = entityManager.createNamedQuery(
 				UserQueryStringNames.GET_PSY_APPOINTMENTS, 
 				Appointment.class);
-		query.setParameter("psychologistId", psy.getId());
-		DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
-		DateTimeFormatter formatterHour = DateTimeFormatter.ISO_LOCAL_TIME;
+		query.setParameter("userId", psy.getId());
 		
 
-		for(Appointment ap: query.getResultList()) {
-			String formattedDate = ap.getFecha().format(formatter);
-			String formattedHour = ap.getFecha().format(formatterHour);
-			char c = '.';
-			String getHourApp = "";
-			String getHourIntroduced = "";
-			int x = 0;
-			while(c != ':')
-			{
-				c = formattedHour.charAt(x);
-				if(c != ':')
-					getHourApp += c;
-				c = hora.charAt(x);
-				if(c != ':')
-					getHourIntroduced += c;
-				x++;	
-			}
-			if(formattedDate.equals(fecha) && getHourApp.equals(getHourIntroduced))
+		for(Appointment aux: query.getResultList()) {
+			if(appointment.getDate().truncatedTo(ChronoUnit.HOURS).equals(aux.getFecha().truncatedTo(ChronoUnit.HOURS)))
 			{
 				log.info("Ya existe una cita en esa misma hora");
-				return new AppointmentTransfer(app);
+				return new JSONTransferMessage("Ya existe una cita en esa misma hora");
 			}
 		}
 		
-		app.setFecha(LocalDateTime.parse(fecha +"T"+ hora, DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-		app.setPatiente(u);
-		app.setPychologist(psy);
+		returnedApp.setFecha(appointment.getDate());
+		returnedApp.setPatiente(u);
+		returnedApp.setPychologist(psy);
 		
-		entityManager.persist(app);
+		entityManager.persist(returnedApp);
 		
-		return new AppointmentTransfer(app);
+		return new JSONTransferMessage("Todo bien");
 	   }
 }

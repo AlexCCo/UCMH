@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function(event){
 	$("#accept-contact-psy").click(function(event){
 		let input_text = $("#contact-psy-message").val();
 		let now = new Date();
-		//Pillar id del psicólogo
 		let psy_mail = document.getElementById("user-message-owner").getAttribute("data-user-psychologist-mail");
 		if(psy_mail === undefined){
 			return;
