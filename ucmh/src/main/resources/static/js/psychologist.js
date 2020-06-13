@@ -21,7 +21,10 @@ document.addEventListener("DOMContentLoaded", function(e){
 		  $("#get-user-history").attr("data-clicked-mail", mail);
 		  //TODO: fix user domain problem
 		  $("#add-new-entry").attr("data-clicked-mail", "");
+		  $("#accept-new-appnt").attr("data-clicked-mail", mail);
+		  $("#pat-new-appn").attr("href", "#modal1");
 		  console.log(msg);
+		  
 	      });
 	});
 	
@@ -121,9 +124,33 @@ document.addEventListener("DOMContentLoaded", function(e){
 		
 	});
 	
+	//some notifications will pop up
 	ws.receive = function(text) {
 		console.log(text);
 	}
+	
+	$("#accept-new-appnt").click(function(event){
+		let uri = `${config.rootUrl}psy/create-appoinment`;
+		let mail = $(this).attr("data-clicked-mail");
+		let date = $("#new-appnt-date").val();
+		date += `T${$("#new-appnt-hour").val()}:00`;
+		
+		let payload= {"mail": `${mail}`, "date":`${date}`};
+		
+		let request = new XMLHttpRequest();
+
+		console.log(JSON.stringify(payload));
+		
+		request.open('POST', uri);
+		request.setRequestHeader('X-CSRF-TOKEN', config.csrf.value);
+		request.setRequestHeader('Content-Type', 'application/json');
+		
+		request.onload = function(){
+			console.log(request.responseText);
+		}
+		
+		request.send(JSON.stringify(payload));
+	});
 });
 
 /**${now.getUTCHours()}-${now.getUTCMinutes()

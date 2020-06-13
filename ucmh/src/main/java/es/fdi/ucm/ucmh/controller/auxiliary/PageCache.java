@@ -10,11 +10,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import es.fdi.ucm.ucmh.model.User;
-import es.fdi.ucm.ucmh.model.UserType;
+import es.fdi.ucm.ucmh.model.auxiliar.UserType;
 import es.fdi.ucm.ucmh.transfer.UserTransferData;
 
 /**
- * Auxiliary class to help implement admin logic
+ * Auxiliary class to help implement admin logic<br>
+ * 
+ * IT CAN NO ACCEPT DIFFERENT TYPE OF LISTS
  * */
 public abstract class PageCache {
 	protected final int SHOW_MAX_USERS;
@@ -65,7 +67,7 @@ public abstract class PageCache {
 	 * 
 	 * <b>NOTE:</b> To understand queryStringName parameter look <i>See also</i> section.
 	 * 
-	 * @see es.fdi.ucm.ucmh.model.repositories.UserQueryStringNames
+	 * @see es.fdi.ucm.ucmh.model.auxiliar.UserQueryStringNames
 	 * @see es.fdi.ucm.ucmh.model.User
 	 * */
 	protected LinkedList<User> queryList(UserType userType, EntityManager entityManager, long lastUserId, String queryStringName){
@@ -94,7 +96,7 @@ public abstract class PageCache {
 	 * 
 	 * <b>NOTE:</b> To understand queryStringName parameter look <i>See also</i> section.
 	 * 
-	 * @see es.fdi.ucm.ucmh.model.repositories.UserQueryStringNames
+	 * @see es.fdi.ucm.ucmh.model.auxiliar.UserQueryStringNames
 	 * @see es.fdi.ucm.ucmh.model.User
 	 * */
 	protected LinkedList<User> queryNativeList(UserType userType, EntityManager entityManager, long lastUserId, String queryStringName){

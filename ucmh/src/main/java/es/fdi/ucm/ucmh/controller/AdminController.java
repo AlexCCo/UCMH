@@ -36,10 +36,10 @@ import es.fdi.ucm.ucmh.controller.auxiliary.PagePATCache;
 import es.fdi.ucm.ucmh.controller.auxiliary.PagePSYCache;
 import es.fdi.ucm.ucmh.model.Message;
 import es.fdi.ucm.ucmh.model.User;
-import es.fdi.ucm.ucmh.model.repositories.UserQueryStringNames;
+import es.fdi.ucm.ucmh.model.auxiliar.UserQueryStringNames;
+import es.fdi.ucm.ucmh.model.auxiliar.UserType;
 import es.fdi.ucm.ucmh.transfer.JSONTransferMessage;
 import es.fdi.ucm.ucmh.transfer.UserTransferData;
-import es.fdi.ucm.ucmh.model.UserType;
 
 /**
  *
@@ -364,6 +364,7 @@ public class AdminController {
 		for(Message msg : userMessages) {
 			entityManager.remove(msg);
 		}
+		
 		
 		entityManager.remove(u);
 		entityManager.flush();

@@ -24,6 +24,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import es.fdi.ucm.ucmh.model.auxiliar.UserType;
+
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "User.getUserListMoreThan", 

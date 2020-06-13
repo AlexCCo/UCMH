@@ -3,11 +3,13 @@ package es.fdi.ucm.ucmh.controller;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
@@ -18,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,19 +35,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.fdi.ucm.ucmh.controller.auxiliary.AuxiliaryStringPaths;
+import es.fdi.ucm.ucmh.model.Appointment;
 import es.fdi.ucm.ucmh.model.GroupAppointment;
 import es.fdi.ucm.ucmh.model.PatientHistory;
 import es.fdi.ucm.ucmh.model.User;
-import es.fdi.ucm.ucmh.model.repositories.UserQueryStringNames;
+import es.fdi.ucm.ucmh.model.auxiliar.UserQueryStringNames;
+import es.fdi.ucm.ucmh.transfer.AppointmentTransfer;
 import es.fdi.ucm.ucmh.transfer.CreateEntryReceivedData;
 import es.fdi.ucm.ucmh.transfer.GroupAppointmentJsonRespone;
 import es.fdi.ucm.ucmh.transfer.JSONTransferMessage;
 import es.fdi.ucm.ucmh.transfer.PatientHistoryTransfer;
 import es.fdi.ucm.ucmh.transfer.UserTransferData;
 
-/**
- * @author GARCÍA GROSSI, PABLO
- * */
+
 @Controller
 @RequestMapping("/psy")
 public class PsychologistController {
@@ -66,8 +69,11 @@ public class PsychologistController {
 		return entityManager.find(User.class, u.getId());
 	}
 	
+	@Secured(value = "ROLE_PSY")
 	@GetMapping("")
 	public String getUser(Model model) {
+		log.info("request made by psychologist with id {} "
+		   		+ "to create retrive psychologist template", userFromSession().getId());
 		User psy = refreshUser(userFromSession());
 		model.addAttribute("pacientes", entityManager.createNamedQuery(
 			"User.findPatientsOf", User.class).setParameter("psychologistId", psy.getId())
@@ -78,19 +84,15 @@ public class PsychologistController {
 		return "psychologist";
 	}
 	
-	@GetMapping("/horarioPsicologo")
-	public String goToHorario()
-	{
-		return "horarioPsicologo";
-	}
-	
-	//Edited by Alejandro Cancelo Correia
+	@Secured(value = "ROLE_PSY")
 	@PostMapping(path="/modify/{mail}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Transactional
 	@ResponseBody
 	public UserTransferData modifyUser(@ModelAttribute User user, @RequestParam(required=false) String disorder,
 			@RequestParam(required=false) String treatment,@PathVariable long mail)
 	{
+		log.info("request made by psychologist with id {} "
+		   		+ "to change information about user {}", userFromSession().getId(), mail);
 		TypedQuery<User> query = entityManager.createNamedQuery(UserQueryStringNames.GET_USER_BY_MAIL, User.class);
 		query.setParameter("mail", mail);
 		User target = query.getSingleResult();
@@ -100,21 +102,24 @@ public class PsychologistController {
 		return new UserTransferData(target);
 	}
 	
-	//Edited by Alejandro Cancelo Correia
+	@Secured(value = "ROLE_PSY")
 	@GetMapping(path="/pacient/{mail}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Transactional
 	@ResponseBody
 	public UserTransferData getPacient(@PathVariable String mail)
 	{
+		log.info("request made by psychologist with id {} "
+		   		+ "to obtain information about user {}", userFromSession().getId(), mail);
 		TypedQuery<User> query = entityManager.createNamedQuery(UserQueryStringNames.GET_USER_BY_MAIL, User.class);
 		query.setParameter("mail", mail);
 		User pacient = query.getSingleResult();
 		return new UserTransferData(pacient);
 	}
-		
-   @PostMapping(value = "/saveGroupAppointment", produces = { MediaType.APPLICATION_JSON_VALUE })
-   @ResponseBody
-   @Transactional
+
+	@Secured(value = "ROLE_PSY")
+	@PostMapping(value = "/saveGroupAppointment", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@ResponseBody
+	@Transactional
 	public GroupAppointmentJsonRespone saveEmployee(@ModelAttribute @Valid GroupAppointment group_appointment,
          BindingResult result) {
 
@@ -142,8 +147,9 @@ public class PsychologistController {
    /**
     * @author Alejandro Cancelo Correia
     * */
-   @GetMapping(value = "/history-of/{userMail}", produces = MediaType.APPLICATION_JSON_VALUE)
-   public @ResponseBody List<PatientHistoryTransfer> getHistoryOf(@PathVariable String userMail){
+	@Secured(value = "ROLE_PSY")
+	@GetMapping(value = "/history-of/{userMail}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<PatientHistoryTransfer> getHistoryOf(@PathVariable String userMail){
 	   log.info("get history request made by psychologist with id {} "
 	   		+ "to obtain psychological history from user with mail {}", userFromSession().getId(), userMail);
 	   TypedQuery<User> validateMail= entityManager.createNamedQuery(UserQueryStringNames.GET_USER_BY_MAIL, User.class);
@@ -175,10 +181,11 @@ public class PsychologistController {
     * 
     * @author Alejandro Cancelo Correia
     * */
-   @PostMapping(value = "/create-entry", consumes = MediaType.APPLICATION_JSON_VALUE,
+	@Secured(value = "ROLE_PSY")
+	@PostMapping(value = "/create-entry", consumes = MediaType.APPLICATION_JSON_VALUE,
 		   produces = MediaType.APPLICATION_JSON_VALUE)
-   @Transactional
-   public @ResponseBody JSONTransferMessage createHistoryEntryForPatient(@RequestBody CreateEntryReceivedData request){
+	@Transactional
+	public @ResponseBody JSONTransferMessage createHistoryEntryForPatient(@RequestBody CreateEntryReceivedData request){
 	   log.info("request made by psychologist with id {} "
 	   		+ "to create a new history entry for user", userFromSession().getId(), request.getMail());
 	   
@@ -209,4 +216,148 @@ public class PsychologistController {
 	   
 	   return new JSONTransferMessage("ok");
    }
+   
+	/**
+	 * @author Alejandro Cancelo Correia
+	 * */
+	@Secured(value = "ROLE_PSY")
+	@GetMapping(value = "/psychologistAppointments")
+	public String getPsychologistAppointmetsTemplate(Model model){
+		log.info("request made by psychologist with id {} "
+		   		+ "to create get the appointments template", userFromSession().getId());
+		TypedQuery<Appointment> query = entityManager.createNamedQuery(UserQueryStringNames.GET_PSY_APPOINTMENTS, Appointment.class);
+		
+		query.setParameter("userId", userFromSession().getId());
+		
+		List<AppointmentTransfer> transferList = new ArrayList<AppointmentTransfer>();
+		String name = null;
+		for(Appointment appo: query.getResultList()) {
+			name = appo.getPatiente().getFirstName() + ", " + appo.getPatiente().getLastName();
+			transferList.add(new AppointmentTransfer(appo.getFecha().toString().replaceFirst("T", " "),
+													 name,
+													 appo.getPatiente().getMail()
+													 ));
+		}
+		
+		model.addAttribute("appnList", transferList);
+		
+		return "psychologistAppointments";
+	}
+	
+	
+	private static class DelAppointmentParam{
+		private String mail;
+		private LocalDateTime date;
+		/**
+		 * @param mail the mail to set
+		 */
+		public void setMail(String mail) {
+			this.mail = mail;
+		}
+		/**
+		 * @param date the date to set
+		 */
+		public void setDate(String date) {
+			this.date = LocalDateTime.parse(date);
+		}
+		
+		
+	}
+	/**
+	 * @author Alejandro Cancelo Correia
+	 * */
+	@Secured(value = "ROLE_PSY")
+	@PostMapping(value = "/remove-appoinment", consumes = MediaType.APPLICATION_JSON_VALUE,
+											   produces = MediaType.APPLICATION_JSON_VALUE)
+	@Transactional
+	public @ResponseBody JSONTransferMessage obtainMoreAppointmentsOf(@RequestBody DelAppointmentParam param) {
+		User u = userFromSession();
+		log.info("request made by psychologist with id {} "
+		   		+ "to remove an appoinment with user {}", u.getId(), param.mail);
+		
+		TypedQuery<User> userQuery = entityManager.createNamedQuery(UserQueryStringNames.GET_USER_BY_MAIL, User.class);
+		User patient = null;
+		
+		try {
+			userQuery.setParameter("mail", param.mail);
+			patient = userQuery.getSingleResult();
+			
+		}catch (NoResultException e) {
+			log.error("Request to remove and appointment with user {} "
+					+ "made by psychologist: {}. FAILED: reason= {}",
+					param.mail,
+					u.getId(),
+					e.getCause()
+					);
+			return new JSONTransferMessage("That mail doesn't exits");
+		} catch (Exception e) {
+			log.error("Request to remove and appointment with user {} "
+					+ "made by psychologist: {}. FAILED: reason= {}",
+					param.mail,
+					u.getId(),
+					e.getCause()
+					);
+			return new JSONTransferMessage("Some error occurred!");
+		}
+		
+		entityManager.createNamedQuery(UserQueryStringNames.DELETE_APPOINTMENT_OF_PAT)
+		       .setParameter("userId", patient.getId())
+		       .setParameter("date", param.date)
+		       .executeUpdate();
+
+		entityManager.createNamedQuery(UserQueryStringNames.DELETE_APPOINTMENT_OF_PSY)
+	          .setParameter("userId", u.getId())
+	          .setParameter("date", param.date)
+	          .executeUpdate();
+		
+		return new JSONTransferMessage("ok");
+	}
+	
+	/**
+	 * @author Alejandro Cancelo Correia
+	 * */
+	@Secured(value = "ROLE_PSY")
+	@PostMapping(value = "/create-appoinment", consumes = MediaType.APPLICATION_JSON_VALUE,
+											   produces = MediaType.APPLICATION_JSON_VALUE)
+	@Transactional
+	public @ResponseBody JSONTransferMessage createNewAppointmentWith(@RequestBody DelAppointmentParam param) {
+		User u = userFromSession();
+		log.info("request made by psychologist with id {} "
+		   		+ "to create an appoinment with user {}", u.getId(), param.mail);
+		
+		TypedQuery<User> query = entityManager.createNamedQuery(UserQueryStringNames.GET_USER_BY_MAIL, User.class);
+		
+		User patient = null;
+		
+		try {
+			query.setParameter("mail", param.mail);
+			patient = query.getSingleResult();
+			
+		}catch (NoResultException e) {
+			log.error("Request to remove and appointment with user {} "
+					+ "made by psychologist: {}. FAILED: reason= {}",
+					param.mail,
+					u.getId(),
+					e.getCause()
+					);
+			return new JSONTransferMessage("That mail doesn't exits");
+		} catch (Exception e) {
+			log.error("Request to remove and appointment with user {} "
+					+ "made by psychologist: {}. FAILED: reason= {}",
+					param.mail,
+					u.getId(),
+					e.getCause()
+					);
+			return new JSONTransferMessage("Some error occurred!");
+		}
+		
+		Appointment created = new Appointment();
+		created.setFecha(param.date);
+		created.setPatiente(patient);
+		created.setPychologist(u);
+		
+		entityManager.persist(created);
+		
+		return new JSONTransferMessage("ok");
+	}
 }

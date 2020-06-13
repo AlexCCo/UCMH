@@ -9,14 +9,23 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Version;
 
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "Appointment.getAppointmentListOfPatient",
 				query = "SELECT p "
 						+ "FROM Appointment p "
-						+ "WHERE p.patient.id = :patientId")
+						+ "WHERE p.patient.id = :userId "
+						+ "ORDER BY p.fecha ASC"),
+	@NamedQuery(name = "Appointment.getAppointmentListOfPsy",
+				query = "SELECT p "
+						+ "FROM Appointment p "
+						+ "WHERE p.psychologist.id = :userId "
+						+ "ORDER BY p.fecha ASC"),
+	@NamedQuery(name = "Appointment.deletAppointmetOfPat",
+				query = "DELETE FROM Appointment a WHERE a.patient.id = :userId AND a.fecha = :date"),
+	@NamedQuery(name = "Appointment.deletAppointmetOfPsy",
+				query = "DELETE FROM Appointment a WHERE a.psychologist.id = :userId AND a.fecha = :date")
 })
 public class Appointment {
 	//---------------Atributos-----------------

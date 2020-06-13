@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import es.fdi.ucm.ucmh.model.User;
-import es.fdi.ucm.ucmh.model.UserType;
+import es.fdi.ucm.ucmh.model.auxiliar.UserType;
 
 /**
  * Called when a user is first authenticated (via login).
