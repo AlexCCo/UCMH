@@ -19,7 +19,7 @@
 				
 				
 				<li th:if="${session.u.hasRole('PAT')}"><a th:href="@{/user/}" class="waves-effect waves-light btn modal-trigger">Mis citas</a></li>
-				<li th:if="${session.u.hasRole('PAT')}"><a th:href="@{/user/}" class="waves-effect waves-light btn modal-trigger">Estadisticas</a></li>
+				<li th:if="${session.u.hasRole('PAT')}"><a th:href="@{/user/estadisticasPaciente}" class="waves-effect waves-light btn modal-trigger">Estadisticas</a></li>
 				<li th:if="${session.u.hasRole('PAT')}"><a th:href="@{/user/ajustesPaciente}" class="waves-effect waves-light btn modal-trigger">Ajustes</a></li>
 				
 				
@@ -35,7 +35,9 @@
 					<a th:case="'psy'" th:href="@{/psy/messages}" class="waves-effect waves-light btn ">Mensajes recibidos</a>
 					<a th:case="'pat'" th:href="@{/user/messages}" class="waves-effect waves-light btn ">Mensajes recibidos</a>
 				</li>
-				
+				<li>
+				  <i id="notification" class="material-icons">add_alert</i>
+				</li>
 				<li>
 					<form th:action="@{/logout}" method="post">
 						<button id="log-out-button" type="submit" class="waves-effect waves-light btn modal-trigger"

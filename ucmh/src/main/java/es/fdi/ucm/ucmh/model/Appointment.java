@@ -16,7 +16,11 @@ import javax.persistence.Version;
 	@NamedQuery(name = "Appointment.getAppointmentListOfPatient",
 				query = "SELECT p "
 						+ "FROM Appointment p "
-						+ "WHERE p.patient.id = :patientId")
+						+ "WHERE p.patient.id = :patientId"),
+	@NamedQuery(name = "Appointment.getAppointmentListOfPsychologist",
+	query = "SELECT p "
+			+ "FROM Appointment p "
+			+ "WHERE p.psychologist.id = :psychologistId")
 })
 public class Appointment {
 	//---------------Atributos-----------------

@@ -17,15 +17,9 @@
 	</head>
 	<body>
 		<th:block th:replace="fragments/nav :: nav"></th:block>
-		
-		<!-- Menú desplegable mobile-->
-
-		<ul class="sidenav" id="mobile-demo">
-			<li><a>Cerrar sesión</a></li>
-		</ul>
 
 		<h4 class="center-align">Panel de administración de <span th:text="${session.u.firstName+' '+session.u.lastName}"></span>
-		<span id="msg-alert">Tienes un nuevo mensaje! </span></h4>
+		<span id="msg-alert">¡Tienes un nuevo mensaje! </span></h4>
 
 		<div class="row">
 			<div class="col s6">

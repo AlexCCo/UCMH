@@ -23,7 +23,8 @@
 	<!-- Change made by Alejandro Cancelo Correia -->
 	<th:block th:replace="fragments/nav :: nav"></th:block>
 	<!-- ########################################### -->
-
+	
+	<span id="user-message-owner" data-user-owner="" th:attr="data-user-psychologist-mail=${user.psychologist.mail}"></span>
 	<h4 class="center-align">Ajustes de <spam th:text="${user.firstName}"></spam></h4>
 
 	<div class="card central-div">
@@ -35,13 +36,25 @@
 				<p>Correo electrónico: <spam th:text="${user.psychologist.mail}"></spam></p>
 			</div>
 			<div>
-				<button class="contact-psy waves-effect waves-indigo blue lighten-2 white-text btn-flat">
+				<a href="#contact-psy-modal"class="modal-trigger contact-psy waves-effect waves-indigo blue lighten-2 white-text btn-flat">
 					Contactar
-				</button>
+				</a>
 				<a href="#change-psy-modal" class="modal-trigger change-psy waves-effect waves-red-darken-4 red lighten-2 btn-flat">
 					Cambiar de psicologo
 				</a>
 			</div>
+		</div>
+	</div>
+	<div id="contact-psy-modal" class="modal">
+		<div class="modal-content">
+			<h4>Contactar a tu psicologo</h4>
+			<p>Escribe tu mensaje aquí:</p>
+			<textarea id="contact-psy-message" cols="120"></textarea>
+		</div>
+		<div class="modal-footer">
+			<p id="result-text">¡Mensaje enviado!</p>
+			<button class="modal-close red darken-3 btn-flat">Cancelar</button>
+			<button id="accept-contact-psy" class="waves-effect waves-teal green darken-1 btn-flat">Aceptar</button>
 		</div>
 	</div>
 	<div id="change-psy-modal" class="modal">
@@ -64,6 +77,7 @@
 	<script src="/js/vendor/schedule-util.js"></script>
 	<script src="/js/vendor/schedule-main.js"></script>
 	<script src="/js/settings-p.js"></script>
+	<script src="/js/notification.js"></script>
 	<script>
 		$(document).ready(function() {
 			$('.modal').modal();

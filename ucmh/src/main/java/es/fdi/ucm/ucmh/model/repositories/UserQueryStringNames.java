@@ -96,4 +96,9 @@ public class UserQueryStringNames {
 	 * String representing a <b>named</b> query to obtain every appointment of a patient
 	 * */
 	public static final String GET_PATIENT_APPOINTMENTS = "Appointment.getAppointmentListOfPatient";
+	
+	/**
+	 * String representing a <b>named</b> query to obtain every appointment of a psychologist
+	 * */
+	public static final String GET_PSY_APPOINTMENTS = "Appointment.getAppointmentListOfPsychologist";
 }
