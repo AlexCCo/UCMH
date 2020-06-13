@@ -36,9 +36,6 @@
 	          <span th:text="${u.mail}"> Title </span><br>
 	          <span th:text="${u.phoneNumber}"> Title </span><br>
 	          </p>
-	          <p>Trastorno de ansiedad <br>
-	             Receta: Pastillas fuertes
-	          </p>
 	          <button th:attr="data-user-mail=${u.mail}" class="waves-effect blue lighten-5 blue-text text-darken-2 btn pacientBTN">ver info</button>
 	        </li>
       </ul>
@@ -71,7 +68,7 @@
 						</div>
           </div>
           <div class="card-action">
-	          <a href="#">Nueva cita</a>
+	          <a  id="pat-new-appn" class="modal-trigger">Nueva cita</a>
 	        </div>
 	        
         <div class="col-md-12">
@@ -93,16 +90,37 @@
 				</div>
 			</div>
 		</div>
+		
+		<div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>Cita individual</h4>
+      <!-- Selección de día -->
+
+      <p> Selecciona día para la sesión </p>
+      <input id="new-appnt-date"type="date">
+
+      <!-- Selección de hora ini -->
+
+      <p> Selecciona hora de la sesión </p>
+      <input id="new-appnt-hour" type="time">
+    </div>
+    <div class="modal-footer">
+      <button class="modal-close waves-effect waves-red btn-flat red">Cancelar</button>
+      <button id="accept-new-appnt"class="waves-effect waves-green btn-flat green">Aceptar</button>
+    </div>
+  </div>
+  
 <!-- Change made by Alejandro Cancelo Correia -->
 	<th:block th:replace="fragments/footer :: jslibs"></th:block>
 <!-- ########################################### -->
 	
+	<script src="/js/psychologist.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$('.modal').modal();
 			$('.modal-trigger').modal();
 		});
 	</script>
-	<script src="/js/psychologist.js"></script>
+	
   </body>
 </html>

@@ -31,7 +31,7 @@ import es.fdi.ucm.ucmh.controller.auxiliary.AuxiliaryStringPaths;
 import es.fdi.ucm.ucmh.controller.auxiliary.MessageQueryObject;
 import es.fdi.ucm.ucmh.model.Message;
 import es.fdi.ucm.ucmh.model.User;
-import es.fdi.ucm.ucmh.model.repositories.UserQueryStringNames;
+import es.fdi.ucm.ucmh.model.auxiliar.UserQueryStringNames;
 import es.fdi.ucm.ucmh.transfer.MessageTransferData;
 
 

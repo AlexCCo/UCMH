@@ -1,4 +1,4 @@
-package es.fdi.ucm.ucmh.model;
+package es.fdi.ucm.ucmh.model.auxiliar;
 
 public enum UserType {
 

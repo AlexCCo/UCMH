@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import es.fdi.ucm.ucmh.model.Appointment;
 import es.fdi.ucm.ucmh.model.GroupAppointment;
 import es.fdi.ucm.ucmh.model.User;
-import es.fdi.ucm.ucmh.model.repositories.UserQueryStringNames;
+import es.fdi.ucm.ucmh.model.auxiliar.UserQueryStringNames;
 import es.fdi.ucm.ucmh.transfer.AppointmentTransfer;
 import es.fdi.ucm.ucmh.transfer.GroupAppointmentJsonRespone;
 import es.fdi.ucm.ucmh.transfer.JSONTransferMessage;
@@ -70,7 +70,7 @@ public class UserController {
 				UserQueryStringNames.GET_PATIENT_APPOINTMENTS, 
 				Appointment.class);
 		
-		query.setParameter("patientId", u.getId());
+		query.setParameter("userId", u.getId());
 		
 		List<AppointmentTransfer> list = new ArrayList<AppointmentTransfer>();
 		//we return a transfer object because each Appointment class has more

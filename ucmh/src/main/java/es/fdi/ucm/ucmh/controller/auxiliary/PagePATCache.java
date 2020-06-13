@@ -8,8 +8,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import es.fdi.ucm.ucmh.model.User;
-import es.fdi.ucm.ucmh.model.UserType;
-import es.fdi.ucm.ucmh.model.repositories.UserQueryStringNames;
+import es.fdi.ucm.ucmh.model.auxiliar.UserQueryStringNames;
+import es.fdi.ucm.ucmh.model.auxiliar.UserType;
 import es.fdi.ucm.ucmh.transfer.UserTransferData;
 
 public class PagePATCache extends PageCache {

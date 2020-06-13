@@ -9,24 +9,22 @@ import es.fdi.ucm.ucmh.model.User;
 
 public class AppointmentTransfer {
 	private String date;
-	private String psychologistName;
-	private String psychologistMail;
+	private String userName;
+	private String userMail;
 	
-	public AppointmentTransfer(String fecha, String psychologistName, String psychologistMail) {
-		super();
+	public AppointmentTransfer(String fecha, String userName, String userMail) {
 		this.date = fecha;
-		this.psychologistName = psychologistName;
-		this.psychologistMail = psychologistMail;
+		this.userName = userName;
+		this.userMail = userMail;
 	}
 	
 	public AppointmentTransfer(Appointment recv) {
-		super();
 		this.date = recv.getFecha().toString().replaceFirst("T", " ");
 		User u = recv.getPsychologist();
-		this.psychologistName = u.getFirstName() +", " + u.getLastName();
-		this.psychologistMail = u.getMail();
+		this.userName = u.getFirstName() +", " + u.getLastName();
+		this.userMail = u.getMail();
 	}
-
+	
 	/**
 	 * @return the Date
 	 */
@@ -35,17 +33,17 @@ public class AppointmentTransfer {
 	}
 
 	/**
-	 * @return the psychologistName
+	 * @return the userName
 	 */
-	public String getPsychologistName() {
-		return psychologistName;
+	public String getUserName() {
+		return userName;
 	}
 
 	/**
-	 * @return the psychologistMail
+	 * @return the userMail
 	 */
-	public String getPsychologistMail() {
-		return psychologistMail;
+	public String getUserMail() {
+		return userMail;
 	}
 	
 	
