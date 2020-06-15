@@ -41,9 +41,21 @@
 		<li><a href="ajustesPaciente">Ajustes</a></li>
 		<li><a>Cerrar sesión</a></li>
 	</ul>
-
+	<span id="state-value" th:attr="value=-1"></span>
+	<input id="selectedDate" type="hidden"></input>
 	<h4 class="center-align">Estadísticas de ánimo</h4>
-
+	
+	<div class="row">
+      <div class="col s6">
+        <ul id="states-list" class="collection">
+        	<li th:if="${emotionStates.empty}"> No hay estados de ánimo guardados. </li>
+	        <li class="collection-item avatar" th:each="s, itemstat: *{emotionStates}">
+	         <i class="material-icons" th:text="${s.iconString}">sentiment_satisfied_alt</i>
+	          <p>Fecha: </p><p th:text="${s.date}"> Title </p>
+	          <span>Descripción: </span><p th:text="${s.explanation}"> Title </p>
+	        </li>
+      </ul>
+    </div>
 	<div class="calendar">
 		<div class="month">
 			<div class="prev" onclick="moveDate('prev')">
@@ -67,6 +79,9 @@
 			<div>Sab</div>
 		</div>
 		
+		<h4 class="center-align">Historial de ánimo</h4>
+
+		
 		<div class="days"></div>
 		
 		<div id="modal" class="modal">
@@ -78,42 +93,41 @@
 				
 				<p>Selecciona tu estado de ánimo</p>
 				<div class="emotion-state">
-					<a class="waves-effect waves-light btn-small">
+					<a id="very-dissatisfied" class="waves-effect waves-light btn-small">
 						<i class="material-icons">sentiment_very_dissatisfied</i>
 					</a>
-					<a class="waves-effect waves-light btn-small">
+					<a id="dissatisfied" class="waves-effect waves-light btn-small">
 						<i class="material-icons">sentiment_dissatisfied</i>
 					</a> 
-					<a class="waves-effect waves-light btn-small"> 
+					<a id="neutral" class="waves-effect waves-light btn-small"> 
 						<i class="material-icons">sentiment_satisfied</i>
 					</a>
-					<a class="waves-effect waves-light btn-small"> 
+					<a id="satisfied" class="waves-effect waves-light btn-small"> 
 						<i class="material-icons">sentiment_satisfied_alt</i>
 					</a> 
-					<a class="waves-effect waves-light btn-small"> 
+					<a id="very-satisfied" class="waves-effect waves-light btn-small"> 
 						<i class="material-icons">sentiment_very_satisfied</i>
 					</a>
 				</div>
-				
+				<h5 id="show-emotion">Hoy me siento:</h5>
 				<p>Explica porqué te siente así</p>
-				<textarea class="materialize-textarea"></textarea>
+				<textarea id="explanation" class="materialize-textarea"></textarea>
 			</div>
 			
 			<div class="modal-footer">
 				<a href="#!"
 					class="modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
-				<a href="#!"
+				<a id="saveState" href="#!"
 					class="modal-action modal-close waves-effect waves-green btn-flat">Aceptar</a>
 			</div>
 		</div>
-		
 	<!-- Change made by Alejandro Cancelo Correia -->
 	<th:block th:replace="fragments/footer :: jslibs"></th:block>
 	<!-- ########################################### -->
 
 		<script src="/js/vendor/calendario.js"></script>
-		<script src="/js/estadoDeAnimo.js"></script>
 		<script src="/js/notification.js"></script>
+		<script src="/js/estadisticas.js"></script>
 
 		<script>
 			$(document).ready(function() {

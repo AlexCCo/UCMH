@@ -32,6 +32,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.fdi.ucm.ucmh.model.Appointment;
+import es.fdi.ucm.ucmh.model.EmotionState;
+import es.fdi.ucm.ucmh.model.EmotionStates;
 import es.fdi.ucm.ucmh.model.GroupAppointment;
 import es.fdi.ucm.ucmh.model.User;
 import es.fdi.ucm.ucmh.model.auxiliar.UserQueryStringNames;
@@ -115,6 +117,12 @@ public class UserController {
 		User u = userFromSession();
 		log.info("Request to obtain settings template from {}", u.getId());
 		
+		TypedQuery<EmotionState> query = entityManager.createNamedQuery(
+				UserQueryStringNames.GET_PAT_EMOTIONSTATES, 
+				EmotionState.class);
+		query.setParameter("patientMail", u.getMail());
+		
+		model.addAttribute("emotionStates", query.getResultList());
 		model.addAttribute("user", u);
 		
 		return "estadisticasPaciente";
@@ -181,4 +189,55 @@ public class UserController {
 		
 		return new JSONTransferMessage("Todo bien");
 	   }
+	
+	private static class EmotionSettings
+	{
+		private String date;
+		
+		private Integer state;
+		
+		private String explanation;
+
+		public String getDate() {
+			return date;
+		}
+
+		public void setDate(String date) {
+			this.date = date;
+		}
+
+		public Integer getState() {
+			return state;
+		}
+
+		public void setState(Integer state) {
+			this.state = state;
+		}
+
+		public String getExplanation() {
+			return explanation;
+		}
+
+		public void setExplanation(String explanation) {
+			this.explanation = explanation;
+		}
+	}
+	@Secured(value = "ROLE_PAT")
+	@PostMapping(value = "/saveEmotionState", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	@Transactional
+	public JSONTransferMessage saveEmotionState(@RequestBody EmotionSettings emotion)
+	{
+		User u = userFromSession();
+		
+		EmotionState em = new EmotionState();
+		
+		em.setDate(emotion.getDate());
+		em.setPatient(u);
+		em.setState(EmotionStates.values()[emotion.state]);
+		em.setExplanation(emotion.getExplanation());
+		
+		entityManager.persist(em);
+		return new JSONTransferMessage("Todo ok");
+	}
 }

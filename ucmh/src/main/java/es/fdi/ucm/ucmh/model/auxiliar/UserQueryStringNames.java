@@ -148,4 +148,12 @@ public class UserQueryStringNames {
 	 * 
 	 * */
 	public static final String DELETE_APPOINTMENT_OF_PAT = "Appointment.deletAppointmetOfPat";
+	
+	/**
+	 * String representing a <b>named</b> query to obtain all the EmotionStates of a patient<br>
+	 * 
+	 * The query parameter name is <i>patientMail</i>
+	 * 
+	 * */
+	public static final String GET_PAT_EMOTIONSTATES = "EmotionState.getPatientEmotionStates";
 }

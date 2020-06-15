@@ -46,6 +46,7 @@
 	<ul id="appointment-list" class="collection">
       <li class="collection-item card appoint" th:each="appnt : ${appointments}">
       	<div>
+      		<span id="appointment-name" th:attr="name=${appnt.userName}, mail=${appnt.userMail}"></span>
       		<div class="appoint-date">DATE: <span th:text="${appnt.date}" class="date-value"></span></div>
       		<div class="lower-separator-container">
       			<div class="lower-separator"></div>
