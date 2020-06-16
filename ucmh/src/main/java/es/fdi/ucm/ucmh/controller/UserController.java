@@ -78,7 +78,7 @@ public class UserController {
 		
 		List<AppointmentTransfer> list = new ArrayList<AppointmentTransfer>();
 		//we return a transfer object because each Appointment class has more
-		//information that its needede
+		//information that it's neededed
 		for(Appointment ap: query.getResultList()) {
 			list.add(new AppointmentTransfer(ap));
 		}
@@ -137,6 +137,11 @@ public class UserController {
 		return new JSONTransferMessage("ok");
 	}
 	
+	/**
+	 * Information necessary to obtain from the template in order to create a new appointment
+	 * @author Pablo García Grossi
+	 *
+	 */
 	private static class AppointmentSettings
 	{
 		private LocalDateTime date;
@@ -150,7 +155,7 @@ public class UserController {
 		}
 	}
 	/**
-	 * It will add a new appointment in the database.
+	 * It will add a new appointment in the database. It also checks if the appointment receieved matches with one of the psychologist appointments.
 	 * @param fecha
 	 * @param hora
 	 * @param result
@@ -190,6 +195,11 @@ public class UserController {
 		return new JSONTransferMessage("Todo bien");
 	   }
 	
+	/**
+	 * Information necessary to obtain from the template in order to create a new emotion state
+	 * @author Pablo García Grossi
+	 *
+	 */
 	private static class EmotionSettings
 	{
 		private String date;
@@ -222,6 +232,12 @@ public class UserController {
 			this.explanation = explanation;
 		}
 	}
+	/**
+	 * Adds a new emotion state to the database
+	 * @param emotion
+	 * @return
+	 * @author Pablo García Grossi
+	 */
 	@Secured(value = "ROLE_PAT")
 	@PostMapping(value = "/saveEmotionState", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody

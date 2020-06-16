@@ -41,11 +41,12 @@
 		<li><a href="ajustesPaciente">Ajustes</a></li>
 		<li><a>Cerrar sesión</a></li>
 	</ul>
+	
 	<span id="state-value" th:attr="value=-1"></span>
 	<input id="selectedDate" type="hidden"></input>
 	<h4 class="center-align">Estadísticas de ánimo</h4>
 	
-	<div class="row">
+    <div class="row">
       <div class="col s6">
         <ul id="states-list" class="collection">
         	<li th:if="${emotionStates.empty}"> No hay estados de ánimo guardados. </li>
@@ -55,8 +56,11 @@
 	          <span>Descripción: </span><p th:text="${s.explanation}"> Title </p>
 	        </li>
       </ul>
+    	</div>
     </div>
+
 	<div class="calendar">
+    
 		<div class="month">
 			<div class="prev" onclick="moveDate('prev')">
 				<span>&#10094;</span>
@@ -77,13 +81,11 @@
 			<div>Jue</div>
 			<div>Vie</div>
 			<div>Sab</div>
+			
 		</div>
-		
-		<h4 class="center-align">Historial de ánimo</h4>
-
-		
 		<div class="days"></div>
-		
+	</div>
+	
 		<div id="modal" class="modal">
 			<div class="modal-content">
 				<div>

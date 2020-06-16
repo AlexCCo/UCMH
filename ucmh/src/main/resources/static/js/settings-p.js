@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function(event){
 		request.send(feedback);
 	});
 	
+	/*Sends the message written to the correspondent psychologist in order to contact him*/
 	$("#accept-contact-psy").click(function(event){
 		let input_text = $("#contact-psy-message").val();
 		let now = new Date();

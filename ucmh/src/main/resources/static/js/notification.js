@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", (event) => {
+	
+	/*Sets the new messages icon visible qhen recieving a new message*/
 	console.log("Dom loaded!");
 	new_incoming_messages = document.getElementById("notification");
 	new_incoming_messages.style.visibility = "hidden";

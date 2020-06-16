@@ -1,6 +1,7 @@
 
 document.addEventListener("DOMContentLoaded", function(e){
 	
+	/*Selects the correspondent patient and updates the page with its data (Author: Pablo García Grossi)*/
 	$( ".pacientBTN" ).click(function(e) {
 	  let mail = $(this).attr("data-user-mail");
 	  
@@ -28,6 +29,7 @@ document.addEventListener("DOMContentLoaded", function(e){
 	      });
 	});
 	
+	/*Takes the disorder and treatment introduced and saves them into the patient (Author: Pablo García Grossi)*/
 	$( ".savePacient" ).click(function(e) {
 	  let mail = $(this).attr("data-clicked-mail");
 	  let disorderB = $("#pacientDisorder").val();
@@ -128,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function(e){
 	ws.receive = function(text) {
 		console.log(text);
 	}
-	
+	/*Accepts a new appointment and sends the data in order to save it in the database (Author: Pablo García Grossi)*/
 	$("#accept-new-appnt").click(function(event){
 		let uri = `${config.rootUrl}psy/create-appoinment`;
 		let mail = $(this).attr("data-clicked-mail");

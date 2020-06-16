@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 	
 	appointment_list.html_holder = appointment_box;
 	
+	/*Tries to create a new appointment according to the date and hour introduced and adds it to the ul(Author: Pablo García Grossi)*/
 	$("#accept-new-appnt").click(function(event){
 		let date = $("#new-appnt-date").val();
 		let hour = $("#new-appnt-hour").val();
@@ -23,6 +24,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 				alert(request.responseText);
 		};
 		
+		//adds a new div into the appointments list
 		let outer_div = document.createElement("li");
 		outer_div.className = "collection-item card appoint";
 		
@@ -36,7 +38,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 		request.send(JSON.stringify(completeDate));
 	});
 });
-
+/*Structure of the apppointment in the template (Author: Pablo García Grossi)*/
 function render_appointments(date, username, mail)
 {
 	let html_string = 

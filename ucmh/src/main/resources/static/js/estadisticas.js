@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", (event) => {
 	
+	/*functions taht updates the emotion state.*/
 	$("#very-dissatisfied").click(function(event){
 		$("#state-value").attr("value", 0);
 		document.getElementById("show-emotion").innerHTML = 'Hoy me siento: muy mal';
@@ -22,6 +23,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
 		document.getElementById("show-emotion").innerHTML = 'Hoy me siento: muy bien';
 	});
 	
+	/*sends the date, description and emotion state in order to be saved in the database*/
+	/*after that, it updates the template to show the states on screen*/
 	$("#saveState").click(function(event){
 		let date = $("#selectedDate").val();
 		let text_input = $("#explanation").val();

@@ -69,6 +69,11 @@ public class PsychologistController {
 		return entityManager.find(User.class, u.getId());
 	}
 	
+	/**
+	 * Adds a list of the psychologist's patients to the model and returns to the psychologist main page.
+	 * @param model
+	 * @return
+	 */
 	@Secured(value = "ROLE_PSY")
 	@GetMapping("")
 	public String getUser(Model model) {
@@ -84,6 +89,14 @@ public class PsychologistController {
 		return "psychologist";
 	}
 	
+	/**
+	 * Gets the determined user in order to modify or to save a new disorder or treatment
+	 * @param user
+	 * @param disorder
+	 * @param treatment
+	 * @param mail
+	 * @return
+	 */
 	@Secured(value = "ROLE_PSY")
 	@PostMapping(path="/modify/{mail}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Transactional
