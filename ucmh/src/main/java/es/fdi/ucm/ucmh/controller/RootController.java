@@ -44,17 +44,11 @@ public class RootController {
 		"index"
 	};
 	
-	@GetMapping(value = "/index/{usersTemplates}")
-	public String indexPage(@PathVariable("usersTemplates") final String webUsers) {
-		for (String page : availableViews) {
-			if(webUsers.equals(page)) {
-				log.printf(Level.DEBUG, "The client tried to access to {0}", webUsers);
-				return webUsers;
-			}
-		}
-		throw new ResourceNotFound();
+	@GetMapping(value = "")
+	public String redirectToLogin() {
+		return "patient";
 	}
-	
+
 	//ERRORS HANDLING
 	
 	@ExceptionHandler(ResourceNotFound.class)

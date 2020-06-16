@@ -291,6 +291,10 @@ public class AdminController {
 	 * {
 	 * 	"result":"OK" if everything went well or "Error" if don't 
 	 * }
+	 * 
+	 * <b>NOTE:</b> I didn't have enough time to add support to delete an user when
+	 * it has appointments nor to change the query string to an user mail instead of
+	 * an user id
 	 * */
 	@Secured(value = "ROLE_ADMIN")
 	@PostMapping(value = "/user-delete-{userId}",
